@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>12星座占い｜めろﾋﾟｮﾝ☆</title>
+<title>占い｜めろﾋﾟｮﾝ☆</title>
 <meta name="description" content="めろﾋﾟｮﾝ☆は、平成の携帯ﾎﾑﾍﾟみたいなﾎｰﾑﾍﾟｰｼﾞを無料で作れるｻｲﾄです。">
-<meta property="og:title" content="12星座占い｜めろﾋﾟｮﾝ☆">
+<meta property="og:title" content="占い｜めろﾋﾟｮﾝ☆">
 <meta property="og:description" content="平成のﾎﾑﾍﾟ、いまここで。登録・利用ぜんぶ無料★">
 <meta property="og:image" content="https://iamissuepink.github.io/img/og.png">
 <meta property="og:type" content="website">
@@ -62,7 +62,8 @@
       <li><a href="new.html">新着日記</a></li>
       <li><a href="bbs.html">みんなの掲示板</a></li>
       <li><a href="sozai.html">素材置き場</a></li>
-      <li><a href="fortune.html">12星座占い</a></li>
+      <li><a href="fortune.html">占い（12星座・16ﾀｲﾌﾟ）</a></li>
+      <li><a href="shindan.html">診断</a></li>
       <li><a href="school.html">進路の資料請求</a></li>
       <li><a href="contact.html">お問い合わせ</a></li>
     </ul>
@@ -73,13 +74,16 @@
   </section>
 </aside>
 <main class="main">
-<p class="crumb"><a href="index.html">TOP</a> ＞ 12星座占い</p>
-<section class="box"><h1 class="ptitle">FORTUNE</h1><p class="psub">☆12星座占い☆</p>
+<p class="crumb"><a href="index.html">TOP</a> ＞ 占い</p>
+<section class="box"><h1 class="ptitle">FORTUNE</h1><p class="psub">☆12星座占い・16ﾀｲﾌﾟ占い☆ 毎日0時に更新だょ</p>
 <div class="bb"><div class="pagebody">
-<div class="sgrid" id="signs" style="width:100%"></div>
-<section class="sec pk glow" id="res" hidden></section>
-<section class="sec pp glow"><h3>★今日のﾗﾝｷﾝｸﾞ★</h3><div id="rank"></div></section>
-<p style="font-size:11px;color:#c9a2ff;margin:0">※占いゎお遊びだょ。いい結果ゎ信じて、わるい結果ゎ気にしないでね♪</p>
+<div class="tabs" role="tablist"><button type="button" role="tab" id="t-z" aria-selected="true">12星座占い</button><button type="button" role="tab" id="t-m" aria-selected="false">16ﾀｲﾌﾟ占い</button></div>
+<section class="sec pk" style="border-radius:0 0 0 0"><p style="font-size:12px;text-align:center;margin:0" id="lead"></p><div class="sgrid" id="signs" style="margin-top:8px"></div>
+<p style="font-size:11px;text-align:center;margin:8px 0 0" id="t16note" hidden>自分のﾀｲﾌﾟがわからない人ゎ <a href="shindan.html#type16">かんたん16ﾀｲﾌﾟ診断</a> をやってみてね♪</p></section>
+<section class="sec pk" id="res" hidden></section>
+<section class="sec pp"><h3>★今日のﾗﾝｷﾝｸﾞ★</h3><div id="rank"></div></section>
+<p style="font-size:11px;color:#c9a2ff;margin:0">※占いゎお遊びだょ。いい結果ゎ信じて、わるい結果ゎ気にしないでね♪<br>※16ﾀｲﾌﾟ占いゎ、性格の4文字ﾀｲﾌﾟを使っためろﾋﾟｮﾝ☆ｵﾘｼﾞﾅﾙの占いで、公式の性格検査とゎ関係ないょ</p>
+<section class="sec bl"><h3>♡診断もあるょ♡</h3><a class="pill" href="shindan.html">診断ﾒﾆｭｰへ</a></section>
 </div></div></section>
 </main>
 </div>
@@ -96,33 +100,38 @@
 <script src="site.js?v=1"></script>
 <script>
 var $=function(i){return document.getElementById(i)},E=DB.esc;
-var S=['おひつじ座','おうし座','ふたご座','かに座','しし座','おとめ座','てんびん座','さそり座','いて座','やぎ座','みずがめ座','うお座'];
-var M=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+var SETS={z:{name:'12星座',L:['おひつじ座','おうし座','ふたご座','かに座','しし座','おとめ座','てんびん座','さそり座','いて座','やぎ座','みずがめ座','うお座'],M:['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'],salt:0,lead:'自分の星座をえらんでね'},
+ m:{name:'16ﾀｲﾌﾟ',L:['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'],M:['📘','🧸','🔮','♟','🔧','🎨','🌙','🔬','⚡','🎤','✨','💡','📋','🍰','🌷','👑'],salt:977,lead:'自分の4文字ﾀｲﾌﾟをえらんでね'}};
 var COL=['ﾋﾟﾝｸ','ﾚｯﾄﾞ','ｵﾚﾝｼﾞ','ｲｴﾛｰ','ﾐﾝﾄｸﾞﾘｰﾝ','水色','ﾈｲﾋﾞｰ','ﾗﾍﾞﾝﾀﾞｰ','ｺﾞｰﾙﾄﾞ','ｼﾙﾊﾞｰ','ﾎﾜｲﾄ','ﾌﾞﾗｯｸ','ﾋｮｳ柄','ﾚｲﾝﾎﾞｰ'];
 var ITEM=['ﾌﾟﾘｸﾗ','ｹｰﾀｲのｽﾄﾗｯﾌﾟ','ｼｭｼｭ','ﾘｯﾌﾟｸﾞﾛｽ','ｷﾗｷﾗｼｰﾙ','手鏡','ﾍｱﾋﾟﾝ','ｲﾁｺﾞﾐﾙｸ','ﾁｮｺ','ﾃﾞｺったﾍﾟﾝ','ﾏｽｺｯﾄ','ｲﾔﾎﾝ','ﾊﾝﾄﾞｸﾘｰﾑ','ﾐｻﾝｶﾞ','ｶﾁｭｰｼｬ','ｷｬﾝﾃﾞｨ','ﾉｰﾄ','香水','ﾘﾎﾞﾝ','ｸﾞﾐ'];
-var MSG=[
- ['ちょっとお休みﾓｰﾄﾞな日。無理しないで、早めに寝ちゃおう(-_-)zzz','空回りしやすいかも。深呼吸してから話すとｸﾞｯﾄﾞ!','うっかりﾐｽに注意!! 持ち物ﾁｪｯｸを忘れずにね'],
+var MSG=[['ちょっとお休みﾓｰﾄﾞな日。無理しないで、早めに寝ちゃおう(-_-)zzz','空回りしやすいかも。深呼吸してから話すとｸﾞｯﾄﾞ!','うっかりﾐｽに注意!! 持ち物ﾁｪｯｸを忘れずにね'],
  ['いつもどおりが一番の日。小さなｲｲｺﾄを探してみて♪','友達の話をじっくり聞くと、ﾅｲｽな発見があるかも','ﾏｲﾍﾟｰｽでOK。焦らず自分のﾘｽﾞﾑで(´∀｀)'],
  ['なんだかﾂｲてる予感☆ 気になってたｺﾄに挑戦してみて!!','笑顔がﾁｬｰﾑﾎﾟｲﾝﾄ♡ まわりからの注目度UP!','ひらめきがさえる日。ﾒﾓしておくといいかも✧'],
  ['最強ﾗｯｷｰﾃﾞｰ!! 何をやってもうまくいきそう(ﾉ´∀｀*)ﾉ','うれしいﾆｭｰｽが届くかも♪ ｹｰﾀｲをﾁｪｯｸ!!','ｷﾗｷﾗ運MAX✧ 思いきって行動すると吉!!']];
 function rnd(seed){var x=seed>>>0||1;return function(){x^=x<<13;x>>>=0;x^=x>>17;x^=x<<5;x>>>=0;return x/4294967296}}
 function today(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()}
-function fort(i){var r=rnd(today()*31+i*7919+17);for(var k=0;k<5;k++)r();
+var K='z',F,ORD;
+function fort(i,salt){var r=rnd(today()*31+i*7919+17+salt);for(var k=0;k<5;k++)r();
   var a={love:1+Math.floor(r()*5),money:1+Math.floor(r()*5),friend:1+Math.floor(r()*5),study:1+Math.floor(r()*5)};
   a.total=a.love+a.money+a.friend+a.study+r();a.col=COL[Math.floor(r()*COL.length)];a.item=ITEM[Math.floor(r()*ITEM.length)];return a}
-var F=S.map(function(_,i){return fort(i)}),ORD=F.map(function(f,i){return i}).sort(function(a,b){return F[b].total-F[a].total});
 function st(n){return '<span style="color:#ffe066">'+'★'.repeat(n)+'</span><span style="color:#555">'+'★'.repeat(5-n)+'</span>'}
-function show(i){var f=F[i],rk=ORD.indexOf(i)+1,lv=rk<=3?3:rk<=6?2:rk<=9?1:0,r=rnd(today()+i*101);
+function show(i){var S=SETS[K],f=F[i],rk=ORD.indexOf(i)+1,n=S.L.length,lv=rk<=n/4?3:rk<=n/2?2:rk<=n*3/4?1:0,r=rnd(today()+i*101+S.salt);
   $('res').hidden=false;
-  $('res').innerHTML='<h3>'+M[i]+' '+S[i]+' ｸﾝ…今日ゎ'+rk+'位!!</h3><p style="text-align:center">'+E(MSG[lv][Math.floor(r()*3)])+'</p>'+
+  $('res').innerHTML='<h3>'+S.M[i]+' '+E(S.L[i])+' ｸﾝ…今日ゎ'+rk+'位!!</h3><p style="text-align:center">'+E(MSG[lv][Math.floor(r()*3)])+'</p>'+
    '<div class="li">恋愛運　'+st(f.love)+'</div><div class="li">金運　　'+st(f.money)+'</div><div class="li">友情運　'+st(f.friend)+'</div><div class="li">勉強運　'+st(f.study)+'</div>'+
    '<div class="li">ﾗｯｷｰｶﾗｰ　<b style="color:#ff9ad5">'+E(f.col)+'</b></div><div class="li">ﾗｯｷｰｱｲﾃﾑ　<b style="color:#9be3ff">'+E(f.item)+'</b></div>';
-  history.replaceState(null,'','?s='+i);$('res').scrollIntoView({behavior:'smooth',block:'start'})}
-$('signs').innerHTML=S.map(function(s,i){return '<a class="scell" href="?s='+i+'" data-s="'+i+'" style="text-decoration:none;color:#ffd6ec;min-height:44px"><span style="font-size:18px">'+M[i]+'</span>'+s+'</a>'}).join('');
-$('signs').onclick=function(e){var a=e.target.closest('[data-s]');if(!a)return;e.preventDefault();show(+a.getAttribute('data-s'))};
-$('rank').innerHTML=ORD.map(function(i,k){return '<div class="li"><span class="dg" style="color:#ffe066">'+(k+1)+'位</span> <a href="?s='+i+'" data-s="'+i+'">'+M[i]+' '+S[i]+'</a></div>'}).join('');
-$('rank').onclick=$('signs').onclick;
-var q=+new URLSearchParams(location.search).get('s');if(new URLSearchParams(location.search).has('s')&&q>=0&&q<12)show(q);
+  history.replaceState(null,'','?'+(K==='m'?'t':'s')+'='+i);$('res').scrollIntoView({behavior:'smooth',block:'start'})}
+function setK(k,open){K=k;var S=SETS[k];$('t-z').setAttribute('aria-selected',k==='z');$('t-m').setAttribute('aria-selected',k==='m');$('lead').textContent=S.lead;$('t16note').hidden=k!=='m';
+  F=S.L.map(function(_,i){return fort(i,S.salt)});ORD=F.map(function(f,i){return i}).sort(function(a,b){return F[b].total-F[a].total});
+  $('signs').style.gridTemplateColumns='repeat('+(k==='m'?4:3)+',minmax(0,1fr))';
+  $('signs').innerHTML=S.L.map(function(s,i){return '<a class="scell" href="#" data-s="'+i+'" style="text-decoration:none;color:#ffd6ec;min-height:44px"><span style="font-size:18px">'+S.M[i]+'</span>'+E(s)+'</a>'}).join('');
+  $('rank').innerHTML=ORD.map(function(i,n){return '<div class="li"><span class="dg" style="color:#ffe066">'+(n+1)+'位</span> <a href="#" data-s="'+i+'">'+S.M[i]+' '+E(S.L[i])+'</a></div>'}).join('');
+  $('res').hidden=true;if(open!=null)show(open)}
+function pick(e){var a=e.target.closest('[data-s]');if(!a)return;e.preventDefault();show(+a.getAttribute('data-s'))}
+$('signs').onclick=pick;$('rank').onclick=pick;
+$('t-z').onclick=function(){setK('z')};$('t-m').onclick=function(){setK('m')};
+var P=new URLSearchParams(location.search);
+if(P.has('t')&&+P.get('t')>=0&&+P.get('t')<16)setK('m',+P.get('t'));else if(P.has('s')&&+P.get('s')>=0&&+P.get('s')<12)setK('z',+P.get('s'));else setK(location.hash==='#m'?'m':'z');
 </script>
 </body>
 </html>
