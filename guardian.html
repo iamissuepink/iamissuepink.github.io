@@ -70,7 +70,7 @@
 <script>
 var $=function(i){return document.getElementById(i)},E=DB.esc,V={public:'誰でも見れる',members:'会員だけ',friends:'めろ友だけ',private:'自分だけ'};
 async function load(){try{var K=await DB.gChildren();
-  $('kids').innerHTML=K.length?K.map(function(k){if(!k.approved)return '<div class="li"><b>'+E(k.nickname)+'</b>（ID: '+E(k.hp_id)+'）<br>承認待ちです<br><button type="button" class="del" data-ok="'+k.id+'">利用を承認する</button></div>';
+  $('kids').innerHTML=K.length?K.map(function(k){if(!k.approved)return '<div class="li"><b>'+E(k.nickname)+'</b>（めろID: '+E(k.hp_id)+'）<br>承認待ちです<br><button type="button" class="del" data-ok="'+k.id+'">利用を承認する</button></div>';
     return '<div class="li"><b>'+E(k.nickname)+'</b>（<a href="hp.html?id='+E(k.hp_id)+'" target="_blank">ﾎﾑﾍﾟを見る</a>）<div class="fm" style="gap:4px;margin-top:4px"><label>公開範囲</label><select data-vis="'+k.id+'">'+Object.keys(V).map(function(v){return '<option value="'+v+'"'+(k.visibility===v?' selected':'')+'>'+V[v]+'</option>'}).join('')+'</select>'+
     '<label style="display:flex;gap:6px;align-items:center;color:#ffd6ec"><input type="checkbox" data-lock="'+k.id+'"'+(k.vis_locked?' checked':'')+'> お子さまが公開範囲を変えられないようにする</label><button type="button" class="del" data-save="'+k.id+'">保存</button>'+(k.visibility?'':'<small>※まだﾎﾑﾍﾟが作られていません</small>')+'</div></div>'}).join(''):'<p>お子さまのｱｶｳﾝﾄが見つかりません。お子さまが入力したﾒｰﾙｱﾄﾞﾚｽで登録しているか確認してください。</p>';
   var F=await DB.gFriends();

@@ -468,7 +468,7 @@ document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{
   if(!/^[a-z0-9_]{3,16}$/.test(HID)){note('ﾎﾑﾍﾟが見つからないょ<br><br><a href="index.html">めろﾋﾟｮﾝ☆TOPへ</a>');return}
   try{me=await DB.me();R=await DB.getHp(HID)}catch(e){note(esc(e.message));return}
   if(!R){note('このIDのﾎﾑﾍﾟゎ見つからないょ<br><br><a href="index.html">めろﾋﾟｮﾝ☆TOPへ</a>');return}
-  document.getElementById('mid').textContent='ID: '+R.hp_id;
+  document.getElementById('mid').textContent='めろID: '+R.hp_id;
   owner=!!(me&&me.id===R.id);
   document.getElementById('rpt').href='report.html?type=hp&hp='+encodeURIComponent(HID);
   if(owner){try{INFO=await DB.myInfo(me.id)}catch(e){}}

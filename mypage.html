@@ -47,9 +47,9 @@
 </section>
 <section class="sec gd glow" id="setup" hidden>
 <h3>★はじめの設定★</h3>
-<p style="font-size:12px">ﾎﾑﾍﾟを作る前に1回だけ設定してね。<b>IDゎあとから変えられない</b>ょ</p>
+<p style="font-size:12px">ﾎﾑﾍﾟを作る前に1回だけ設定してね。<b>めろIDゎあとから変えられない</b>ょ</p>
 <div class="fm" style="gap:8px">
-<label for="hpid">ﾎﾑﾍﾟID（半角英小文字・数字・_ の3〜16文字）</label>
+<label for="hpid">めろID（半角英小文字・数字・_ の3〜16文字）</label>
 <input id="hpid" type="text" maxlength="16" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="例：ayapyon">
 <p class="msg" id="idmsg" style="text-align:left"></p>
 <label for="by">生まれた年と月（ほかの人にゎ見えないょ）</label>
@@ -94,6 +94,7 @@
 <section class="sec bl glow">
 <h3>★ﾒﾆｭｰ★</h3>
 <a class="pill" href="bbs.html">掲示板(BBS)</a>
+<a class="pill purple" id="adminl" href="admin.html" hidden>管理画面（運営専用）</a>
 </section>
 <button class="pill purple" id="out" type="button">ﾛｸﾞｱｳﾄ</button>
 </div>
@@ -129,6 +130,7 @@ try{var p=await DB.getProfile(u.id);
   $('hello').textContent=(p?p.nickname:'ななしさん')+'さん';$('nick').value=p?p.nickname:'';$('bio').value=p?p.bio:'';
   var d=new Date(p?p.created_at:u.created_at);$('since').textContent=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
 }catch(e){say(e.message,true)}
+DB.isAdmin(u.id).then(function(a){if(a)$('adminl').hidden=false}).catch(function(){});
 try{var info=await DB.myInfo(u.id);
   if(!info){$('setup').hidden=false;initSetup()}
   else if(info.needs_guardian&&!info.guardian_approved){$('pending').hidden=false;$('gurl').textContent=location.origin+location.pathname.replace(/[^\/]*$/,'')+'guardian.html'}
@@ -156,7 +158,7 @@ function initSetup(){
     t=setTimeout(async function(){try{var ok=await DB.idOk(v);if($('hpid').value!==v)return;m.textContent=ok?'そのID使えるょ✧':'そのIDゎ使えないょ';m.className='msg'+(ok?'':' ng')}catch(e){m.textContent=e.message;m.className='msg ng'}},400)};
   $('setbtn').onclick=async function(){var b=this,sm=$('setmsg');
     if(!$('by').value||!$('bm').value){sm.textContent='生まれた年と月を選んでね';sm.className='msg ng';return}
-    if(!confirm('ID「'+$('hpid').value+'」で設定する？（あとから変えられないょ）'))return;
+    if(!confirm('めろID「'+$('hpid').value+'」で設定する？（あとから変えられないょ）'))return;
     b.disabled=true;sm.textContent='設定中…';sm.className='msg';
     try{await DB.setup($('hpid').value,$('by').value+'-'+('0'+$('bm').value).slice(-2),$('gbox').hidden?'':$('gmail').value.trim());location.reload()}
     catch(e){sm.textContent=e.message;sm.className='msg ng'}b.disabled=false};

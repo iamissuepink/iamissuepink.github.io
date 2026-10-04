@@ -43,8 +43,8 @@
 <div class="fm" style="gap:8px" id="form">
 <label for="rs">理由</label>
 <select id="rs"><option value="">えらんでね</option><option>個人情報</option><option>悪口・いじめ</option><option>出会い・勧誘</option><option>宣伝・詐欺</option><option>著作権</option><option>その他</option></select>
-<label for="hp">ﾎﾑﾍﾟID（わかれば）</label><input id="hp" type="text" maxlength="16" autocapitalize="off">
-<label for="dt">くわしく（なくてもOK）</label><textarea id="dt" maxlength="500"></textarea>
+<label for="hp">めろID（わかれば）</label><input id="hp" type="text" maxlength="16" autocapitalize="off">
+<label for="dt">くわしく（めろIDがわからないときゎ書いてね）</label><textarea id="dt" maxlength="500"></textarea>
 <button class="pill" id="go" type="button">通報する</button>
 </div>
 <p class="msg" id="msg" role="status"></p>
@@ -74,13 +74,13 @@
 <script>
 var $=function(i){return document.getElementById(i)},P=new URLSearchParams(location.search),T=P.get('type')||'hp',ID=P.get('id')||'',HP=(P.get('hp')||'').toLowerCase();
 var TY={hp:'ﾎﾑﾍﾟ',bbs:'みんなの掲示板の書き込み',hp_bbs:'ﾎﾑﾍﾟBBSの書き込み',diary:'日記',photo:'写真',question:'質問箱',material:'素材'};if(!TY[T])T='hp';
-$('hp').value=HP;$('tgt').textContent='通報するもの：'+TY[T]+(HP?'（ID: '+HP+'）':'');
+$('hp').value=HP;$('tgt').textContent='通報するもの：'+TY[T]+(HP?'（めろID: '+HP+'）':'');
 DB.me().then(function(u){if(!u){$('form').innerHTML='<p>通報するにゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してね。ﾛｸﾞｲﾝできないときゎ、まわりの大人に相談してね。</p>'}});
 $('go').onclick=async function(){var b=this,m=$('msg'),hp=$('hp').value.trim().toLowerCase();
   if(!$('rs').value){m.textContent='理由をえらんでね';m.className='msg ng';return}
-  if(T==='hp'&&!ID&&!hp){m.textContent='ﾎﾑﾍﾟIDを入れてね';m.className='msg ng';return}
+  if(!ID&&!hp&&!$('dt').value.trim()){m.textContent='めろIDがわからないときゎ「くわしく」に、どんなことがあったか書いてね';m.className='msg ng';return}
   b.disabled=true;
-  try{await DB.report(T,ID||hp,hp,$('rs').value,$('dt').value.trim());$('form').innerHTML='';m.textContent='通報を受け付けたょ。教えてくれてありがとう。';m.className='msg'}
+  try{await DB.report(T,ID||hp||'-',hp,$('rs').value,$('dt').value.trim());$('form').innerHTML='';m.textContent='通報を受け付けたょ。教えてくれてありがとう。';m.className='msg'}
   catch(e){m.textContent=e.message;m.className='msg ng';b.disabled=false}};
 </script>
 </body>
