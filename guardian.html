@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390">
-<title>ﾛｸﾞｲﾝ｜めろﾋﾟｮﾝ☆</title>
+<title>保護者ﾍﾟｰｼﾞ｜めろﾋﾟｮﾝ☆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=4">
@@ -29,31 +29,23 @@
 </svg>
 <span class="puffy" style="font-size: 30px; margin-top: -4px">めろﾋﾟｮﾝ☆</span>
 </a>
-<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★ﾛｸﾞｲﾝ・無料登録★ ﾒｱﾄﾞだけでｶﾝﾀﾝ登録♪ ﾊﾟｽﾜｰﾄﾞゎ誰にも教えないでね!!</span></div>
-<h1 class="puffy" style="font-size: 30px; margin-top: 6px">LOGIN</h1>
-<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★ﾛｸﾞｲﾝ・無料登録★</p>
+<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★保護者の方へ★ お子さまのめろﾋﾟｮﾝ☆の利用を見守るﾍﾟｰｼﾞです</span></div>
+<h1 class="puffy" style="font-size: 30px; margin-top: 6px">GUARDIAN</h1>
+<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★保護者ﾍﾟｰｼﾞ★</p>
 
-<div style="width:100%">
-<div class="tabs" role="tablist">
-<button type="button" role="tab" id="t-in" aria-selected="true">ﾛｸﾞｲﾝ</button>
-<button type="button" role="tab" id="t-up" aria-selected="false">無料登録♡</button>
-</div>
-<section class="sec pk glow" style="border-radius:0 0 14px 14px">
-<div id="f-in" class="fm" style="gap:8px">
-<label for="in-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="in-mail" type="email" autocomplete="email">
-<label for="in-pass">ﾊﾟｽﾜｰﾄﾞ</label><input id="in-pass" type="password" autocomplete="current-password">
-<button class="pill purple" id="b-in" type="button" style="margin-top:8px">ﾛｸﾞｲﾝ</button>
-</div>
-<div id="f-up" class="fm" style="gap:8px" hidden>
-<label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
-<label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-mail" type="email" autocomplete="email">
-<label for="up-pass">ﾊﾟｽﾜｰﾄﾞ（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
-<button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
-<p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!<br>※ﾆｯｸﾈｰﾑに本名ゎ使わないでね</p>
-</div>
-<p class="msg" id="msg" role="status"></p>
+<section class="sec gd glow">
+<h3>保護者の方へ</h3>
+<p style="font-size:12px;text-align:left">めろﾋﾟｮﾝ☆では、12歳以下のお子さまが利用するには保護者の方の承認が必要です。<br>
+1. お子さまが登録時に入力したﾒｰﾙｱﾄﾞﾚｽで、めろﾋﾟｮﾝ☆に会員登録してください（ﾎﾑﾍﾟを作る必要はありません）<br>
+2. このﾍﾟｰｼﾞを開くと、お子さまのｱｶｳﾝﾄが表示されます<br>
+3. 承認後は、ﾎﾑﾍﾟの公開範囲の設定・ﾛｯｸや、めろ友申請の承認ができます</p>
 </section>
+<p class="msg" id="msg">確認中…</p>
+<div id="main" hidden style="width:100%;display:flex;flex-direction:column;gap:14px">
+<section class="sec pk glow"><h3>♡お子さま♡</h3><div id="kids"></div></section>
+<section class="sec pp glow"><h3>♡めろ友申請の承認♡</h3><div id="frs"></div></section>
 </div>
+
 <svg width="300" height="34" viewBox="0 0 300 34" aria-hidden="true">
 <g stroke="#ffffff" stroke-width="1.5">
 <path d="M22 28 C4 16 6 4 15 4 C19 4 22 7 22 10 C22 7 25 4 29 4 C38 4 40 16 22 28 Z" fill="#ff4fa3"></path>
@@ -76,19 +68,22 @@
 <script src="db.js?v=6"></script>
 <script src="kira.js?v=2"></script>
 <script>
-(function(){
-var $=function(i){return document.getElementById(i)},msg=$('msg');
-function say(t,ng){msg.textContent=t;msg.className='msg'+(ng?' ng':'')}
-function tab(up){$('t-in').setAttribute('aria-selected',!up);$('t-up').setAttribute('aria-selected',up);$('f-in').hidden=up;$('f-up').hidden=!up;say('')}
-$('t-in').onclick=function(){tab(false)};$('t-up').onclick=function(){tab(true)};
-if(location.hash==='#signup')tab(true);
-DB.me().then(function(u){if(u)location.href='mypage.html'});
-$('b-in').onclick=async function(){var b=this;b.disabled=true;say('ﾛｸﾞｲﾝ中…');
-  try{await DB.logIn($('in-mail').value.trim(),$('in-pass').value);location.href='mypage.html'}catch(e){say(e.message,true)}b.disabled=false};
-$('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim();
-  if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
-  b.disabled=true;say('登録中…');
-  try{await DB.signUp($('up-mail').value.trim(),$('up-pass').value,n);say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉')}catch(e){say(e.message,true)}b.disabled=false};
-})();</script>
+var $=function(i){return document.getElementById(i)},E=DB.esc,V={public:'誰でも見れる',members:'会員だけ',friends:'めろ友だけ',private:'自分だけ'};
+async function load(){try{var K=await DB.gChildren();
+  $('kids').innerHTML=K.length?K.map(function(k){if(!k.approved)return '<div class="li"><b>'+E(k.nickname)+'</b>（ID: '+E(k.hp_id)+'）<br>承認待ちです<br><button type="button" class="del" data-ok="'+k.id+'">利用を承認する</button></div>';
+    return '<div class="li"><b>'+E(k.nickname)+'</b>（<a href="hp.html?id='+E(k.hp_id)+'" target="_blank">ﾎﾑﾍﾟを見る</a>）<div class="fm" style="gap:4px;margin-top:4px"><label>公開範囲</label><select data-vis="'+k.id+'">'+Object.keys(V).map(function(v){return '<option value="'+v+'"'+(k.visibility===v?' selected':'')+'>'+V[v]+'</option>'}).join('')+'</select>'+
+    '<label style="display:flex;gap:6px;align-items:center;color:#ffd6ec"><input type="checkbox" data-lock="'+k.id+'"'+(k.vis_locked?' checked':'')+'> お子さまが公開範囲を変えられないようにする</label><button type="button" class="del" data-save="'+k.id+'">保存</button>'+(k.visibility?'':'<small>※まだﾎﾑﾍﾟが作られていません</small>')+'</div></div>'}).join(''):'<p>お子さまのｱｶｳﾝﾄが見つかりません。お子さまが入力したﾒｰﾙｱﾄﾞﾚｽで登録しているか確認してください。</p>';
+  var F=await DB.gFriends();
+  $('frs').innerHTML=F.length?F.map(function(f){return '<div class="li"><b>'+E(f.child)+'</b> と <a href="hp.html?id='+E(f.other_hp)+'" target="_blank">'+E(f.other)+'</a> さんのめろ友申請<br><button type="button" class="del" data-fok="'+f.id+'">承認する</button><button type="button" class="del" data-fng="'+f.id+'">断る</button></div>'}).join(''):'<p>承認が必要な申請ゎありません</p>'}
+  catch(e){$('kids').innerHTML='<p class="msg ng">'+E(e.message)+'</p>'}}
+document.addEventListener('click',async function(e){var t=e.target,a;
+  try{
+    if(a=t.getAttribute('data-ok')){if(!confirm('お子さまの利用を承認しますか？'))return;await DB.gApprove(a);load()}
+    else if(a=t.getAttribute('data-save')){await DB.gSet(a,document.querySelector('[data-vis="'+a+'"]').value,document.querySelector('[data-lock="'+a+'"]').checked);alert('保存しました')}
+    else if(a=t.getAttribute('data-fok')){await DB.gOkFriend(+a);load()}
+    else if(a=t.getAttribute('data-fng')){if(!confirm('この申請を断りますか？'))return;await DB.gNgFriend(+a);load()}
+  }catch(err){alert(err.message)}});
+DB.me().then(function(u){if(!u){$('msg').innerHTML='<a href="login.html#signup">会員登録</a>または<a href="login.html">ﾛｸﾞｲﾝ</a>してください';return}$('msg').hidden=true;$('main').hidden=false;load()});
+</script>
 </body>
 </html>

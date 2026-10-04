@@ -6,7 +6,7 @@
 <title>掲示板｜めろﾋﾟｮﾝ☆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css?v=3">
+<link rel="stylesheet" href="common.css?v=4">
 </head>
 <body>
 <div id="root" style="margin: 0 auto; position: relative; overflow: hidden; width: 390px; min-height: 100vh; box-sizing: border-box; padding: 18px 0 30px; font-family: 'Kosugi Maru', sans-serif; font-size: 13px; line-height: 1.7; color: #ffd6ec; background-color: #000000; background-image: radial-gradient(#ffffff 1.1px, transparent 1.8px), radial-gradient(#ff7fc4 1.3px, transparent 2px); background-size: 26px 26px, 40px 40px; background-position: 0 0, 13px 20px">
@@ -63,14 +63,14 @@
 </svg>
 <a class="pill purple" href="index.html" style="width: 100%">◀ TOPにもどる</a>
 <footer style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; font-size: 11px; margin-top: 6px">
-<a href="info.html#rules">利用規約</a><a href="info.html#rules">ﾌﾟﾗｲﾊﾞｼｰ</a><a href="info.html#contact">お問い合わせ</a><a href="info.html#contact">通報する</a>
+<a href="info.html#rules">利用規約</a><a href="info.html#rules">ﾌﾟﾗｲﾊﾞｼｰ</a><a href="info.html#contact">お問い合わせ</a><a href="report.html">通報する</a>
 </footer>
 <p style="margin: 0; font-size: 11px; color: #c9a2ff">(c) めろﾋﾟｮﾝ☆</p>
 </div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=5"></script>
+<script src="db.js?v=6"></script>
 <script src="kira.js?v=2"></script>
 <script>
 (async function(){
@@ -79,7 +79,7 @@ function say(t,ng){msg.textContent=t;msg.className='msg'+(ng?' ng':'')}
 var u=await DB.me();
 async function load(){try{var ps=await DB.posts(50);
   $('list').innerHTML=ps.length?ps.map(function(p,i){var n=p.profiles?p.profiles.nickname:'ななしさん';
-    return '<div class="post"><span class="nm" style="color:'+C[i%C.length]+'">'+DB.esc(n)+'</span> <span class="dt">'+DB.time(p.created_at)+'</span>'+(u&&p.user_id===u.id?'<button class="del" type="button" data-id="'+p.id+'">削除</button>':'')+'\n'+DB.esc(p.body)+'</div>'}).join(''):'<p class="msg">まだ書き込みがないょ。一番乗りしてね♪</p>';
+    return '<div class="post"><span class="nm" style="color:'+C[i%C.length]+'">'+DB.esc(n)+'</span> <span class="dt">'+DB.time(p.created_at)+'</span>'+(u&&p.user_id===u.id?'<button class="del" type="button" data-id="'+p.id+'">削除</button>':'')+(u&&p.user_id===u.id?'':'<a class="del" style="text-decoration:none" href="report.html?type=bbs&id='+p.id+'">通報</a>')+'\n'+DB.esc(p.body)+'</div>'}).join(''):'<p class="msg">まだ書き込みがないょ。一番乗りしてね♪</p>';
 }catch(e){$('list').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
 if(u){$('can').hidden=false;try{var p=await DB.getProfile(u.id);$('who').textContent=(p?p.nickname:'ななしさん')+'さん'}catch(e){}}else{$('need').hidden=false}
 $('send').onclick=async function(){var b=this,t=$('body').value.trim();

@@ -139,15 +139,18 @@ body.ed{padding-bottom:210px}
 .tg{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px}.tg label{display:flex;align-items:center;gap:3px;min-height:28px}
 .hist .d{color:var(--hi);font-size:11px}.hist a{color:var(--ink)}
 .mbar .ic{font-size:14px;text-decoration:none}
+
+.uhtml{display:block;width:100%;height:200px;border:0;background:#fff;border-radius:6px}
+.eta.code{font-family:"Courier New",monospace;font-size:13px;white-space:pre;overflow-x:auto}
 </style>
 </head>
 <body>
-<div class="mbar"><a class="lg" href="index.html">めろﾋﾟｮﾝ☆</a><span id="mid"></span><span style="display:flex;gap:10px;align-items:center"><a class="ic" href="search.html" aria-label="ﾎﾑﾍﾟ検索">🔍</a><a class="ic" href="#" id="rlt" aria-label="ﾎﾑﾍﾟﾙｰﾚｯﾄ">🎲</a><a href="info.html#contact">通報</a></span></div>
+<div class="mbar"><a class="lg" href="index.html">めろﾋﾟｮﾝ☆</a><span id="mid"></span><span style="display:flex;gap:10px;align-items:center"><a class="ic" href="search.html" aria-label="ﾎﾑﾍﾟ検索">🔍</a><a class="ic" href="#" id="rlt" aria-label="ﾎﾑﾍﾟﾙｰﾚｯﾄ">🎲</a><a id="rpt" href="report.html">通報</a></span></div>
 <div id="root"><p class="note">読み込み中…</p></div>
 <div id="ui"></div>
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=5"></script>
+<script src="db.js?v=6"></script>
 <script>
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
@@ -160,7 +163,7 @@ var COLS=[['ﾋﾟﾝｸ','#ff3d9a'],['赤','#ff2a2a'],['ｵﾚﾝｼﾞ','#ff95
 var THEMES=[['pink','ﾋﾟﾝｸ水玉'],['gal','黒×ﾋﾟﾝｸ×ｺﾞｰﾙﾄﾞ'],['yume','ゆめかわ'],['mizu','水色'],['lemon','ﾚﾓﾝ']];
 var CV=[['bg','背景'],['pat','背景の水玉'],['card','画面の中'],['ink','文字'],['hi','メイン色'],['hi2','サブ色']];
 var BUILTIN={prof:'♡ﾌﾟﾛﾌ♡',intro:'♡自己紹介♡',real:'♡ﾘｱﾙ♡',diary:'♡日記♡',photo:'♡写真♡',bbs:'♡BBS♡',ask:'♡質問箱♡',link:'♡ﾘﾝｸ♡'};
-var CLAPS=null,FR=null,KIRI=0;
+var CLAPS=null,FR=null,KIRI=0,INFO=null,SUSP=false;
 var DV='☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆';
 function esc(x){return DB.esc(x)}
 function clock(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
@@ -198,6 +201,7 @@ function ta(attr,v,ph,h){return '<textarea class="eta deco" '+attr+' placeholder
 function iconOk(){return D.icon&&D.icon.indexOf(DB.imgBase)===0}
 function top(){
   var h='',s=sp(D.song);
+  if(SUSP)h+='<div class="kiri" style="border-color:#ff2a2a"><b>このﾎﾑﾍﾟゎ運営によって凍結されています</b><br><small>ほかの人からゎ見れない状態だょ。くわしくゎお問い合わせしてね</small></div>';
   h+=ED?'<span class="elb">ﾎﾑﾍﾟ名</span>'+inp('title',D.title,'big'):'<h1><span class="tw">✦</span>'+esc(D.title)+'<span class="tw b">✦</span></h1>';
   if(ED)h+='<span class="elb">流れる文字</span>'+inp('marquee',D.marquee,'deco');else if(D.marquee)h+='<div class="marq"><span>'+deco(D.marquee)+'</span></div>';
   if(iconOk())h+='<img class="pic" src="'+esc(D.icon)+'" alt="ﾌﾟﾛﾌ画像">';
@@ -242,40 +246,72 @@ function real(){
   if(!D.real.length)h+='<p class="empty">まだﾘｱﾙはありません</p>';
   D.real.forEach(function(e,i){h+='<div class="ent"><div class="d">'+esc(tm(e.at))+(i===0?'<span class="new">NEW!</span>':'')+(ED?' <button type="button" class="ebtn sub" data-act="delreal" data-i="'+i+'" style="min-height:24px;padding:0 8px">消す</button>':'')+'</div>'+deco(e.t)+'</div>'});
   return h+back()}
+function htmlOk(){return INFO&&INFO.created_at&&Date.now()-new Date(INFO.created_at).getTime()>=3*86400000}
+function htmlDoc(code){var base=DB.imgBase.replace(/\/hp\/$/,'/');
+  var csp="default-src 'none'; img-src "+base+" data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; font-src data:";
+  code=String(code||'').replace(/\[s=([^\]\s]+)\]/g,function(m,x){return DB.sozOk(x)?'<img src="'+DB.sozBase+x+'" alt="">':''});
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="'+csp+'"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>'+code+
+    '<script>(function(){function s(){parent.postMessage({melo:1,h:document.documentElement.scrollHeight},"*")}try{new ResizeObserver(s).observe(document.documentElement)}catch(e){}addEventListener("load",s);setTimeout(s,300);s()})()<\/script></body></html>'}
+function plain(t){return String(t||'').replace(/\[[^\]]*\]/g,'')}
+function starter(k){var p=D.pages[k],m=D.menu.filter(function(x){return x.k===k})[0];
+  return '<style>\nbody{margin:0;padding:12px;background:#ffd6ea;color:#6b1f45;font-family:sans-serif;font-size:14px;text-align:center}\nh1{color:#ff3d9a;font-size:20px}\n.box{background:#fff;border:2px dotted #ff8cc6;border-radius:10px;padding:10px;margin:10px 0}\n
+/* ===== 平成リアル寄せ ===== */
+.menu a{border-radius:0;background:var(--hi);border:2px outset var(--hi2);box-shadow:none;text-shadow:none;padding:5px 2px;font-size:12px}
+.menu a::before{display:none}
+.menu a:active{transform:none;box-shadow:none;border-style:inset}
+.ttl{border-radius:0;font-size:13px}
+.ebtn{border-radius:0;background:var(--hi);border:2px outset var(--hi2);font-size:12px}
+.ebtn.sub{background:var(--card);border:2px outset var(--line)}
+.ebtn:active{border-style:inset}
+.mini2{border-radius:0}
+.ein,.eta{border-radius:0;border:2px inset var(--hi2)}
+.tools button,.mini,.pal button,.moods button{border-radius:0}
+.sh{border-radius:0}.mbox{border-radius:0}.kiri{border-radius:0}.box{border-radius:0}
+.pgrid img{border-radius:0}.pic{border-radius:0}
+.song iframe{border-radius:0}
+.mbar .lg{font-family:"MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif}
+</style>\n<h1>'+esc(plain(m?m.l:'ﾍﾟｰｼﾞ'))+'</h1>\n<div class="box">\n'+esc(plain(p.b)||'ここに好きなことを書いてね♪').replace(/\n/g,'<br>\n')+'\n</div>\n'}
+function frameH(k){return '<iframe class="uhtml" data-pg="'+esc(k)+'" sandbox="allow-scripts" title="'+esc(plain(label(k)))+'"></iframe>'}
 function page(k){
   var p=D.pages[k];if(!p)return ttl('ﾍﾟｰｼﾞ')+'<p class="empty">このﾍﾟｰｼﾞゎ見つからないょ</p>'+back();
-  if(ED)return ttl(label(k))+'<span class="elb">ﾍﾟｰｼﾞの中身</span>'+ta('data-pg="'+esc(k)+'"',p.b,'自由に書いてね♪',260)+back();
+  if(ED){var h=ttl(label(k))+'<div class="vact"><button type="button" class="ebtn'+(p.fmt==='html'?' sub':'')+'" data-act="fmt" data-i="0" data-v="'+esc(k)+'">文章で書く</button><button type="button" class="ebtn'+(p.fmt==='html'?'':' sub')+'" data-act="fmt" data-i="1" data-v="'+esc(k)+'">HTMLで作る</button></div>';
+    if(p.fmt!=='html')return h+'<span class="elb">ﾍﾟｰｼﾞの中身</span>'+ta('data-pg="'+esc(k)+'"',p.b,'自由に書いてね♪',260)+back();
+    if(!htmlOk())return h+'<p class="empty">HTMLで作る機能ゎ、はじめの設定から3日たつと使えるょ</p>'+back();
+    return h+'<p class="note2" style="color:var(--hi)">HTMLとCSSで自由に作れるょ。外部のｻｲﾄの画像やｽｸﾘﾌﾟﾄ、ﾌｫｰﾑゎ使えないょ。素材ゎ [s=ｺｰﾄﾞ] で入る</p><div class="vact"><button type="button" class="ebtn sub" data-act="kaizo" data-v="'+esc(k)+'">文章ﾍﾟｰｼﾞを元に改造</button><button type="button" class="ebtn sub" data-act="blank" data-v="'+esc(k)+'">白紙にする</button></div>'+
+      '<textarea class="eta code" data-pgh="'+esc(k)+'" spellcheck="false" style="min-height:260px">'+esc(p.h||'')+'</textarea><span class="elb">ﾌﾟﾚﾋﾞｭｰ</span>'+frameH(k)+back()}
+  if(p.fmt==='html')return frameH(k)+back();
   return ttl(label(k))+(p.b?'<p style="word-break:break-all">'+deco(p.b)+'</p>':'<p class="empty">まだ何も書いてないょ</p>')+back()}
 /* 交流ページ */
 var LOAD={diary:ldDiary,photo:ldPhoto,bbs:ldBbs,ask:ldAsk,link:ldLink,foot:ldFoot};
 function apage(k){return ttl(k==='foot'?'足あと':label(k))+'<div id="ap"><p class="empty">読み込み中…</p></div>'+back()}
 function ap(h){var e=document.getElementById('ap');if(e)e.innerHTML=h}
 function fail(e){ap('<p class="empty">'+esc(e.message)+'</p>')}
+function rep(t,id){return '<a class="mini2" style="text-decoration:none;display:inline-flex;align-items:center" href="report.html?type='+t+'&id='+encodeURIComponent(id)+'&hp='+encodeURIComponent(HID)+'">通報</a>'}
 function who(p){return p&&p.hp_id?'<a href="hp.html?id='+esc(p.hp_id)+'">'+esc(p.nickname)+'</a>':esc(p?p.nickname:'ななしさん')}
 async function ldDiary(){try{var L=await DB.diaries(R.id),h='';
   if(ED)h+='<div class="box"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div>';
   if(!L.length)h+='<p class="empty">まだ日記ゎありません</p>';
-  L.forEach(function(d,i){h+='<details class="dia"'+(i===0?' open':'')+'><summary><span class="d">'+esc(tm(d.created_at))+'</span> '+esc(d.title||'無題')+(d.is_public?'':' <span class="ptag">非公開</span>')+(i===0?'<span class="new">NEW!</span>':'')+'</summary><div class="bd">'+deco(d.body)+'</div>'+
+  L.forEach(function(d,i){h+='<details class="dia"'+(i===0?' open':'')+'><summary><span class="d">'+esc(tm(d.created_at))+'</span> '+esc(d.title||'無題')+(d.is_public?'':' <span class="ptag">非公開</span>')+(i===0?'<span class="new">NEW!</span>':'')+'</summary><div class="bd">'+deco(d.body)+'</div>'+(!owner?'<p style="text-align:right;margin:2px 0">'+rep('diary',d.id)+'</p>':'')+
     (ED?'<p style="text-align:right;margin:4px 0"><button type="button" class="ebtn sub" data-act="dpub" data-i="'+d.id+'" data-v="'+(d.is_public?'0':'1')+'">'+(d.is_public?'非公開にする':'公開する')+'</button> <button type="button" class="ebtn sub" data-act="ddel" data-i="'+d.id+'">消す</button></p>':'')+'</details>'});
   ap(h)}catch(e){fail(e)}}
 async function ldPhoto(){try{var L=await DB.photos(R.id),h='';
   if(ED)h+='<div class="box"><label class="ebtn" style="display:inline-flex;align-items:center">写真を選ぶ<input type="file" id="pf" accept="image/*" hidden></label> <input class="ein" id="pc" maxlength="100" placeholder="ひとこと（なくてもOK）" style="margin-top:6px"><p class="note2" style="color:var(--hi)">※自動で小さくして、撮った場所の情報を消すょ</p></div>';
   if(!L.length)h+='<p class="empty">まだ写真ゎありません</p>';
-  h+='<div class="pgrid">'+L.map(function(p){return '<figure><img src="'+esc(DB.imgBase+p.path)+'" alt="'+esc(p.caption||'写真')+'" loading="lazy">'+(p.caption?'<figcaption>'+esc(p.caption)+'</figcaption>':'')+(ED?'<button type="button" class="ebtn sub" data-act="pdel" data-i="'+p.id+'" data-v="'+esc(p.path)+'">消す</button>':'')+'</figure>'}).join('')+'</div>';
+  h+='<div class="pgrid">'+L.map(function(p){return '<figure><img src="'+esc(DB.imgBase+p.path)+'" alt="'+esc(p.caption||'写真')+'" loading="lazy">'+(p.caption?'<figcaption>'+esc(p.caption)+'</figcaption>':'')+(!owner?rep('photo',p.id):'')+(ED?'<button type="button" class="ebtn sub" data-act="pdel" data-i="'+p.id+'" data-v="'+esc(p.path)+'">消す</button>':'')+'</figure>'}).join('')+'</div>';
   ap(h);var f=document.getElementById('pf');if(f)f.onchange=function(){if(f.files[0])upPhoto(f.files[0])}}catch(e){fail(e)}}
 async function upPhoto(file){st('写真を準備中…');try{var blob=await shrink(file,1000),r=await DB.uploadImg(me.id,blob);await DB.addPhoto(r.path,(document.getElementById('pc')||{}).value||'');st('写真を追加したょ✧');ldPhoto()}catch(e){st(e.message)}}
 async function ldBbs(){try{var L=await DB.hpPosts(R.id),h='';
   h+=me?'<div class="box">'+ta('id="bb" maxlength="500"','','書き込んでね♪',70)+'<p style="text-align:right;margin:4px 0 0"><button type="button" class="ebtn" data-act="badd">書き込む</button></p></div>':'<p class="empty">書き込むにゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してね</p>';
   if(!L.length)h+='<p class="empty">まだ書き込みゎありません</p>';
   L.forEach(function(p){var mine=me&&p.user_id===me.id;h+='<div class="ent"><div class="d">'+who(p.profiles)+' '+esc(tm(p.created_at))+
-    (mine||owner?' <button type="button" class="mini2" data-act="bdel" data-i="'+p.id+'">消す</button>':'')+(owner&&!mine?' <button type="button" class="mini2" data-act="bblk" data-v="'+esc(p.user_id)+'">ﾌﾞﾛｯｸ</button>':'')+'</div>'+deco(p.body)+'</div>'});
+    (mine||owner?' <button type="button" class="mini2" data-act="bdel" data-i="'+p.id+'">消す</button>':'')+(owner&&!mine?' <button type="button" class="mini2" data-act="bblk" data-v="'+esc(p.user_id)+'">ﾌﾞﾛｯｸ</button>':'')+(!mine?' '+rep('hp_bbs',p.id):'')+'</div>'+deco(p.body)+'</div>'});
   ap(h)}catch(e){fail(e)}}
 async function ldAsk(){try{var L=await DB.questions(R.id),h='';
   if(!owner)h+=me?'<div class="box">'+ta('id="qq" maxlength="300"','','質問してね♪（名前ゎ表示されないょ）',70)+'<p style="text-align:right;margin:4px 0 0"><button type="button" class="ebtn" data-act="qadd">質問する</button></p></div>':'<p class="empty">質問するにゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してね</p>';
   var un=L.filter(function(q){return !q.answer}),an=L.filter(function(q){return q.answer});
   if(owner&&un.length){h+='<p class="elb">未回答（自分にしか見えないょ）</p>';un.forEach(function(q){h+='<div class="ent"><div class="d">'+esc(tm(q.created_at))+'</div>Q. '+esc(q.body)+'<textarea class="eta" data-qa="'+q.id+'" placeholder="回答を書く" style="min-height:50px;margin-top:4px"></textarea><p style="text-align:right;margin:4px 0"><button type="button" class="ebtn" data-act="qans" data-i="'+q.id+'">回答する</button> <button type="button" class="mini2" data-act="qdel" data-i="'+q.id+'">消す</button> <button type="button" class="mini2" data-act="qblk" data-i="'+q.id+'">ﾌﾞﾛｯｸ</button></p></div>'})}
   if(!an.length)h+='<p class="empty">まだ回答した質問ゎありません</p>';
-  an.forEach(function(q){h+='<div class="ent"><b>Q.</b> '+esc(q.body)+'<br><b style="color:var(--hi)">A.</b> '+deco(q.answer)+(owner?' <button type="button" class="mini2" data-act="qdel" data-i="'+q.id+'">消す</button>':'')+'</div>'});
+  an.forEach(function(q){h+='<div class="ent"><b>Q.</b> '+esc(q.body)+'<br><b style="color:var(--hi)">A.</b> '+deco(q.answer)+(!owner?' '+rep('question',q.id):'')+(owner?' <button type="button" class="mini2" data-act="qdel" data-i="'+q.id+'">消す</button>':'')+'</div>'});
   ap(h)}catch(e){fail(e)}}
 async function ldLink(){try{var L=await DB.hpFriends(R.id),h='<p class="elb">めろ友</p>';
   if(!L.length)h+='<p class="empty">ﾘﾝｸ募集中ﾃﾞｽ</p>';
@@ -301,7 +337,7 @@ function draw(){
   if(LOAD[r]){root.innerHTML=frame(apage(r));LOAD[r]()}
   else root.innerHTML=frame(f?f():(D.pages[r]?page(r):top()));
   if(!r&&!ED)ldUpd();
-  readGlit();drawUi()}
+  fillFrames();readGlit();drawUi()}
 function cur(v){return getComputedStyle(document.documentElement).getPropertyValue('--'+v).trim()}
 function sheetHtml(){
   if(sheet==='color')return '<div class="sh"><p class="shh">文字の色（選んだ文字を囲むょ）</p><div class="sw">'+COLS.map(function(c){return '<button type="button" data-act="wrapc" data-v="'+c[1]+'" style="background:'+c[1]+'" aria-label="'+c[0]+'"></button>'}).join('')+'</div></div>';
@@ -340,7 +376,10 @@ function drawUi(){
   var f=document.getElementById('iconf');if(f)f.onchange=function(){if(f.files[0])upIcon(f.files[0])}}
 async function ldSoz(){var e=document.getElementById('szl');if(!e)return;try{var L=await DB.materials(60);
   e.innerHTML=L.length?L.map(function(m){return '<button type="button" data-act="ins" data-v="[s='+esc(m.path)+']" title="'+esc(m.title)+'"><img src="'+esc(DB.sozBase+m.path)+'" alt="'+esc(m.title||'素材')+'" style="max-height:32px;max-width:80px"></button>'}).join(''):'まだ素材がないょ'}catch(err){e.textContent=err.message}}
-function redrawPage(){var r=location.hash.replace(/^#/,''),fn={prof:prof,intro:intro,real:real}[r];if(LOAD[r])return;root.innerHTML=frame(fn?fn():(D.pages[r]?page(r):top()))}
+function redrawPage(){var r=location.hash.replace(/^#/,''),fn={prof:prof,intro:intro,real:real}[r];if(LOAD[r])return;root.innerHTML=frame(fn?fn():(D.pages[r]?page(r):top()));fillFrames()}
+function fillFrames(){document.querySelectorAll('iframe.uhtml').forEach(function(f){var p=D.pages[f.getAttribute('data-pg')];if(p)f.srcdoc=htmlDoc(p.h)})}
+window.addEventListener('message',function(e){if(!e.data||e.data.melo!==1)return;document.querySelectorAll('iframe.uhtml').forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(Math.max(+e.data.h||0,120),6000)+'px'})});
+var pvT=null;
 function changed(){dirty=true;st('まだ保存してないょ')}
 function st(t){var e=document.getElementById('st');if(e)e.textContent=t}
 /* 選んだ文字を囲む・挿入 */
@@ -352,7 +391,8 @@ function lastOk(){return lastF&&document.body.contains(lastF)}
 root.addEventListener('input',function(e){var t=e.target,k=t.getAttribute('data-k'),q=t.getAttribute('data-q'),pg=t.getAttribute('data-pg');
   if(k){D[k]=t.type==='checkbox'?t.checked:t.value;changed()}
   else if(q){var p=q.split(',');D.qa[+p[0]][+p[1]]=t.value;changed()}
-  else if(pg&&D.pages[pg]){D.pages[pg].b=t.value;changed()}});
+  else if(pg&&D.pages[pg]){D.pages[pg].b=t.value;changed()}
+  else if(t.getAttribute('data-pgh')){var kk=t.getAttribute('data-pgh');if(D.pages[kk]){D.pages[kk].h=t.value;changed();clearTimeout(pvT);pvT=setTimeout(fillFrames,600)}}});
 root.addEventListener('change',function(e){if(e.target.getAttribute('data-k')==='song')draw()});
 document.addEventListener('click',async function(e){var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act'),i=+b.getAttribute('data-i'),v=b.getAttribute('data-v'),el;
   if(a==='edit'){ED=true;draw()}
@@ -373,6 +413,9 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='resetc'){D.colors={};applyColors();readGlit();changed();drawUi()}
   else if(a==='delicon'){if(confirm('ﾌﾟﾛﾌ画像を外す？')){var old=D.iconPath;D.icon='';D.iconPath='';await save(null,true);if(old)DB.delImg(old).catch(function(){});draw()}}
   else if(a==='save'){await save(b)}
+  else if(a==='fmt'){D.pages[v].fmt=i===1?'html':'tpl';changed();draw()}
+  else if(a==='kaizo'){if(D.pages[v].h&&!confirm('今のHTMLを上書きする？'))return;D.pages[v].h=starter(v);changed();draw()}
+  else if(a==='blank'){if(D.pages[v].h&&!confirm('HTMLを全部消す？'))return;D.pages[v].h='';changed();draw()}
   else if(a==='clap'){if(!me){alert('拍手するにゎﾛｸﾞｲﾝしてね');return}try{CLAPS=await DB.clap(R.id);thanks()}catch(err){alert(err.message)}}
   else if(a==='closem'){var m=document.getElementById('modal');if(m)m.remove();draw()}
   else if(a==='freq'){if(!confirm(R.nickname+' さんにめろ友申請する？'))return;try{await DB.requestFriend(R.id);FR='sent';draw()}catch(err){alert(err.message)}}
@@ -427,8 +470,10 @@ document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{
   if(!R){note('このIDのﾎﾑﾍﾟゎ見つからないょ<br><br><a href="index.html">めろﾋﾟｮﾝ☆TOPへ</a>');return}
   document.getElementById('mid').textContent='ID: '+R.hp_id;
   owner=!!(me&&me.id===R.id);
-  if(R.hp){D=fix(R.hp.data,R.nickname);VIS=R.hp.visibility;CNT=R.hp.counter}
-  else if(owner){var info=await DB.myInfo(me.id);
+  document.getElementById('rpt').href='report.html?type=hp&hp='+encodeURIComponent(HID);
+  if(owner){try{INFO=await DB.myInfo(me.id)}catch(e){}}
+  if(R.hp){D=fix(R.hp.data,R.nickname);VIS=R.hp.visibility;CNT=R.hp.counter;SUSP=!!R.hp.suspended}
+  else if(owner){var info=INFO;
     if(!info||(info.needs_guardian&&!info.guardian_approved)){note('ﾏｲﾍﾟｰｼﾞで設定を済ませてね<br><br><a href="mypage.html">ﾏｲﾍﾟｰｼﾞへ</a>');return}
     D=def(R.nickname);isNew=true;VIS=DB.age(info.birth_ym.slice(0,7))<18?'members':'public';dirty=true}
   else{note(me?'このﾎﾑﾍﾟゎ見れないか、まだ作られてないょ':'このﾎﾑﾍﾟを見るにゎﾛｸﾞｲﾝが必要かも<br><br><a href="login.html">ﾛｸﾞｲﾝ</a>');return}

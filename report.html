@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390">
-<title>ﾛｸﾞｲﾝ｜めろﾋﾟｮﾝ☆</title>
+<title>通報｜めろﾋﾟｮﾝ☆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=4">
@@ -29,31 +29,27 @@
 </svg>
 <span class="puffy" style="font-size: 30px; margin-top: -4px">めろﾋﾟｮﾝ☆</span>
 </a>
-<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★ﾛｸﾞｲﾝ・無料登録★ ﾒｱﾄﾞだけでｶﾝﾀﾝ登録♪ ﾊﾟｽﾜｰﾄﾞゎ誰にも教えないでね!!</span></div>
-<h1 class="puffy" style="font-size: 30px; margin-top: 6px">LOGIN</h1>
-<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★ﾛｸﾞｲﾝ・無料登録★</p>
+<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★通報★ 困ったことがあったら教えてね。運営が確認するょ</span></div>
+<h1 class="puffy" style="font-size: 30px; margin-top: 6px">REPORT</h1>
+<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★通報★</p>
 
-<div style="width:100%">
-<div class="tabs" role="tablist">
-<button type="button" role="tab" id="t-in" aria-selected="true">ﾛｸﾞｲﾝ</button>
-<button type="button" role="tab" id="t-up" aria-selected="false">無料登録♡</button>
-</div>
-<section class="sec pk glow" style="border-radius:0 0 14px 14px">
-<div id="f-in" class="fm" style="gap:8px">
-<label for="in-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="in-mail" type="email" autocomplete="email">
-<label for="in-pass">ﾊﾟｽﾜｰﾄﾞ</label><input id="in-pass" type="password" autocomplete="current-password">
-<button class="pill purple" id="b-in" type="button" style="margin-top:8px">ﾛｸﾞｲﾝ</button>
-</div>
-<div id="f-up" class="fm" style="gap:8px" hidden>
-<label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
-<label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-mail" type="email" autocomplete="email">
-<label for="up-pass">ﾊﾟｽﾜｰﾄﾞ（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
-<button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
-<p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!<br>※ﾆｯｸﾈｰﾑに本名ゎ使わないでね</p>
+<section class="sec gd glow">
+<h3>通報について</h3>
+<p style="font-size:12px">ﾙｰﾙ違反や、こわい・いやな思いをしたときゎ通報してね。誰が通報したかゎ相手にゎ伝わらないょ。<br>命や体が危ないときゎ、すぐにまわりの大人や警察（110）に相談してね。</p>
+</section>
+<section class="sec pk glow">
+<h3>✎通報する✎</h3>
+<p id="tgt" style="font-size:12px"></p>
+<div class="fm" style="gap:8px" id="form">
+<label for="rs">理由</label>
+<select id="rs"><option value="">えらんでね</option><option>個人情報</option><option>悪口・いじめ</option><option>出会い・勧誘</option><option>宣伝・詐欺</option><option>著作権</option><option>その他</option></select>
+<label for="hp">ﾎﾑﾍﾟID（わかれば）</label><input id="hp" type="text" maxlength="16" autocapitalize="off">
+<label for="dt">くわしく（なくてもOK）</label><textarea id="dt" maxlength="500"></textarea>
+<button class="pill" id="go" type="button">通報する</button>
 </div>
 <p class="msg" id="msg" role="status"></p>
 </section>
-</div>
+
 <svg width="300" height="34" viewBox="0 0 300 34" aria-hidden="true">
 <g stroke="#ffffff" stroke-width="1.5">
 <path d="M22 28 C4 16 6 4 15 4 C19 4 22 7 22 10 C22 7 25 4 29 4 C38 4 40 16 22 28 Z" fill="#ff4fa3"></path>
@@ -76,19 +72,16 @@
 <script src="db.js?v=6"></script>
 <script src="kira.js?v=2"></script>
 <script>
-(function(){
-var $=function(i){return document.getElementById(i)},msg=$('msg');
-function say(t,ng){msg.textContent=t;msg.className='msg'+(ng?' ng':'')}
-function tab(up){$('t-in').setAttribute('aria-selected',!up);$('t-up').setAttribute('aria-selected',up);$('f-in').hidden=up;$('f-up').hidden=!up;say('')}
-$('t-in').onclick=function(){tab(false)};$('t-up').onclick=function(){tab(true)};
-if(location.hash==='#signup')tab(true);
-DB.me().then(function(u){if(u)location.href='mypage.html'});
-$('b-in').onclick=async function(){var b=this;b.disabled=true;say('ﾛｸﾞｲﾝ中…');
-  try{await DB.logIn($('in-mail').value.trim(),$('in-pass').value);location.href='mypage.html'}catch(e){say(e.message,true)}b.disabled=false};
-$('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim();
-  if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
-  b.disabled=true;say('登録中…');
-  try{await DB.signUp($('up-mail').value.trim(),$('up-pass').value,n);say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉')}catch(e){say(e.message,true)}b.disabled=false};
-})();</script>
+var $=function(i){return document.getElementById(i)},P=new URLSearchParams(location.search),T=P.get('type')||'hp',ID=P.get('id')||'',HP=(P.get('hp')||'').toLowerCase();
+var TY={hp:'ﾎﾑﾍﾟ',bbs:'みんなの掲示板の書き込み',hp_bbs:'ﾎﾑﾍﾟBBSの書き込み',diary:'日記',photo:'写真',question:'質問箱',material:'素材'};if(!TY[T])T='hp';
+$('hp').value=HP;$('tgt').textContent='通報するもの：'+TY[T]+(HP?'（ID: '+HP+'）':'');
+DB.me().then(function(u){if(!u){$('form').innerHTML='<p>通報するにゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してね。ﾛｸﾞｲﾝできないときゎ、まわりの大人に相談してね。</p>'}});
+$('go').onclick=async function(){var b=this,m=$('msg'),hp=$('hp').value.trim().toLowerCase();
+  if(!$('rs').value){m.textContent='理由をえらんでね';m.className='msg ng';return}
+  if(T==='hp'&&!ID&&!hp){m.textContent='ﾎﾑﾍﾟIDを入れてね';m.className='msg ng';return}
+  b.disabled=true;
+  try{await DB.report(T,ID||hp,hp,$('rs').value,$('dt').value.trim());$('form').innerHTML='';m.textContent='通報を受け付けたょ。教えてくれてありがとう。';m.className='msg'}
+  catch(e){m.textContent=e.message;m.className='msg ng';b.disabled=false}};
+</script>
 </body>
 </html>

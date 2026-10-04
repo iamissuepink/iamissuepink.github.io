@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390">
-<title>素材置き場｜めろﾋﾟｮﾝ☆</title>
+<title>管理画面｜めろﾋﾟｮﾝ☆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=4">
@@ -29,25 +29,16 @@
 </svg>
 <span class="puffy" style="font-size: 30px; margin-top: -4px">めろﾋﾟｮﾝ☆</span>
 </a>
-<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>✿素材置き場✿ ﾎﾑﾍﾟに使える素材がいっぱい♪ 自分で作った素材を置いてね</span></div>
-<h1 class="puffy" style="font-size: 30px; margin-top: 6px">SOZAI</h1>
-<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">✿素材置き場✿</p>
+<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★管理画面★ 運営専用ﾍﾟｰｼﾞ</span></div>
+<h1 class="puffy" style="font-size: 30px; margin-top: 6px">ADMIN</h1>
+<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★管理画面★</p>
 
-<section class="sec gd glow">
-<h3>★使い方★</h3>
-<p style="font-size:12px">使いたい素材の「ｺｰﾄﾞをｺﾋﾟｰ」を押して、ﾎﾑﾍﾟの編集画面に貼ってね。編集画面の「素材」ボタンからも選べるょ。</p>
-</section>
-<section class="sec pk glow" id="up" hidden>
-<h3>✎素材を置く✎</h3>
-<div class="fm" style="gap:8px">
-<label for="sf">画像（gif・png・webp、300KBまで）</label><input id="sf" type="file" accept="image/gif,image/png,image/webp">
-<label for="st">素材の名前</label><input id="st" type="text" maxlength="30" placeholder="例：ﾋﾟﾝｸのﾊｰﾄ">
-<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="own" style="width:18px;height:18px;margin-top:2px">自分で作った素材です（ほかのサイトの素材や、ｷｬﾗｸﾀｰ・芸能人の画像ゎ置けないょ）</label>
-<button class="pill" id="sbtn" type="button">置く♪</button>
-<p class="msg" id="smsg" role="status"></p>
+<p class="msg" id="msg">確認中…</p>
+<div id="main" hidden style="width:100%;display:flex;flex-direction:column;gap:14px">
+<div class="tabs" role="tablist"><button type="button" role="tab" id="t-open" aria-selected="true">未対応の通報</button><button type="button" role="tab" id="t-done" aria-selected="false">対応済み</button></div>
+<section class="sec pk glow" style="border-radius:0 0 14px 14px"><div id="reps"></div></section>
+<section class="sec pp glow"><h3>★ﾎﾑﾍﾟ見回り（更新順）★</h3><div id="hps"></div></section>
 </div>
-</section>
-<section class="sec pp glow"><h3>♡新着素材♡</h3><div id="res" class="sgrid"><p class="msg">読み込み中…</p></div></section>
 
 <svg width="300" height="34" viewBox="0 0 300 34" aria-hidden="true">
 <g stroke="#ffffff" stroke-width="1.5">
@@ -71,25 +62,30 @@
 <script src="db.js?v=6"></script>
 <script src="kira.js?v=2"></script>
 <script>
-var $=function(i){return document.getElementById(i)};
+var $=function(i){return document.getElementById(i)},E=DB.esc,ST='open',TY={hp:'ﾎﾑﾍﾟ',bbs:'みんなの掲示板の書き込み',hp_bbs:'ﾎﾑﾍﾟBBSの書き込み',diary:'日記',photo:'写真',question:'質問箱',material:'素材'};
 function tm(s){var d=new Date(s);return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
-function isNew(s){return Date.now()-new Date(s).getTime()<3*86400000}
-function hpRow(h,extra){return '<a class="hrow" href="hp.html?id='+DB.esc(h.hp_id)+'">'+(h.icon&&h.icon.indexOf(DB.imgBase)===0?'<img src="'+DB.esc(h.icon)+'" alt="">':'<span class="noimg">♡</span>')+'<span><b>'+DB.esc(h.title||h.nickname+'のﾎﾑﾍﾟ')+'</b><br><small>by '+DB.esc(h.nickname)+(extra||'')+'</small>'+(h.tags&&h.tags.length?'<br><small class="tg">'+h.tags.map(function(t){return '#'+DB.esc(t)}).join(' ')+'</small>':'')+'</span></a>'}
-async function roulette(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else alert('まだﾎﾑﾍﾟがないみたい')}catch(e){alert(e.message)}}
-
-var me=null;
-async function load(){try{var L=await DB.materials(120);
-  $('res').innerHTML=L.length?L.map(function(m){var p=m.profiles||{};return '<div class="scell"><div class="simg"><img src="'+DB.esc(DB.sozBase+m.path)+'" alt="'+DB.esc(m.title||'素材')+'"></div><b>'+DB.esc(m.title||'無題')+'</b><small>by '+(p.hp_id?'<a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a>':DB.esc(p.nickname||''))+'</small><button type="button" class="del" data-cp="'+DB.esc(m.path)+'">ｺｰﾄﾞをｺﾋﾟｰ</button>'+(me&&m.user_id===me.id?'<button type="button" class="del" data-rm="'+m.id+'" data-p="'+DB.esc(m.path)+'">削除</button>':'<a class="del" style="text-decoration:none" href="report.html?type=material&id='+m.id+'&hp='+encodeURIComponent(p.hp_id||'')+'">通報</a>')+'</div>'}).join(''):'<p class="msg">まだ素材がないょ。一番乗りしてね♪</p>'}
-  catch(e){$('res').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
-$('res').onclick=async function(e){var c=e.target.getAttribute('data-cp'),r=e.target.getAttribute('data-rm');
-  if(c){var code='[s='+c+']';try{await navigator.clipboard.writeText(code);e.target.textContent='ｺﾋﾟｰしたょ✧'}catch(err){prompt('このｺｰﾄﾞをｺﾋﾟｰしてね',code)}}
-  else if(r){if(!confirm('この素材を削除する？（使ってるﾎﾑﾍﾟからも消えるょ）'))return;try{await DB.delMaterial(+r,e.target.getAttribute('data-p'));load()}catch(err){alert(err.message)}}};
-$('sbtn').onclick=async function(){var b=this,m=$('smsg'),f=$('sf').files[0];
-  if(!f){m.textContent='画像を選んでね';m.className='msg ng';return}
-  if(!$('own').checked){m.textContent='自分で作った素材だけ置けるょ';m.className='msg ng';return}
-  b.disabled=true;m.textContent='ｱｯﾌﾟﾛｰﾄﾞ中…';m.className='msg';
-  try{await DB.addMaterial(me.id,f,$('st').value.trim());m.textContent='置いたょ✧';$('sf').value='';$('st').value='';$('own').checked=false;load()}catch(e){m.textContent=e.message;m.className='msg ng'}b.disabled=false};
-DB.me().then(function(u){me=u;if(u)$('up').hidden=false;load()});
+async function loadReps(){$('reps').innerHTML='<p class="msg">読み込み中…</p>';try{var L=await DB.reports(ST);
+  $('reps').innerHTML=L.length?L.map(function(r){return '<div class="li"><span class="dt">'+tm(r.created_at)+'</span> <b style="color:#ffe066">'+E(r.reason)+'</b><br>'+E(TY[r.target_type]||r.target_type)+' #'+E(r.target_id)+(r.hp_id?' ／ <a href="hp.html?id='+E(r.hp_id)+'" target="_blank">'+E(r.hp_id)+'のﾎﾑﾍﾟ</a>':'')+(r.detail?'<br><small>'+E(r.detail)+'</small>':'')+
+    '<br>'+(r.target_type!=='hp'?'<button type="button" class="del" data-del="'+r.id+'" data-t="'+E(r.target_type)+'" data-tid="'+E(r.target_id)+'">中身を削除</button>':'')+(r.hp_id?'<button type="button" class="del" data-sus="'+E(r.hp_id)+'">ﾎﾑﾍﾟを凍結</button>':'')+
+    (ST==='open'?'<button type="button" class="del" data-done="'+r.id+'">対応済みにする</button>':'<button type="button" class="del" data-reopen="'+r.id+'">未対応に戻す</button>')+'</div>'}).join(''):'<p>通報ゎありません</p>'}
+  catch(e){$('reps').innerHTML='<p class="msg ng">'+E(e.message)+'</p>'}}
+async function loadHps(){try{var L=await DB.adminHps();
+  $('hps').innerHTML=L.length?L.map(function(h){return '<div class="li"><a href="hp.html?id='+E(h.hp_id)+'" target="_blank">'+E(h.title||h.nickname)+'</a> <small>（'+E(h.hp_id)+' ／ '+E(h.visibility)+' ／ '+(h.age==null?'?':h.age)+'歳）</small><br><span class="dt">'+tm(h.updated_at)+'</span> '+(h.suspended?'<b style="color:#ff7a7a">凍結中</b> <button type="button" class="del" data-unsus="'+h.user_id+'">凍結解除</button>':'<button type="button" class="del" data-susu="'+h.user_id+'">凍結</button>')+'</div>'}).join(''):'<p>まだﾎﾑﾍﾟゎありません</p>'}
+  catch(e){$('hps').innerHTML='<p class="msg ng">'+E(e.message)+'</p>'}}
+document.addEventListener('click',async function(e){var t=e.target,a;
+  try{
+    if(a=t.getAttribute('data-del')){if(!confirm('この中身を削除する？'))return;await DB.adminDel(t.getAttribute('data-t'),t.getAttribute('data-tid'));alert('削除したょ');}
+    else if(a=t.getAttribute('data-sus')){if(!confirm(a+' のﾎﾑﾍﾟを凍結する？'))return;var uid=await DB.userByHp(a);if(!uid)throw new Error('ﾎﾑﾍﾟが見つからないょ');await DB.suspend(uid,true);alert('凍結したょ');loadHps()}
+    else if(a=t.getAttribute('data-susu')){if(!confirm('凍結する？'))return;await DB.suspend(a,true);loadHps()}
+    else if(a=t.getAttribute('data-unsus')){await DB.suspend(a,false);loadHps()}
+    else if(a=t.getAttribute('data-done')){await DB.setReport(+a,'done');loadReps()}
+    else if(a=t.getAttribute('data-reopen')){await DB.setReport(+a,'open');loadReps()}
+  }catch(err){alert(err.message)}});
+function tab(s){ST=s;$('t-open').setAttribute('aria-selected',s==='open');$('t-done').setAttribute('aria-selected',s==='done');loadReps()}
+$('t-open').onclick=function(){tab('open')};$('t-done').onclick=function(){tab('done')};
+DB.me().then(async function(u){if(!u){$('msg').innerHTML='<a href="login.html">ﾛｸﾞｲﾝ</a>してね';return}
+  if(!(await DB.isAdmin(u.id))){$('msg').textContent='このﾍﾟｰｼﾞゎ運営専用だょ';return}
+  $('msg').hidden=true;$('main').hidden=false;tab('open');loadHps()});
 </script>
 </body>
 </html>

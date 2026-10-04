@@ -22,6 +22,9 @@ function err(e){
   if(/friend_exists/.test(m))return 'もう申請してるか、めろ友になってるょ';
   if(/not_ready/.test(m))return 'ﾛｸﾞｲﾝして「はじめの設定」をしてからね';
   if(/cannot_accept/.test(m))return 'この申請ゎ承認できないょ';
+  if(/vis_locked/.test(m))return '公開範囲ゎ保護者の人がロックしてるょ';
+  if(/cannot_approve/.test(m))return '承認できなかったょ（ﾒｰﾙｱﾄﾞﾚｽを確認してね）';
+  if(/not_guardian|not_admin/.test(m))return 'この操作ゎできないょ';
   if(/exceeded the maximum|too large/i.test(m))return '画像が大きすぎるょ';
   if(/row-level security|permission denied|Unauthorized/i.test(m))return 'ﾏｲﾍﾟｰｼﾞで「はじめの設定」をしてからね';
   return 'ｴﾗｰ: '+m;
@@ -39,11 +42,11 @@ window.DB={
   posts:function(n){return run(sb.from('bbs_posts').select('id,user_id,body,created_at,profiles(nickname)').order('created_at',{ascending:false}).limit(n||50))},
   addPost:function(body){return run(sb.from('bbs_posts').insert({body:body}))},
   delPost:function(id){return run(sb.from('bbs_posts').delete().eq('id',id))},
-  myInfo:async function(id){var d=await run(sb.from('private_info').select('birth_ym,needs_guardian,guardian_approved,leave_footprints').eq('id',id).limit(1));return d[0]||null},
+  myInfo:async function(id){var d=await run(sb.from('private_info').select('birth_ym,needs_guardian,guardian_approved,leave_footprints,vis_locked,created_at').eq('id',id).limit(1));return d[0]||null},
   myHpId:async function(id){var d=await run(sb.from('profiles').select('hp_id').eq('id',id).limit(1));return d[0]?d[0].hp_id:null},
   idOk:function(p){return run(sb.rpc('hp_id_available',{p:p}))},
   setup:function(hpId,birth,guardian){return run(sb.rpc('setup_account',{p_hp_id:hpId,p_birth:birth,p_guardian:guardian||''}))},
-  getHp:async function(hpId){var d=await run(sb.from('profiles').select('id,nickname,hp_id,homepages(data,visibility,counter,updated_at)').eq('hp_id',hpId).limit(1));
+  getHp:async function(hpId){var d=await run(sb.from('profiles').select('id,nickname,hp_id,homepages(data,visibility,counter,updated_at,suspended)').eq('hp_id',hpId).limit(1));
     if(!d[0])return null;var h=d[0].homepages;if(Array.isArray(h))h=h[0]||null;return {id:d[0].id,nickname:d[0].nickname,hp_id:d[0].hp_id,hp:h}},
   saveHp:function(uid,data,vis){return run(sb.from('homepages').upsert({user_id:uid,data:data,visibility:vis,updated_at:new Date().toISOString()}))},
   imgBase:IMG,sozBase:SOZ,
@@ -86,6 +89,20 @@ window.DB={
   delFriend:function(id){return run(sb.from('friend_requests').delete().eq('id',id))},
   incoming:function(me){return run(sb.from('friend_requests').select('id,created_at,profiles!friend_requests_from_id_fkey(nickname,hp_id)').eq('to_id',me).eq('status','pending').order('created_at',{ascending:false}))},
   hpFriends:function(o){return run(sb.rpc('hp_friends',{p_owner:o}))},
+  report:function(t,id,hp,reason,detail){return run(sb.from('reports').insert({target_type:t,target_id:String(id),hp_id:hp||null,reason:reason,detail:detail||''}))},
+  isAdmin:async function(uid){var d=await run(sb.from('admins').select('user_id').eq('user_id',uid).limit(1));return !!d[0]},
+  reports:function(st){return run(sb.from('reports').select('*').eq('status',st||'open').order('created_at',{ascending:false}).limit(100))},
+  setReport:function(id,st){return run(sb.from('reports').update({status:st}).eq('id',id))},
+  adminDel:function(t,id){var tb={bbs:'bbs_posts',hp_bbs:'hp_bbs',diary:'diaries',photo:'photos',question:'questions',material:'materials'}[t];if(!tb)throw new Error('この種類ゎ削除できないょ');return run(sb.from(tb).delete().eq('id',id))},
+  suspend:function(uid,v){return run(sb.rpc('admin_suspend',{p_user:uid,p:v}))},
+  adminHps:function(){return run(sb.rpc('admin_hps',{lim:100}))},
+  userByHp:async function(hp){var d=await run(sb.from('profiles').select('id').eq('hp_id',hp).limit(1));return d[0]?d[0].id:null},
+  gChildren:function(){return run(sb.rpc('guardian_children'))},
+  gApprove:function(c){return run(sb.rpc('guardian_approve',{p_child:c}))},
+  gSet:function(c,vis,lock){return run(sb.rpc('guardian_set',{p_child:c,p_vis:vis,p_lock:lock}))},
+  gFriends:function(){return run(sb.rpc('guardian_friend_requests'))},
+  gOkFriend:function(id){return run(sb.rpc('guardian_ok_friend',{p_id:id}))},
+  gNgFriend:function(id){return run(sb.rpc('guardian_ng_friend',{p_id:id}))},
   visit:function(hpId){return run(sb.rpc('hp_visit',{p_hp_id:hpId}))},
   age:function(ym){var p=String(ym).split('-'),y=+p[0],m=+p[1],t=new Date(),last=new Date(y,m,0).getDate();
     var a=t.getFullYear()-y;if(t.getMonth()+1<m||(t.getMonth()+1===m&&t.getDate()<last))a--;return a}
