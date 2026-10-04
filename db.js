@@ -3,6 +3,7 @@
 var URL='https://sxlcqlgkcsavaavcoduc.supabase.co';
 var KEY='sb_publishable_YhIWbfIEOGUtrh-xPrM59w_qBJBABz0';
 var sb=window.supabase.createClient(URL,KEY);
+var IMG=URL+'/storage/v1/object/public/hp/';
 var SITE=location.origin+location.pathname.replace(/[^\/]*$/,'');
 function err(e){
   var m=(e&&e.message)||String(e);
@@ -16,7 +17,8 @@ function err(e){
   if(/already_set/.test(m))return 'はじめの設定ゎもう終わってるょ';
   if(/need_guardian/.test(m))return '12歳以下の人ゎ保護者のﾒｱﾄﾞが必要だょ';
   if(/bad_birth/.test(m))return '生まれた年と月を確認してね';
-  if(/row-level security|permission denied/i.test(m))return 'ﾏｲﾍﾟｰｼﾞで「はじめの設定」をしてからね';
+  if(/exceeded the maximum|too large/i.test(m))return '画像が大きすぎるょ';
+  if(/row-level security|permission denied|Unauthorized/i.test(m))return 'ﾏｲﾍﾟｰｼﾞで「はじめの設定」をしてからね';
   return 'ｴﾗｰ: '+m;
 }
 async function run(p){var r=await p;if(r.error)throw new Error(err(r.error));return r.data}
@@ -39,6 +41,9 @@ window.DB={
   getHp:async function(hpId){var d=await run(sb.from('profiles').select('id,nickname,hp_id,homepages(data,visibility,counter,updated_at)').eq('hp_id',hpId).limit(1));
     if(!d[0])return null;var h=d[0].homepages;if(Array.isArray(h))h=h[0]||null;return {id:d[0].id,nickname:d[0].nickname,hp_id:d[0].hp_id,hp:h}},
   saveHp:function(uid,data,vis){return run(sb.from('homepages').upsert({user_id:uid,data:data,visibility:vis,updated_at:new Date().toISOString()}))},
+  imgBase:IMG,
+  uploadImg:async function(uid,blob){var path=uid+'/'+Date.now()+'.jpg';await run(sb.storage.from('hp').upload(path,blob,{contentType:'image/jpeg',upsert:false}));return {path:path,url:IMG+path}},
+  delImg:function(path){return run(sb.storage.from('hp').remove([path]))},
   visit:function(hpId){return run(sb.rpc('hp_visit',{p_hp_id:hpId}))},
   age:function(ym){var p=String(ym).split('-'),y=+p[0],m=+p[1],t=new Date(),last=new Date(y,m,0).getDate();
     var a=t.getFullYear()-y;if(t.getMonth()+1<m||(t.getMonth()+1===m&&t.getDate()<last))a--;return a}
