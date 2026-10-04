@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390">
-<title>ｼｽﾃﾑ情報｜めろﾋﾟｮﾝ☆</title>
+<title>ﾛｸﾞｲﾝ｜めろﾋﾟｮﾝ☆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
@@ -29,35 +29,31 @@
 </svg>
 <span class="puffy" style="font-size: 30px; margin-top: -4px">めろﾋﾟｮﾝ☆</span>
 </a>
-<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★ｼｽﾃﾑ情報★ お知らせ・準備状況・よくある質問ゎここでﾁｪｯｸ!!</span></div>
-<h1 class="puffy" style="font-size: 30px; margin-top: 6px">SYSTEM</h1>
-<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★ｼｽﾃﾑ情報★</p>
+<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★ﾛｸﾞｲﾝ・無料登録★ ﾒｱﾄﾞだけでｶﾝﾀﾝ登録♪ ﾊﾟｽﾜｰﾄﾞゎ誰にも教えないでね!!</span></div>
+<h1 class="puffy" style="font-size: 30px; margin-top: 6px">LOGIN</h1>
+<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★ﾛｸﾞｲﾝ・無料登録★</p>
 
-<section class="sec pp glow" id="news">
-<h3>♪お知らせ♪</h3>
-<div class="li"><span class="dt">2026/10/4</span> <span class="blink" style="color: #ff3b3b; font-size: 10px; font-weight: bold">NEW!</span><br>ﾛｸﾞｲﾝ・無料登録、ﾏｲﾍﾟｰｼﾞ、掲示板(BBS)を公開しました✦</div>
-<div class="li"><span class="dt">2026/10/4</span><br>「めろﾋﾟｮﾝ☆とは？」「使い方」「ｼｽﾃﾑ情報」ﾍﾟｰｼﾞを公開しました✦</div>
-<div class="li"><span class="dt">2026/10/4</span><br>めろﾋﾟｮﾝ☆のTOPﾍﾟｰｼﾞを公開しました♪</div>
+<div style="width:100%">
+<div class="tabs" role="tablist">
+<button type="button" role="tab" id="t-in" aria-selected="true">ﾛｸﾞｲﾝ</button>
+<button type="button" role="tab" id="t-up" aria-selected="false">無料登録♡</button>
+</div>
+<section class="sec pk glow" style="border-radius:0 0 14px 14px">
+<div id="f-in" class="fm" style="gap:8px">
+<label for="in-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="in-mail" type="email" autocomplete="email">
+<label for="in-pass">ﾊﾟｽﾜｰﾄﾞ</label><input id="in-pass" type="password" autocomplete="current-password">
+<button class="pill purple" id="b-in" type="button" style="margin-top:8px">ﾛｸﾞｲﾝ</button>
+</div>
+<div id="f-up" class="fm" style="gap:8px" hidden>
+<label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
+<label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-mail" type="email" autocomplete="email">
+<label for="up-pass">ﾊﾟｽﾜｰﾄﾞ（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
+<button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
+<p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!<br>※ﾆｯｸﾈｰﾑに本名ゎ使わないでね</p>
+</div>
+<p class="msg" id="msg" role="status"></p>
 </section>
-<section class="sec pk glow" id="status">
-<h3>✿機能の準備状況✿</h3>
-<div class="li"><span class="tag ok">公開中</span>TOPﾍﾟｰｼﾞ</div><div class="li"><span class="tag ok">公開中</span>めろﾋﾟｮﾝ☆とは？</div><div class="li"><span class="tag ok">公開中</span>使い方</div><div class="li"><span class="tag ok">公開中</span>ｼｽﾃﾑ情報</div><div class="li"><span class="tag wip">準備中</span>12星座占い</div><div class="li"><span class="tag wip">準備中</span>素材置き場</div><div class="li"><span class="tag wip">準備中</span>資料請求</div><div class="li"><span class="tag ok">公開中</span>ﾛｸﾞｲﾝ・無料登録</div><div class="li"><span class="tag ok">公開中</span>ﾏｲﾍﾟｰｼﾞ（ﾎﾑﾍﾟ作成ゎ準備中）</div><div class="li"><span class="tag wip">準備中</span>新着日記</div><div class="li"><span class="tag wip">準備中</span>ﾎﾑﾍﾟ検索・ﾗﾝｷﾝｸﾞ</div><div class="li"><span class="tag ok">公開中</span>掲示板(BBS)</div>
-</section>
-<section class="sec bl glow" id="faq">
-<h3>★よくある質問★</h3>
-<details><summary>いつから使えるの？</summary><p>ﾛｸﾞｲﾝ・ﾎﾑﾍﾟ作成ゎただいま準備中！決まったらお知らせで発表するょ</p></details>
-<details><summary>ｽﾏﾎだけで作れる？</summary><p>ｽﾏﾎだけで作れるようにする予定だょ♪</p></details>
-<details><summary>平成のﾎﾑﾍﾟ知らなくても大丈夫？</summary><p>ﾓﾁﾛﾝ!! 使い方ﾍﾟｰｼﾞも見てね</p></details>
-</section>
-<section class="sec gd glow" id="rules">
-<h3>利用規約・ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰ</h3>
-<p>ただいま準備中です。ﾛｸﾞｲﾝ機能の公開までに掲載します。</p>
-</section>
-<section class="sec gd glow" id="contact">
-<h3>お問い合わせ・通報</h3>
-<p>ただいま準備中です。</p>
-</section>
-
+</div>
 <svg width="300" height="34" viewBox="0 0 300 34" aria-hidden="true">
 <g stroke="#ffffff" stroke-width="1.5">
 <path d="M22 28 C4 16 6 4 15 4 C19 4 22 7 22 10 C22 7 25 4 29 4 C38 4 40 16 22 28 Z" fill="#ff4fa3"></path>
@@ -76,6 +72,23 @@
 </div>
 </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="db.js"></script>
 <script src="kira.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},msg=$('msg');
+function say(t,ng){msg.textContent=t;msg.className='msg'+(ng?' ng':'')}
+function tab(up){$('t-in').setAttribute('aria-selected',!up);$('t-up').setAttribute('aria-selected',up);$('f-in').hidden=up;$('f-up').hidden=!up;say('')}
+$('t-in').onclick=function(){tab(false)};$('t-up').onclick=function(){tab(true)};
+if(location.hash==='#signup')tab(true);
+DB.me().then(function(u){if(u)location.href='mypage.html'});
+$('b-in').onclick=async function(){var b=this;b.disabled=true;say('ﾛｸﾞｲﾝ中…');
+  try{await DB.logIn($('in-mail').value.trim(),$('in-pass').value);location.href='mypage.html'}catch(e){say(e.message,true)}b.disabled=false};
+$('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim();
+  if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
+  b.disabled=true;say('登録中…');
+  try{await DB.signUp($('up-mail').value.trim(),$('up-pass').value,n);say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉')}catch(e){say(e.message,true)}b.disabled=false};
+})();</script>
 </body>
 </html>

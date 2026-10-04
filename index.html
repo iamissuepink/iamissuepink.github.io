@@ -45,8 +45,8 @@
 </section>
 
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%">
-<a class="pill purple" href="#">ﾛｸﾞｲﾝ</a>
-<a class="pill" href="#">無料ﾎﾑﾍﾟ作成♡</a>
+<a class="pill purple" href="login.html">ﾛｸﾞｲﾝ</a>
+<a class="pill" href="login.html#signup">無料ﾎﾑﾍﾟ作成♡</a>
 </div>
 
 <div class="glow" style="width: 100%; box-sizing: border-box; padding: 10px 8px; border: 2px dotted #ff9ad5; border-radius: 10px; display: flex; flex-direction: column; gap: 4px; color: #ffe066">
@@ -71,8 +71,8 @@
 <a class="pill" href="#">新着日記</a>
 <a class="pill" href="#">ﾎﾑﾍﾟ検索</a>
 <a class="pill purple" href="#">ﾗﾝｷﾝｸﾞ</a>
-<a class="pill purple" href="#">ﾏｲﾍﾟｰｼﾞ</a>
-<a class="pill" href="#">掲示板(BBS)</a>
+<a class="pill purple" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
+<a class="pill" href="bbs.html">掲示板(BBS)</a>
 <a class="pill" href="#">素材置き場</a>
 <a class="pill purple" href="#">12星座占い</a>
 <a class="pill purple" href="#">資料請求</a>
@@ -127,14 +127,10 @@
 
 <h2 class="puffy" style="font-size: 26px">BBS</h2>
 <p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">♪みんなの掲示板♪</p>
-<div class="glow" style="width: 100%; box-sizing: border-box; border: 2px dotted #9be3ff; border-radius: 10px; padding: 6px 10px; text-align: left; display: flex; flex-direction: column">
-<div style="padding: 6px 0; border-bottom: 1px dashed #4fc3ff"><span style="color: #9be3ff; font-weight: bold">[名前]</span> <span style="font-size: 11px; color: #ffe066">[00:00]</span><br>[書き込み内容]</div>
-<div style="padding: 6px 0; border-bottom: 1px dashed #4fc3ff"><span style="color: #ff9ad5; font-weight: bold">[名前]</span> <span style="font-size: 11px; color: #ffe066">[00:00]</span><br>[書き込み内容]</div>
-<div style="padding: 6px 0"><span style="color: #5ff08f; font-weight: bold">[名前]</span> <span style="font-size: 11px; color: #ffe066">[00:00]</span><br>[書き込み内容]</div>
-</div>
+<div class="glow" id="topbbs" style="width: 100%; box-sizing: border-box; border: 2px dotted #9be3ff; border-radius: 10px; padding: 6px 10px; text-align: left; display: flex; flex-direction: column"><p class="msg">読み込み中…</p></div>
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%">
-<a class="pill" href="#">書き込む♪</a>
-<a class="pill purple" href="#">BBSを見る</a>
+<a class="pill" href="bbs.html#form">書き込む♪</a>
+<a class="pill purple" href="bbs.html">BBSを見る</a>
 </div>
 <p style="margin: -4px 0 0; font-size: 11px; color: #c9a2ff">※荒らし・個人情報の書き込みは禁止だょ</p>
 
@@ -202,6 +198,12 @@
 
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="db.js"></script>
 <script src="kira.js"></script>
+<script>
+DB.posts(3).then(function(ps){var C=['#9be3ff','#ff9ad5','#5ff08f'];
+document.getElementById('topbbs').innerHTML=ps.length?ps.map(function(p,i){return '<div class="post"><span class="nm" style="color:'+C[i%3]+'">'+DB.esc(p.profiles?p.profiles.nickname:'ななしさん')+'</span> <span class="dt">'+DB.time(p.created_at)+'</span>\n'+DB.esc(p.body)+'</div>'}).join(''):'<p class="msg">まだ書き込みがないょ♪</p>'}).catch(function(){document.getElementById('topbbs').innerHTML='<p class="msg">読み込めなかったょ</p>'});
+</script>
 </body>
 </html>

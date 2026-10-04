@@ -59,3 +59,20 @@ summary::before{content:"Q.";color:#ff9ad5;margin-right:6px}
 details p{margin:4px 0 0 1.6em}
 details p::before{content:"A. ";color:#ffe066}
 .home{display:block;text-decoration:none}
+.fm{display:flex;flex-direction:column;gap:4px;text-align:left;width:100%}
+.fm label{color:#ffe066;font-size:12px}
+.fm input,.fm textarea{width:100%;box-sizing:border-box;font:inherit;font-size:16px;color:#ffd6ec;background:#1a0010;border:2px solid #ff6fb5;border-radius:8px;padding:8px}
+.fm textarea{min-height:90px;resize:vertical}
+.fm input:focus,.fm textarea:focus{outline:2px solid #ffe066;outline-offset:1px}
+button.pill{border:0;width:100%;cursor:pointer}
+button.pill:disabled{opacity:.5;cursor:wait}
+.msg{min-height:1.2em;font-size:12px;color:#ffe066;text-align:center;margin:0}
+.msg.ng{color:#ff7a7a}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}
+.tabs button{font:inherit;font-weight:bold;min-height:40px;border-radius:10px 10px 0 0;border:2px solid #ff6fb5;border-bottom:0;background:#1a0010;color:#ff9ad5;cursor:pointer}
+.tabs button[aria-selected=true]{background:#ff6fb5;color:#fff}
+.post{padding:8px 0;border-bottom:1px dashed #4fc3ff;word-break:break-all;white-space:pre-wrap}
+.post:last-child{border-bottom:0}
+.post .nm{font-weight:bold;white-space:normal}
+.del{font:inherit;font-size:11px;color:#ff9ad5;background:none;border:1px solid #ff9ad5;border-radius:999px;padding:0 8px;margin-left:6px;min-height:24px;cursor:pointer}
+[hidden]{display:none!important}
