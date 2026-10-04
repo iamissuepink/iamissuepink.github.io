@@ -162,6 +162,20 @@ body.ed{padding-bottom:210px}
 .edbar .ebtn.sub,.edbar .ebtn.lt{background:#2a0a20;color:#fff;border:2px outset #ff9ad5}
 .edbar .ebtn{color:#fff}
 .tgc{border-bottom:1px dotted #6b2a55;padding:4px 0}.tgc summary{cursor:pointer;font-size:12px;min-height:28px;display:flex;align-items:center}
+
+.mch{display:flex;flex-direction:column;gap:8px;margin:10px 0}.mch .ebtn{min-height:44px;line-height:1.3}.mch small{font-weight:normal;font-size:10px}
+.toast{position:fixed;left:50%;top:20%;transform:translateX(-50%);z-index:70;background:#ff3d9a;color:#fff;font-weight:bold;padding:10px 18px;border:2px outset #ffb3d9;animation:tst 2.2s ease forwards}
+@keyframes tst{0%{opacity:0;transform:translate(-50%,10px)}12%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.tplg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
+.tplc{display:flex;flex-direction:column;align-items:center;gap:4px;font:inherit;font-size:12px;font-weight:bold;color:var(--ink);background:var(--card);border:2px outset var(--line);padding:8px;cursor:pointer;min-height:44px}
+.tplc .sw{display:block;width:100%;height:44px;border:1px solid var(--line)}
+.sw[data-skin=pink]{background:radial-gradient(#fff 2px,transparent 2.5px) 0 0/12px 12px,#ffb3d9}
+.sw[data-skin=gal]{background:linear-gradient(135deg,#000 50%,#ff3d9a 50%);box-shadow:inset 0 0 0 3px #d4a017}
+.sw[data-skin=yume]{background:linear-gradient(135deg,#ffd6f0,#d6e8ff,#e8d6ff)}
+.sw[data-skin=mizu]{background:radial-gradient(#fff 2px,transparent 2.5px) 0 0/12px 12px,#9be3ff}
+.sw[data-skin=lemon]{background:radial-gradient(#fff 2px,transparent 2.5px) 0 0/12px 12px,#ffe866}
+.bxr{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px dotted var(--line);font-size:12px}.bxa{display:flex;gap:4px;flex:0 0 auto}
+.modal .mbox{max-height:86vh;overflow-y:auto}
 </style>
 </head>
 <body>
@@ -170,7 +184,7 @@ body.ed{padding-bottom:210px}
 <div id="ui"></div>
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=9"></script>
+<script src="db.js?v=10"></script>
 <script>
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
@@ -399,7 +413,14 @@ root.addEventListener('input',function(e){var t=e.target,k=t.getAttribute('data-
   else if(t.getAttribute('data-pgh')){var kk=t.getAttribute('data-pgh');if(D.pages[kk]){D.pages[kk].h=t.value;changed();clearTimeout(pvT);pvT=setTimeout(fillFrames,600)}}});
 root.addEventListener('change',function(e){if(e.target.getAttribute('data-k')==='song')draw()});
 document.addEventListener('click',async function(e){var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act'),i=+b.getAttribute('data-i'),v=b.getAttribute('data-v'),el;
-  if(a==='edit'){ED=true;draw()}
+  if(a==='edit'){chooser()}
+  else if(a==='m_edit'){closeM();ED=true;draw()}
+  else if(a==='m_new'){await newHp()}
+  else if(a==='m_box'){await boxView()}
+  else if(a==='m_close'){closeM()}
+  else if(a==='m_restore'){await restore(i)}
+  else if(a==='m_del'){if(confirm('この保存を消す？（元に戻せないょ）')){try{await DB.delBackup(i);await boxView()}catch(err){alert(err.message)}}}
+  else if(a==='m_skin'){D.theme=v;closeM();ED=true;changed();draw()}
   else if(a==='view'){ED=false;sheet='';draw()}
   else if(a==='sheet'){sheet=sheet===v?'':v;drawUi()}
   else if(a==='wrap'){if(el=target())edit(el,'['+v+']','[/'+v+']')}
@@ -438,6 +459,33 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='qblk'){if(confirm('この質問をした人をﾌﾞﾛｯｸする？（誰かゎわからないままだょ）'))try{await DB.blockAsker(i);await DB.delQ(i);ldAsk()}catch(err){alert(err.message)}}
 });
 var FR_ID=null;
+function closeM(){var m=document.getElementById('modal');if(m)m.remove()}
+function modal(html){closeM();var m=document.createElement('div');m.id='modal';m.className='modal';m.innerHTML='<div class="mbox" role="dialog" aria-modal="true">'+html+'</div>';document.body.appendChild(m);var f=m.querySelector('button');if(f)f.focus()}
+function toast(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2200)}
+var BOX=null;
+async function loadBox(){try{BOX=await DB.backups(me.id)}catch(e){BOX=[]}return BOX}
+function stamp(){var d=new Date();return '保存 '+(d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+async function chooser(){await loadBox();
+  modal('<p class="ttl">ﾎﾑﾍﾟ編集</p><div class="mch">'+
+   '<button type="button" class="ebtn" data-act="m_edit">✎ 今のﾎﾑﾍﾟを編集する</button>'+
+   '<button type="button" class="ebtn" data-act="m_new">♡ 新しく作る<br><small>今のﾎﾑﾍﾟゎ保存BOXにしまうょ</small></button>'+
+   '<button type="button" class="ebtn sub" data-act="m_box">📦 保存BOXを見る（'+BOX.length+'/5）</button>'+
+   '<button type="button" class="ebtn sub" data-act="m_close">とじる</button></div>'+
+   '<p class="note2" style="color:var(--hi)">※日記・写真・BBS・質問箱などゎ、新しく作っても消えずにそのまま残るょ</p>')}
+async function newHp(){await loadBox();
+  if(BOX.length>=5){alert('保存BOXがいっぱいだょ（5個まで）。保存BOXからいらないのを消してね');return boxView()}
+  var name=prompt('今のﾎﾑﾍﾟを保存BOXにしまうょ。名前をつけてね',stamp());if(name===null)return;
+  try{if(!isNew)await DB.addBackup(name.slice(0,30)||stamp(),D)}catch(err){alert(err.message);return}
+  var keep={icon:D.icon,iconPath:D.iconPath};D=fix(def(R.nickname),R.nickname);D.icon=keep.icon;D.iconPath=keep.iconPath;
+  modal('<p class="ttl">テンプレをえらんでね</p><div class="tplg">'+THEMES.map(function(t){return '<button type="button" class="tplc" data-act="m_skin" data-v="'+t[0]+'"><span class="sw" data-skin="'+t[0]+'"></span>'+esc(t[1])+'</button>'}).join('')+'</div><p class="note2" style="color:var(--hi)">あとから「ﾃﾞｻﾞｲﾝ」でいつでも変えられるょ。ﾃﾝﾌﾟﾚゎこれからどんどん増える予定♪</p>')}
+async function boxView(){await loadBox();
+  modal('<p class="ttl">📦 保存BOX（'+BOX.length+'/5）</p>'+(BOX.length?BOX.map(function(b){return '<div class="bxr"><div><b>'+esc(b.name||'無題')+'</b><br><small>'+esc(tm(b.created_at))+' ／ '+esc((b.data&&b.data.title)||'')+'</small></div><div class="bxa"><button type="button" class="ebtn" data-act="m_restore" data-i="'+b.id+'">復活</button><button type="button" class="ebtn sub" data-act="m_del" data-i="'+b.id+'">消す</button></div></div>'}).join(''):'<p class="empty">まだ何もしまってないょ</p>')+
+   '<p style="text-align:center;margin-top:10px"><button type="button" class="ebtn sub" data-act="edit">← もどる</button></p>')}
+async function restore(id){var b=(BOX||[]).filter(function(x){return x.id===id})[0];if(!b)return;
+  var full=BOX.length>=5;
+  if(!confirm(full?'保存BOXがいっぱいだから、今のﾎﾑﾍﾟゎしまえないょ。今のﾎﾑﾍﾟを消して「'+b.name+'」を復活する？':'今のﾎﾑﾍﾟを保存BOXにしまって、「'+b.name+'」を復活する？'))return;
+  try{if(!full&&!isNew)await DB.addBackup(stamp(),D);D=fix(b.data,R.nickname);await DB.saveHp(me.id,D,VIS);await DB.delBackup(b.id);dirty=false;isNew=false;closeM();ED=false;draw();toast('復活したょ✧')}
+  catch(err){alert(err.message)}}
 function thanks(){var m=document.createElement('div');m.id='modal';m.className='modal';
   m.innerHTML='<div class="mbox"><p class="ttl">拍手ありがと♪</p><p style="text-align:center">'+deco(D.thanks)+'</p>'+((D.showClaps||owner)?'<p class="cnt">これまでの拍手 <b>'+CLAPS+'</b></p>':'')+'<p style="text-align:center"><button type="button" class="ebtn" data-act="clap2">もっと拍手👏</button> <button type="button" class="ebtn sub" data-act="closem">とじる</button></p></div>';
   var old=document.getElementById('modal');if(old)old.remove();document.body.appendChild(m)}
@@ -462,7 +510,7 @@ function piCheck(){var all=JSON.stringify([D.title,D.marquee,D.intro,D.qa,D.real
 async function save(b,quiet){
   if(!quiet){var hit=piCheck();if(hit.length&&!confirm(hit.join('・')+'っぽいものが入ってるょ。\n誰でも見れる場所に個人情報を書くのゎ危ないよ。\nこのまま保存する？'))return}
   if(b)b.disabled=true;st('保存中…');
-  try{await DB.saveHp(me.id,D,VIS);dirty=false;isNew=false;st('保存したょ✧')}catch(err){st(err.message)}if(b)b.disabled=false}
+  try{await DB.saveHp(me.id,D,VIS);dirty=false;isNew=false;st('保存したょ✧');if(!quiet){ED=false;sheet='';draw();toast('保存したょ✧')}}catch(err){st(err.message)}if(b)b.disabled=false}
 window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue=''}});
 window.addEventListener('hashchange',function(){draw();scrollTo(0,0)});
 setInterval(function(){var c=document.getElementById('clk');if(c)c.textContent=clock()},30000);
@@ -481,7 +529,8 @@ document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{
     if(!info||(info.needs_guardian&&!info.guardian_approved)){note('ﾏｲﾍﾟｰｼﾞで設定を済ませてね<br><br><a href="mypage.html">ﾏｲﾍﾟｰｼﾞへ</a>');return}
     D=def(R.nickname);isNew=true;VIS=DB.age(info.birth_ym.slice(0,7))<18?'members':'public';dirty=true}
   else{note(me?'このﾎﾑﾍﾟゎ見れないか、まだ作られてないょ':'このﾎﾑﾍﾟを見るにゎﾛｸﾞｲﾝが必要かも<br><br><a href="login.html">ﾛｸﾞｲﾝ</a>');return}
-  ED=owner&&(WANT||isNew);
+  ED=owner&&isNew;
+  if(owner&&WANT&&!isNew)setTimeout(chooser,0);
   draw();
   if(R.hp){DB.clapCount(R.id).then(function(n){CLAPS=n;if(!location.hash&&!ED)draw()}).catch(function(){})}
   if(!owner&&R.hp){DB.visit(HID).then(function(n){if(n){CNT=n;if(isKiri(n))KIRI=n;if(!location.hash)draw()}}).catch(function(){})}

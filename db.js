@@ -25,6 +25,7 @@ function err(e){
   if(/vis_locked/.test(m))return '公開範囲ゎ保護者の人がロックしてるょ';
   if(/cannot_approve/.test(m))return '承認できなかったょ（ﾒｰﾙｱﾄﾞﾚｽを確認してね）';
   if(/not_guardian|not_admin/.test(m))return 'この操作ゎできないょ';
+  if(/hp_backups/.test(m)&&/row-level/.test(m))return '保存BOXがいっぱいだょ（5個まで）。いらないのを消してね';
   if(/exceeded the maximum|too large/i.test(m))return '画像が大きすぎるょ';
   if(/row-level security|permission denied|Unauthorized/i.test(m))return 'ﾏｲﾍﾟｰｼﾞで「はじめの設定」をしてからね';
   return 'ｴﾗｰ: '+m;
@@ -111,6 +112,9 @@ window.DB={
   deleteAccount:async function(uid){
     for(var b of ['hp','sozai']){try{var l=await sb.storage.from(b).list(uid,{limit:1000});if(l.data&&l.data.length)await sb.storage.from(b).remove(l.data.map(function(f){return uid+'/'+f.name}))}catch(e){}}
     await run(sb.rpc('delete_account'));await sb.auth.signOut()},
+  backups:function(uid){return run(sb.from('hp_backups').select('id,name,data,created_at').eq('user_id',uid).order('created_at',{ascending:false}))},
+  addBackup:function(name,data){return run(sb.from('hp_backups').insert({name:name,data:data}))},
+  delBackup:function(id){return run(sb.from('hp_backups').delete().eq('id',id))},
   visit:function(hpId){return run(sb.rpc('hp_visit',{p_hp_id:hpId}))},
   age:function(ym){var p=String(ym).split('-'),y=+p[0],m=+p[1],t=new Date(),last=new Date(y,m,0).getDate();
     var a=t.getFullYear()-y;if(t.getMonth()+1<m||(t.getMonth()+1===m&&t.getDate()<last))a--;return a}
