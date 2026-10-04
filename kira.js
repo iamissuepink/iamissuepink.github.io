@@ -25,5 +25,5 @@ root.addEventListener('pointerdown',function(e){
     h+='<span class="sp" style="--dx:'+dx.toFixed(1)+'px;--dy:'+dy.toFixed(1)+'px;--r:'+Math.round(Math.random()*540-270)+'deg;animation-duration:'+(0.55+Math.random()*0.8).toFixed(2)+'s;animation-delay:'+(Math.random()*0.2).toFixed(2)+'s;color:'+C[Math.floor(Math.random()*C.length)]+';font-size:'+Math.round(8+Math.random()*18)+'px"><span class="fl" style="animation-duration:'+(0.05+Math.random()*0.15).toFixed(2)+'s">'+G[Math.floor(Math.random()*G.length)]+'</span></span>'}
   b.innerHTML=h;root.appendChild(b);setTimeout(function(){b.remove()},1600);
 });
-document.querySelectorAll('a[href="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault()})});
+document.addEventListener('click',function(e){var a=e.target.closest('a');if(a&&a.getAttribute('href')==='#')e.preventDefault()});
 })();
