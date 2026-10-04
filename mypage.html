@@ -72,6 +72,15 @@
 <a class="pill" id="hpedit" href="#">ﾎﾑﾍﾟを編集する✎</a>
 <a class="pill purple" id="hpview" href="#">ﾎﾑﾍﾟを見る</a>
 </section>
+<section class="sec pp glow" id="frs" hidden>
+<h3>♡めろ友申請♡</h3>
+<div id="frlist"><p class="msg">読み込み中…</p></div>
+</section>
+<section class="sec bl glow" id="fset" hidden>
+<h3>★足あと設定★</h3>
+<label style="display:flex;gap:8px;align-items:center;min-height:36px"><input type="checkbox" id="lf" style="width:20px;height:20px"> 見に行ったﾎﾑﾍﾟに足あとを残す</label>
+<p style="font-size:11px;color:#c9a2ff">※残すと、そのﾎﾑﾍﾟの持ち主にあなたのﾆｯｸﾈｰﾑとﾎﾑﾍﾟが見えるょ</p>
+</section>
 <section class="sec pp glow">
 <h3>✿ﾌﾟﾛﾌ編集✿</h3>
 <div class="fm" style="gap:8px">
@@ -106,7 +115,7 @@
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=3"></script>
+<script src="db.js?v=4"></script>
 <script src="kira.js?v=2"></script>
 <script>
 (async function(){
@@ -124,7 +133,15 @@ try{var info=await DB.myInfo(u.id);
   else if(info.needs_guardian&&!info.guardian_approved){$('pending').hidden=false}
   else{var hid=await DB.myHpId(u.id);$('myhp').hidden=false;
     var url=location.origin+location.pathname.replace(/[^\/]*$/,'')+'hp.html?id='+hid;
-    $('hpurl').textContent=url;$('hpview').href='hp.html?id='+hid;$('hpedit').href='hp.html?id='+hid+'&edit=1'}
+    $('hpurl').textContent=url;$('hpview').href='hp.html?id='+hid;$('hpedit').href='hp.html?id='+hid+'&edit=1';
+    $('frs').hidden=false;$('fset').hidden=false;$('lf').checked=!!info.leave_footprints;
+    $('lf').onchange=async function(){try{await DB.setFoot(this.checked)}catch(e){alert(e.message)}};
+    loadFr()}
+async function loadFr(){try{var L=await DB.incoming(u.id);
+  $('frlist').innerHTML=L.length?L.map(function(r){var p=r.profiles||{};return '<div class="li"><a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a> さんから申請♪<br><button type="button" class="del" data-acc="'+r.id+'">承認する</button><button type="button" class="del" data-dec="'+r.id+'">断る</button></div>'}).join(''):'<p>届いてる申請ゎないょ</p>';
+}catch(e){$('frlist').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
+$('frlist').onclick=async function(e){var a=e.target.getAttribute('data-acc'),d=e.target.getAttribute('data-dec');
+  try{if(a){await DB.acceptFriend(+a);alert('めろ友になったょ♡')}else if(d){if(!confirm('この申請を断る？'))return;await DB.delFriend(+d)}else return;loadFr()}catch(err){alert(err.message)}}
 }catch(e){say(e.message,true)}
 function initSetup(){
   var y=new Date().getFullYear(),o='<option value="">年</option>';

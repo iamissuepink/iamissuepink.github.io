@@ -122,6 +122,17 @@ body.ed{padding-bottom:210px}
 .mrow{display:flex;gap:4px;align-items:center;margin:4px 0}.mrow .ein{flex:1;min-width:0;color:#ffe3f1;background:#2a0a20}
 .mon{font-size:11px;white-space:nowrap;display:flex;align-items:center;gap:2px}
 .mini{min-width:32px;min-height:32px;font:inherit;color:#fff;background:#2a0a20;border:1px solid #ff6fb5;border-radius:6px;cursor:pointer}
+
+.kiri{text-align:center;margin:8px 0;padding:8px;border:2px dashed var(--hi);border-radius:10px}
+.vact{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.ftag{font-size:12px;font-weight:bold;color:var(--hi);display:inline-flex;align-items:center}
+.box{border:1px dashed var(--hi2);border-radius:8px;padding:8px;margin:6px 0 10px}
+.dia{border-bottom:1px dotted var(--line);padding:6px 0}.dia summary{cursor:pointer;font-weight:bold;min-height:30px}.dia .d{color:var(--hi);font-size:11px}.dia .bd{margin:8px 0;word-break:break-all}
+.ptag{font-size:10px;background:var(--hi2);color:#fff;border-radius:999px;padding:0 6px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pgrid figure{margin:0;text-align:center}.pgrid img{width:100%;aspect-ratio:1;object-fit:cover;border:2px solid var(--hi2);border-radius:6px}.pgrid figcaption{font-size:11px;word-break:break-all}
+.mini2{font:inherit;font-size:11px;color:var(--hi);background:none;border:1px solid var(--hi);border-radius:999px;padding:0 8px;min-height:24px;cursor:pointer}
+.modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px}
+.mbox{background:var(--card);color:var(--ink);border:3px solid var(--hi2);border-radius:14px;padding:12px;max-width:340px;width:100%}
 </style>
 </head>
 <body>
@@ -130,7 +141,7 @@ body.ed{padding-bottom:210px}
 <div id="ui"></div>
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=3"></script>
+<script src="db.js?v=4"></script>
 <script>
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
@@ -142,7 +153,8 @@ var EMO=['♡','♥','❤','💕','💖','💗','💘','☆','★','✧','✦','
 var COLS=[['ﾋﾟﾝｸ','#ff3d9a'],['赤','#ff2a2a'],['ｵﾚﾝｼﾞ','#ff9500'],['黄','#e6b800'],['緑','#22b35e'],['水色','#1ea7e6'],['青','#2f5bff'],['紫','#b45cff'],['金','#d4a017'],['白','#ffffff'],['黒','#000000']];
 var THEMES=[['pink','ﾋﾟﾝｸ水玉'],['gal','黒×ﾋﾟﾝｸ×ｺﾞｰﾙﾄﾞ'],['yume','ゆめかわ'],['mizu','水色'],['lemon','ﾚﾓﾝ']];
 var CV=[['bg','背景'],['pat','背景の水玉'],['card','画面の中'],['ink','文字'],['hi','メイン色'],['hi2','サブ色']];
-var BUILTIN={prof:'♡ﾌﾟﾛﾌ♡',intro:'♡自己紹介♡',real:'♡ﾘｱﾙ♡'};
+var BUILTIN={prof:'♡ﾌﾟﾛﾌ♡',intro:'♡自己紹介♡',real:'♡ﾘｱﾙ♡',diary:'♡日記♡',photo:'♡写真♡',bbs:'♡BBS♡',ask:'♡質問箱♡',link:'♡ﾘﾝｸ♡'};
+var CLAPS=null,FR=null,KIRI=0;
 var DV='☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆';
 function esc(x){return DB.esc(x)}
 function clock(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
@@ -161,9 +173,9 @@ function deco(t){
      .replace(/\[center\]([\s\S]*?)\[\/center\]/g,'<span class="dk-ct">$1</span>');
     if(h===p)break}
   return h.replace(/\n/g,'<br>')}
-function def(nick){return {title:'☆★'+nick+'のﾎﾑﾍﾟ★☆',theme:'pink',marquee:'ようこそ(*´∀`*)ﾉﾞ ゆっくりしてってね☆',mood:'(*´∀`*)',showCounter:true,intro:'',song:'',icon:'',iconPath:'',colors:{},
+function def(nick){return {title:'☆★'+nick+'のﾎﾑﾍﾟ★☆',theme:'pink',marquee:'ようこそ(*´∀`*)ﾉﾞ ゆっくりしてってね☆',mood:'(*´∀`*)',showCounter:true,intro:'',song:'',icon:'',iconPath:'',colors:{},thanks:'拍手ありがと(*´∀`*)ﾉ\nまた遊びに来てね♪',showClaps:true,kiri:'',
   qa:[['名前',''],['ﾆｯｸﾈｰﾑ',''],['誕生日',''],['血液型',''],['趣味',''],['好きな食べ物',''],['ﾏｲﾌﾞｰﾑ',''],['最後に一言','']],real:[],
-  menu:[{k:'prof',l:BUILTIN.prof,on:true},{k:'intro',l:BUILTIN.intro,on:true},{k:'real',l:BUILTIN.real,on:true}],pages:{}}}
+  menu:Object.keys(BUILTIN).map(function(k){return {k:k,l:BUILTIN[k],on:true}}),pages:{}}}
 function fix(d,nick){var b=def(nick);d=d&&typeof d==='object'?d:{};Object.keys(b).forEach(function(k){if(d[k]===undefined)d[k]=b[k]});
   if(!Array.isArray(d.qa))d.qa=[];if(!Array.isArray(d.real))d.real=[];if(!Array.isArray(d.menu))d.menu=b.menu;
   if(!d.pages||typeof d.pages!=='object')d.pages={};if(!d.colors||typeof d.colors!=='object')d.colors={};
@@ -187,6 +199,14 @@ function top(){
   else if(D.mood)h+='<p class="mood">今日の気分 <b>'+esc(D.mood)+'</b></p>';
   if(ED)h+='<label class="elb"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> カウンターを表示する</label>';
   else if(D.showCounter&&!isNew)h+='<p class="cnt">あなたは <b>'+esc(('000000'+CNT).slice(-6))+'</b> 人目のお客様です♪</p>';
+  if(!ED&&KIRI)h+='<div class="kiri"><b class="dk-rb dk-big">ｷﾘ番ｹﾞｯﾄ!!</b><br>'+KIRI+' 番目のお客様です♪'+(me&&!owner?'<br><button type="button" class="ebtn" data-act="kirirep">BBSで報告する</button>':'')+'</div>';
+  if(ED)h+='<span class="elb">ｷﾘ番（カンマ区切り。空なら 777・1000 などゾロ目とキリのいい数）</span>'+inp('kiri',D.kiri,'','例：100,500,1000');
+  if(!ED){h+='<div class="vact">';
+    h+='<button type="button" class="ebtn" data-act="clap">👏 拍手'+((D.showClaps||owner)&&CLAPS!==null?' ('+CLAPS+')':'')+'</button>';
+    if(me&&!owner)h+=FR==='friend'?'<span class="ftag">めろ友だょ♡</span>':FR==='sent'?'<span class="ftag">めろ友申請中…</span>':FR==='in'?'<button type="button" class="ebtn" data-act="facc">めろ友申請を承認</button>':'<button type="button" class="ebtn sub" data-act="freq">めろ友申請</button>';
+    if(owner)h+='<a class="ebtn sub" href="#foot" style="text-decoration:none;display:inline-flex;align-items:center">足あと</a>';
+    h+='</div>'}
+  if(ED)h+='<span class="elb">拍手のお礼ﾒｯｾｰｼﾞ</span>'+ta('data-k="thanks"',D.thanks,'',60)+'<label class="elb"><input type="checkbox" data-k="showClaps"'+(D.showClaps?' checked':'')+'> 拍手の数をみんなに見せる</label>';
   if(ED)h+='<span class="elb">今のお気に入り曲（SpotifyのURL）</span>'+inp('song',D.song,'','https://open.spotify.com/track/…')+(D.song&&!s?'<p class="empty">SpotifyのURLの形じゃないかも</p>':'');
   if(s)h+='<div class="song"><iframe src="'+esc(s)+'" height="152" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>';
   h+='<div class="dv" aria-hidden="true">'+DV+'</div>';
@@ -217,13 +237,52 @@ function page(k){
   var p=D.pages[k];if(!p)return ttl('ﾍﾟｰｼﾞ')+'<p class="empty">このﾍﾟｰｼﾞゎ見つからないょ</p>'+back();
   if(ED)return ttl(label(k))+'<span class="elb">ﾍﾟｰｼﾞの中身</span>'+ta('data-pg="'+esc(k)+'"',p.b,'自由に書いてね♪',260)+back();
   return ttl(label(k))+(p.b?'<p style="word-break:break-all">'+deco(p.b)+'</p>':'<p class="empty">まだ何も書いてないょ</p>')+back()}
+/* 交流ページ */
+var LOAD={diary:ldDiary,photo:ldPhoto,bbs:ldBbs,ask:ldAsk,link:ldLink,foot:ldFoot};
+function apage(k){return ttl(k==='foot'?'足あと':label(k))+'<div id="ap"><p class="empty">読み込み中…</p></div>'+back()}
+function ap(h){var e=document.getElementById('ap');if(e)e.innerHTML=h}
+function fail(e){ap('<p class="empty">'+esc(e.message)+'</p>')}
+function who(p){return p&&p.hp_id?'<a href="hp.html?id='+esc(p.hp_id)+'">'+esc(p.nickname)+'</a>':esc(p?p.nickname:'ななしさん')}
+async function ldDiary(){try{var L=await DB.diaries(R.id),h='';
+  if(ED)h+='<div class="box"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div>';
+  if(!L.length)h+='<p class="empty">まだ日記ゎありません</p>';
+  L.forEach(function(d,i){h+='<details class="dia"'+(i===0?' open':'')+'><summary><span class="d">'+esc(tm(d.created_at))+'</span> '+esc(d.title||'無題')+(d.is_public?'':' <span class="ptag">非公開</span>')+(i===0?'<span class="new">NEW!</span>':'')+'</summary><div class="bd">'+deco(d.body)+'</div>'+
+    (ED?'<p style="text-align:right;margin:4px 0"><button type="button" class="ebtn sub" data-act="dpub" data-i="'+d.id+'" data-v="'+(d.is_public?'0':'1')+'">'+(d.is_public?'非公開にする':'公開する')+'</button> <button type="button" class="ebtn sub" data-act="ddel" data-i="'+d.id+'">消す</button></p>':'')+'</details>'});
+  ap(h)}catch(e){fail(e)}}
+async function ldPhoto(){try{var L=await DB.photos(R.id),h='';
+  if(ED)h+='<div class="box"><label class="ebtn" style="display:inline-flex;align-items:center">写真を選ぶ<input type="file" id="pf" accept="image/*" hidden></label> <input class="ein" id="pc" maxlength="100" placeholder="ひとこと（なくてもOK）" style="margin-top:6px"><p class="note2" style="color:var(--hi)">※自動で小さくして、撮った場所の情報を消すょ</p></div>';
+  if(!L.length)h+='<p class="empty">まだ写真ゎありません</p>';
+  h+='<div class="pgrid">'+L.map(function(p){return '<figure><img src="'+esc(DB.imgBase+p.path)+'" alt="'+esc(p.caption||'写真')+'" loading="lazy">'+(p.caption?'<figcaption>'+esc(p.caption)+'</figcaption>':'')+(ED?'<button type="button" class="ebtn sub" data-act="pdel" data-i="'+p.id+'" data-v="'+esc(p.path)+'">消す</button>':'')+'</figure>'}).join('')+'</div>';
+  ap(h);var f=document.getElementById('pf');if(f)f.onchange=function(){if(f.files[0])upPhoto(f.files[0])}}catch(e){fail(e)}}
+async function upPhoto(file){st('写真を準備中…');try{var blob=await shrink(file,1000),r=await DB.uploadImg(me.id,blob);await DB.addPhoto(r.path,(document.getElementById('pc')||{}).value||'');st('写真を追加したょ✧');ldPhoto()}catch(e){st(e.message)}}
+async function ldBbs(){try{var L=await DB.hpPosts(R.id),h='';
+  h+=me?'<div class="box">'+ta('id="bb" maxlength="500"','','書き込んでね♪',70)+'<p style="text-align:right;margin:4px 0 0"><button type="button" class="ebtn" data-act="badd">書き込む</button></p></div>':'<p class="empty">書き込むにゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してね</p>';
+  if(!L.length)h+='<p class="empty">まだ書き込みゎありません</p>';
+  L.forEach(function(p){var mine=me&&p.user_id===me.id;h+='<div class="ent"><div class="d">'+who(p.profiles)+' '+esc(tm(p.created_at))+
+    (mine||owner?' <button type="button" class="mini2" data-act="bdel" data-i="'+p.id+'">消す</button>':'')+(owner&&!mine?' <button type="button" class="mini2" data-act="bblk" data-v="'+esc(p.user_id)+'">ﾌﾞﾛｯｸ</button>':'')+'</div>'+deco(p.body)+'</div>'});
+  ap(h)}catch(e){fail(e)}}
+async function ldAsk(){try{var L=await DB.questions(R.id),h='';
+  if(!owner)h+=me?'<div class="box">'+ta('id="qq" maxlength="300"','','質問してね♪（名前ゎ表示されないょ）',70)+'<p style="text-align:right;margin:4px 0 0"><button type="button" class="ebtn" data-act="qadd">質問する</button></p></div>':'<p class="empty">質問するにゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してね</p>';
+  var un=L.filter(function(q){return !q.answer}),an=L.filter(function(q){return q.answer});
+  if(owner&&un.length){h+='<p class="elb">未回答（自分にしか見えないょ）</p>';un.forEach(function(q){h+='<div class="ent"><div class="d">'+esc(tm(q.created_at))+'</div>Q. '+esc(q.body)+'<textarea class="eta" data-qa="'+q.id+'" placeholder="回答を書く" style="min-height:50px;margin-top:4px"></textarea><p style="text-align:right;margin:4px 0"><button type="button" class="ebtn" data-act="qans" data-i="'+q.id+'">回答する</button> <button type="button" class="mini2" data-act="qdel" data-i="'+q.id+'">消す</button> <button type="button" class="mini2" data-act="qblk" data-i="'+q.id+'">ﾌﾞﾛｯｸ</button></p></div>'})}
+  if(!an.length)h+='<p class="empty">まだ回答した質問ゎありません</p>';
+  an.forEach(function(q){h+='<div class="ent"><b>Q.</b> '+esc(q.body)+'<br><b style="color:var(--hi)">A.</b> '+deco(q.answer)+(owner?' <button type="button" class="mini2" data-act="qdel" data-i="'+q.id+'">消す</button>':'')+'</div>'});
+  ap(h)}catch(e){fail(e)}}
+async function ldLink(){try{var L=await DB.hpFriends(R.id),h='<p class="elb">めろ友</p>';
+  if(!L.length)h+='<p class="empty">ﾘﾝｸ募集中ﾃﾞｽ</p>';
+  L.forEach(function(f){h+='<p class="lk">▼<a href="hp.html?id='+esc(f.hp_id)+'">'+esc(f.nickname)+'</a></p>'});ap(h)}catch(e){fail(e)}}
+async function ldFoot(){if(!owner){ap('<p class="empty">足あとゎ持ち主しか見れないょ</p>');return}
+  try{var L=await DB.footprints(R.id),h='<p class="note2" style="color:var(--hi)">足あとを残す設定の人だけ記録されるょ</p>';
+  if(!L.length)h+='<p class="empty">まだ足あとゎありません</p>';
+  L.forEach(function(f){h+='<div class="ent"><div class="d">'+esc(tm(f.visited_at))+'</div>'+who(f.profiles)+'</div>'});ap(h)}catch(e){fail(e)}}
 function applyColors(){var st=document.documentElement.style;CV.forEach(function(c){if(hex(D.colors[c[0]]))st.setProperty('--'+c[0],D.colors[c[0]]);else st.removeProperty('--'+c[0])})}
 function draw(){
   var r=location.hash.replace(/^#/,'');
   document.documentElement.dataset.skin=D.theme||'pink';applyColors();
   document.title=(D.title||'ﾎﾑﾍﾟ')+'｜めろﾋﾟｮﾝ☆';document.body.classList.toggle('ed',ED);
   var f={prof:prof,intro:intro,real:real}[r];
-  root.innerHTML=frame(f?f():(D.pages[r]?page(r):top()));
+  if(LOAD[r]){root.innerHTML=frame(apage(r));LOAD[r]()}
+  else root.innerHTML=frame(f?f():(D.pages[r]?page(r):top()));
   readGlit();drawUi()}
 function cur(v){return getComputedStyle(document.documentElement).getPropertyValue('--'+v).trim()}
 function sheetHtml(){
@@ -236,7 +295,7 @@ function sheetHtml(){
     h+='<p><button type="button" class="ebtn sub lt" data-act="resetc">色を着せ替えの元に戻す</button></p>';
     h+='<p class="shh">ﾌﾟﾛﾌ画像</p><label class="ebtn" style="display:inline-flex;align-items:center">画像を選ぶ<input type="file" id="iconf" accept="image/*" hidden></label> '+(D.icon?'<button type="button" class="ebtn sub lt" data-act="delicon">画像を外す</button>':'');
     h+='<p class="note2">※画像ゎ自動で小さくして、撮った場所の情報を消してから保存するょ。顔や制服、家の周りが写った写真ゎ気をつけてね</p>';
-    h+='<p class="shh">公開範囲</p><select id="vis"><option value="public"'+(VIS==='public'?' selected':'')+'>誰でも見れる</option><option value="members"'+(VIS==='members'?' selected':'')+'>会員だけ</option><option value="private"'+(VIS==='private'?' selected':'')+'>自分だけ</option></select></div>';
+    h+='<p class="shh">公開範囲</p><select id="vis"><option value="public"'+(VIS==='public'?' selected':'')+'>誰でも見れる</option><option value="members"'+(VIS==='members'?' selected':'')+'>会員だけ</option><option value="friends"'+(VIS==='friends'?' selected':'')+'>めろ友だけ</option><option value="private"'+(VIS==='private'?' selected':'')+'>自分だけ</option></select></div>';
     return h}
   if(sheet==='menu'){
     var h2='<div class="sh"><p class="shh">ﾒﾆｭｰ（名前・表示・並び順）</p>';
@@ -256,7 +315,7 @@ function drawUi(){
   ui.querySelectorAll('[data-ml]').forEach(function(el){el.oninput=function(){D.menu[+el.getAttribute('data-ml')].l=el.value;changed();if(!location.hash)redrawPage()}});
   ui.querySelectorAll('[data-mo]').forEach(function(el){el.onchange=function(){D.menu[+el.getAttribute('data-mo')].on=el.checked;changed();redrawPage()}});
   var f=document.getElementById('iconf');if(f)f.onchange=function(){if(f.files[0])upIcon(f.files[0])}}
-function redrawPage(){var r=location.hash.replace(/^#/,''),fn={prof:prof,intro:intro,real:real}[r];root.innerHTML=frame(fn?fn():(D.pages[r]?page(r):top()))}
+function redrawPage(){var r=location.hash.replace(/^#/,''),fn={prof:prof,intro:intro,real:real}[r];if(LOAD[r])return;root.innerHTML=frame(fn?fn():(D.pages[r]?page(r):top()))}
 function changed(){dirty=true;st('まだ保存してないょ')}
 function st(t){var e=document.getElementById('st');if(e)e.textContent=t}
 /* 選んだ文字を囲む・挿入 */
@@ -287,9 +346,33 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='padd'){if(D.menu.length>=12){st('ﾍﾟｰｼﾞゎ12個までだょ');return}var k2='p'+Date.now().toString(36);D.pages[k2]={b:''};D.menu.push({k:k2,l:'♡新しいﾍﾟｰｼﾞ♡',on:true});changed();drawUi();redrawPage()}
   else if(a==='resetc'){D.colors={};applyColors();readGlit();changed();drawUi()}
   else if(a==='delicon'){if(confirm('ﾌﾟﾛﾌ画像を外す？')){var old=D.iconPath;D.icon='';D.iconPath='';await save(null,true);if(old)DB.delImg(old).catch(function(){});draw()}}
-  else if(a==='save'){await save(b)}});
-function shrink(file){return new Promise(function(res,rej){var img=new Image(),u=URL.createObjectURL(file);
-  img.onload=function(){var m=600,w=img.naturalWidth,h=img.naturalHeight,r=Math.min(1,m/Math.max(w,h)),c=document.createElement('canvas');
+  else if(a==='save'){await save(b)}
+  else if(a==='clap'){if(!me){alert('拍手するにゎﾛｸﾞｲﾝしてね');return}try{CLAPS=await DB.clap(R.id);thanks()}catch(err){alert(err.message)}}
+  else if(a==='closem'){var m=document.getElementById('modal');if(m)m.remove();draw()}
+  else if(a==='freq'){if(!confirm(R.nickname+' さんにめろ友申請する？'))return;try{await DB.requestFriend(R.id);FR='sent';draw()}catch(err){alert(err.message)}}
+  else if(a==='facc'){try{await DB.acceptFriend(FR_ID);FR='friend';draw()}catch(err){alert(err.message)}}
+  else if(a==='kirirep'){try{await DB.addHpPost(R.id,'【ｷﾘ番報告】'+KIRI+' 番を踏みました♪');alert('BBSに報告したょ✧');location.hash='bbs'}catch(err){alert(err.message)}}
+  else if(a==='dadd'){var t1=document.getElementById('dt').value.trim(),b1=document.getElementById('db').value;if(!b1.trim()){st('本文を書いてね');return}try{await DB.addDiary(t1,b1,document.getElementById('dp').checked);ldDiary()}catch(err){st(err.message)}}
+  else if(a==='dpub'){try{await DB.setDiaryPub(i,v==='1');ldDiary()}catch(err){st(err.message)}}
+  else if(a==='ddel'){if(confirm('この日記を消す？'))try{await DB.delDiary(i);ldDiary()}catch(err){st(err.message)}}
+  else if(a==='pdel'){if(confirm('この写真を消す？'))try{await DB.delPhoto(i);DB.delImg(v).catch(function(){});ldPhoto()}catch(err){st(err.message)}}
+  else if(a==='badd'){var t2=document.getElementById('bb').value.trim();if(!t2)return;try{await DB.addHpPost(R.id,t2);ldBbs()}catch(err){alert(err.message)}}
+  else if(a==='bdel'){if(confirm('この書き込みを消す？'))try{await DB.delHpPost(i);ldBbs()}catch(err){alert(err.message)}}
+  else if(a==='bblk'){if(confirm('この人をﾌﾞﾛｯｸする？（このﾎﾑﾍﾟのBBSと質問箱に書き込めなくなるょ）'))try{await DB.block(v);alert('ﾌﾞﾛｯｸしたょ')}catch(err){alert(err.message)}}
+  else if(a==='qadd'){var t3=document.getElementById('qq').value.trim();if(!t3)return;try{await DB.ask(R.id,t3);alert('質問を送ったょ✧ 回答されたらここに表示されるょ');ldAsk()}catch(err){alert(err.message)}}
+  else if(a==='qans'){var t4=(document.querySelector('[data-qa="'+i+'"]')||{}).value||'';if(!t4.trim())return;try{await DB.answer(i,t4);ldAsk()}catch(err){alert(err.message)}}
+  else if(a==='qdel'){if(confirm('この質問を消す？'))try{await DB.delQ(i);ldAsk()}catch(err){alert(err.message)}}
+  else if(a==='qblk'){if(confirm('この質問をした人をﾌﾞﾛｯｸする？（誰かゎわからないままだょ）'))try{await DB.blockAsker(i);await DB.delQ(i);ldAsk()}catch(err){alert(err.message)}}
+});
+var FR_ID=null;
+function thanks(){var m=document.createElement('div');m.id='modal';m.className='modal';
+  m.innerHTML='<div class="mbox"><p class="ttl">拍手ありがと♪</p><p style="text-align:center">'+deco(D.thanks)+'</p>'+((D.showClaps||owner)?'<p class="cnt">これまでの拍手 <b>'+CLAPS+'</b></p>':'')+'<p style="text-align:center"><button type="button" class="ebtn" data-act="clap2">もっと拍手👏</button> <button type="button" class="ebtn sub" data-act="closem">とじる</button></p></div>';
+  var old=document.getElementById('modal');if(old)old.remove();document.body.appendChild(m)}
+document.addEventListener('click',async function(e){if(e.target.closest('[data-act=clap2]')){try{CLAPS=await DB.clap(R.id);thanks()}catch(err){alert(err.message)}}});
+function isKiri(n){if(!n)return false;var L=String(D.kiri||'').split(/[,、\s]+/).map(Number).filter(Boolean);if(L.length)return L.indexOf(n)>=0;
+  return n>=100&&(n%1000===0||/^(\d)\1+$/.test(String(n))||n===1234||n===12345)}
+function shrink(file,mx){return new Promise(function(res,rej){var img=new Image(),u=URL.createObjectURL(file);
+  img.onload=function(){var m=mx||600,w=img.naturalWidth,h=img.naturalHeight,r=Math.min(1,m/Math.max(w,h)),c=document.createElement('canvas');
     c.width=Math.round(w*r);c.height=Math.round(h*r);var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);
     c.toBlob(function(b){b?res(b):rej(new Error('画像を読み込めなかったょ'))},'image/jpeg',0.85)};
   img.onerror=function(){URL.revokeObjectURL(u);rej(new Error('この画像ゎ使えないみたい'))};img.src=u})}
@@ -324,7 +407,10 @@ function note(t){document.documentElement.dataset.skin='gal';root.innerHTML=fram
   else{note(me?'このﾎﾑﾍﾟゎ見れないか、まだ作られてないょ':'このﾎﾑﾍﾟを見るにゎﾛｸﾞｲﾝが必要かも<br><br><a href="login.html">ﾛｸﾞｲﾝ</a>');return}
   ED=owner&&(WANT||isNew);
   draw();
-  if(!owner&&R.hp){DB.visit(HID).then(function(n){if(n){CNT=n;if(!location.hash)draw()}}).catch(function(){})}
+  if(R.hp){DB.clapCount(R.id).then(function(n){CLAPS=n;if(!location.hash&&!ED)draw()}).catch(function(){})}
+  if(!owner&&R.hp){DB.visit(HID).then(function(n){if(n){CNT=n;if(isKiri(n))KIRI=n;if(!location.hash)draw()}}).catch(function(){})}
+  if(me&&!owner&&R.hp){DB.footprint(R.id).catch(function(){});
+    DB.friendWith(me.id,R.id).then(function(f){if(!f)FR='none';else if(f.status==='accepted')FR='friend';else if(f.from_id===me.id)FR='sent';else{FR='in';FR_ID=f.id}if(!location.hash)draw()}).catch(function(){})}
 })();
 /* glitter */
 var cv=document.getElementById('kira'),cx=cv.getContext('2d'),W=0,H=0,dpr=1,stars=[],parts=[],cols=['#fff'];

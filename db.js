@@ -17,6 +17,10 @@ function err(e){
   if(/already_set/.test(m))return 'はじめの設定ゎもう終わってるょ';
   if(/need_guardian/.test(m))return '12歳以下の人ゎ保護者のﾒｱﾄﾞが必要だょ';
   if(/bad_birth/.test(m))return '生まれた年と月を確認してね';
+  if(/friend_age/.test(m))return '年齢のきまりで、この人とゎめろ友になれないょ';
+  if(/friend_exists/.test(m))return 'もう申請してるか、めろ友になってるょ';
+  if(/not_ready/.test(m))return 'ﾛｸﾞｲﾝして「はじめの設定」をしてからね';
+  if(/cannot_accept/.test(m))return 'この申請ゎ承認できないょ';
   if(/exceeded the maximum|too large/i.test(m))return '画像が大きすぎるょ';
   if(/row-level security|permission denied|Unauthorized/i.test(m))return 'ﾏｲﾍﾟｰｼﾞで「はじめの設定」をしてからね';
   return 'ｴﾗｰ: '+m;
@@ -34,7 +38,7 @@ window.DB={
   posts:function(n){return run(sb.from('bbs_posts').select('id,user_id,body,created_at,profiles(nickname)').order('created_at',{ascending:false}).limit(n||50))},
   addPost:function(body){return run(sb.from('bbs_posts').insert({body:body}))},
   delPost:function(id){return run(sb.from('bbs_posts').delete().eq('id',id))},
-  myInfo:async function(id){var d=await run(sb.from('private_info').select('birth_ym,needs_guardian,guardian_approved').eq('id',id).limit(1));return d[0]||null},
+  myInfo:async function(id){var d=await run(sb.from('private_info').select('birth_ym,needs_guardian,guardian_approved,leave_footprints').eq('id',id).limit(1));return d[0]||null},
   myHpId:async function(id){var d=await run(sb.from('profiles').select('hp_id').eq('id',id).limit(1));return d[0]?d[0].hp_id:null},
   idOk:function(p){return run(sb.rpc('hp_id_available',{p:p}))},
   setup:function(hpId,birth,guardian){return run(sb.rpc('setup_account',{p_hp_id:hpId,p_birth:birth,p_guardian:guardian||''}))},
@@ -44,6 +48,33 @@ window.DB={
   imgBase:IMG,
   uploadImg:async function(uid,blob){var path=uid+'/'+Date.now()+'.jpg';await run(sb.storage.from('hp').upload(path,blob,{contentType:'image/jpeg',upsert:false}));return {path:path,url:IMG+path}},
   delImg:function(path){return run(sb.storage.from('hp').remove([path]))},
+  diaries:function(o){return run(sb.from('diaries').select('id,title,body,is_public,created_at').eq('user_id',o).order('created_at',{ascending:false}).limit(100))},
+  addDiary:function(t,b,pub){return run(sb.from('diaries').insert({title:t,body:b,is_public:pub}))},
+  setDiaryPub:function(id,pub){return run(sb.from('diaries').update({is_public:pub}).eq('id',id))},
+  delDiary:function(id){return run(sb.from('diaries').delete().eq('id',id))},
+  photos:function(o){return run(sb.from('photos').select('id,path,caption,created_at').eq('user_id',o).order('created_at',{ascending:false}).limit(100))},
+  addPhoto:function(path,cap){return run(sb.from('photos').insert({path:path,caption:cap}))},
+  delPhoto:function(id){return run(sb.from('photos').delete().eq('id',id))},
+  hpPosts:function(o){return run(sb.from('hp_bbs').select('id,user_id,body,created_at,profiles!hp_bbs_user_id_fkey(nickname,hp_id)').eq('owner',o).order('created_at',{ascending:false}).limit(100))},
+  addHpPost:function(o,b){return run(sb.from('hp_bbs').insert({owner:o,body:b}))},
+  delHpPost:function(id){return run(sb.from('hp_bbs').delete().eq('id',id))},
+  block:function(u){return run(sb.from('hp_blocks').insert({blocked:u}))},
+  questions:function(o){return run(sb.from('questions').select('id,body,answer,answered_at,created_at').eq('owner',o).order('created_at',{ascending:false}).limit(100))},
+  ask:function(o,b){return run(sb.from('questions').insert({owner:o,body:b}))},
+  answer:function(id,a){return run(sb.from('questions').update({answer:a,answered_at:new Date().toISOString()}).eq('id',id))},
+  delQ:function(id){return run(sb.from('questions').delete().eq('id',id))},
+  blockAsker:function(id){return run(sb.rpc('block_asker',{p_qid:id}))},
+  clap:function(o){return run(sb.rpc('hp_clap',{p_owner:o}))},
+  clapCount:function(o){return run(sb.rpc('hp_clap_count',{p_owner:o}))},
+  footprint:function(o){return run(sb.rpc('hp_footprint',{p_owner:o}))},
+  footprints:function(o){return run(sb.from('footprints').select('visited_at,profiles!footprints_visitor_fkey(nickname,hp_id)').eq('owner',o).order('visited_at',{ascending:false}).limit(100))},
+  setFoot:function(v){return run(sb.rpc('set_footprints',{p:v}))},
+  friendWith:async function(me,o){var d=await run(sb.from('friend_requests').select('id,from_id,status').or('and(from_id.eq.'+me+',to_id.eq.'+o+'),and(from_id.eq.'+o+',to_id.eq.'+me+')').limit(1));return d[0]||null},
+  requestFriend:function(o){return run(sb.rpc('request_friend',{p_to:o}))},
+  acceptFriend:function(id){return run(sb.rpc('accept_friend',{p_id:id}))},
+  delFriend:function(id){return run(sb.from('friend_requests').delete().eq('id',id))},
+  incoming:function(me){return run(sb.from('friend_requests').select('id,created_at,profiles!friend_requests_from_id_fkey(nickname,hp_id)').eq('to_id',me).eq('status','pending').order('created_at',{ascending:false}))},
+  hpFriends:function(o){return run(sb.rpc('hp_friends',{p_owner:o}))},
   visit:function(hpId){return run(sb.rpc('hp_visit',{p_hp_id:hpId}))},
   age:function(ym){var p=String(ym).split('-'),y=+p[0],m=+p[1],t=new Date(),last=new Date(y,m,0).getDate();
     var a=t.getFullYear()-y;if(t.getMonth()+1<m||(t.getMonth()+1===m&&t.getDate()<last))a--;return a}
