@@ -6,7 +6,7 @@
 <title>めろﾋﾟｮﾝ☆｜平成ﾎﾑﾍﾟ作成ｻｲﾄ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css?v=2">
+<link rel="stylesheet" href="common.css?v=3">
 </head>
 <body>
 <div id="root" style="margin: 0 auto; position: relative; overflow: hidden; width: 390px; min-height: 100vh; box-sizing: border-box; padding: 18px 0 30px; font-family: 'Kosugi Maru', sans-serif; font-size: 13px; line-height: 1.7; color: #ffd6ec; background-color: #000000; background-image: radial-gradient(#ffffff 1.1px, transparent 1.8px), radial-gradient(#ff7fc4 1.3px, transparent 2px); background-size: 26px 26px, 40px 40px; background-position: 0 0, 13px 20px">
@@ -68,62 +68,38 @@
 <h2 class="puffy" style="font-size: 32px">MENU</h2>
 <nav aria-label="メニュー" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%">
 <a class="pill purple" href="about.html" style="grid-column: 1 / -1">めろﾋﾟｮﾝ☆とは？</a>
-<a class="pill" href="#">新着日記</a>
-<a class="pill" href="#">ﾎﾑﾍﾟ検索</a>
-<a class="pill purple" href="#">ﾗﾝｷﾝｸﾞ</a>
+<a class="pill" href="new.html">新着日記</a>
+<a class="pill" href="search.html">ﾎﾑﾍﾟ検索</a>
+<a class="pill purple" href="search.html?mode=rank">ﾗﾝｷﾝｸﾞ</a>
 <a class="pill purple" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
 <a class="pill" href="bbs.html">掲示板(BBS)</a>
-<a class="pill" href="#">素材置き場</a>
+<a class="pill" href="sozai.html">素材置き場</a>
 <a class="pill purple" href="#">12星座占い</a>
 <a class="pill purple" href="#">資料請求</a>
 <a class="pill" href="info.html">ｼｽﾃﾑ情報</a>
 <a class="pill" href="howto.html">使い方</a>
 </nav>
 
-<form style="display: flex; gap: 6px; width: 100%; margin: 0" onsubmit="return false">
+<form style="display: flex; gap: 6px; width: 100%; margin: 0" action="search.html" method="get">
 <label for="q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">ﾎﾑﾍﾟ検索</label>
-<input id="q" type="search" placeholder="ﾎﾑﾍﾟをさがす♪" style="flex: 1; min-width: 0; min-height: 44px; box-sizing: border-box; border: 2px solid #ff6fb5; border-radius: 999px; padding: 0 14px; background: #1a0010; color: #ffd6ec; font: inherit; font-size: 15px">
-<button type="submit" class="pill purple" style="border: 0; padding: 0 16px; font-size: 14px">検索</button>
+<input id="q" name="q" type="search" placeholder="ﾎﾑﾍﾟをさがす♪" style="flex: 1; min-width: 0; min-height: 44px; box-sizing: border-box; border: 2px solid #ff6fb5; border-radius: 999px; padding: 0 14px; background: #1a0010; color: #ffd6ec; font: inherit; font-size: 15px">
+<button type="submit" class="pill purple" style="border: 0; padding: 0 16px; font-size: 14px; width: auto">検索</button>
 </form>
+<button type="button" class="pill" id="rl" style="width:100%;border:0;cursor:pointer">🎲 ﾎﾑﾍﾟﾙｰﾚｯﾄ</button>
+<div class="chips" id="tagchips" style="width:100%"></div>
 
 <h2 class="puffy" style="font-size: 26px">NEW DIARY</h2>
 <p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">♡新着日記♡</p>
-<div style="width: 100%; display: flex; flex-direction: column; text-align: left">
-<a href="#" style="display: flex; flex-direction: column; padding: 8px 4px; border-bottom: 1px dashed #ff6fb5; text-decoration: none; color: #ffd6ec">
-<span style="font-size: 11px; color: #ffe066">[00:00] <span class="blink" style="color: #ff3b3b; font-weight: bold">NEW!</span></span>
-<span style="color: #ff9ad5; font-weight: bold">湯けむり横丁での日々</span>
-<span style="font-size: 11px; color: #c9a2ff">by ☆★あやねのﾌﾟﾛﾌ★☆</span>
-</a>
-<a href="#" style="display: flex; flex-direction: column; padding: 8px 4px; border-bottom: 1px dashed #ff6fb5; text-decoration: none; color: #ffd6ec">
-<span style="font-size: 11px; color: #ffe066">[00:00]</span>
-<span style="color: #9be3ff; font-weight: bold">[日記ﾀｲﾄﾙ]</span>
-<span style="font-size: 11px; color: #c9a2ff">by [ﾎﾑﾍﾟ名]</span>
-</a>
-<a href="#" style="display: flex; flex-direction: column; padding: 8px 4px; border-bottom: 1px dashed #ff6fb5; text-decoration: none; color: #ffd6ec">
-<span style="font-size: 11px; color: #ffe066">[00:00]</span>
-<span style="color: #5ff08f; font-weight: bold">[日記ﾀｲﾄﾙ]</span>
-<span style="font-size: 11px; color: #c9a2ff">by [ﾎﾑﾍﾟ名]</span>
-</a>
-</div>
-<a href="#" style="align-self: flex-end; font-size: 12px">→もっと見る</a>
+<div id="nd" style="width: 100%; display: flex; flex-direction: column; text-align: left"><p class="msg">読み込み中…</p></div>
+<a href="new.html" style="align-self: flex-end; font-size: 12px">→もっと見る</a>
 
 <h2 class="puffy" style="font-size: 26px">PICK UP</h2>
 <p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">☆今日のｵｽｽﾒﾎﾑﾍﾟ☆</p>
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%">
-<a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 2px; border: 2px solid #ff6fb5; border-radius: 10px; background: #000; text-decoration: none; color: #ffd6ec; font-size: 11px">
-<span style="width: 54px; height: 54px; border-radius: 50%; border: 2px solid #fff; background: radial-gradient(#fff 1px, transparent 1.6px) 0 0 / 8px 8px, linear-gradient(#ff4fa3, #2a0018)"></span>[ﾎﾑﾍﾟ名]</a>
-<a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 2px; border: 2px solid #b77bff; border-radius: 10px; background: #000; text-decoration: none; color: #ffd6ec; font-size: 11px">
-<span style="width: 54px; height: 54px; border-radius: 50%; border: 2px solid #fff; background: radial-gradient(#fff 1px, transparent 1.6px) 0 0 / 8px 8px, linear-gradient(#e3a3ff, #6b1fd1)"></span>[ﾎﾑﾍﾟ名]</a>
-<a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 2px; border: 2px solid #4fc3ff; border-radius: 10px; background: #000; text-decoration: none; color: #ffd6ec; font-size: 11px">
-<span style="width: 54px; height: 54px; border-radius: 50%; border: 2px solid #fff; background: radial-gradient(#fff 1px, transparent 1.6px) 0 0 / 8px 8px, linear-gradient(#9be3ff, #1e6fb3)"></span>[ﾎﾑﾍﾟ名]</a>
-</div>
+<div id="pu" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%"><p class="msg" style="grid-column:1/-1">読み込み中…</p></div>
 
 <h2 class="puffy" style="font-size: 26px">RANKING</h2>
-<div style="width: 100%; display: flex; flex-direction: column; gap: 6px; text-align: left">
-<a href="#" style="display: flex; gap: 10px; align-items: center; min-height: 44px; padding: 0 10px; border-radius: 10px; background: linear-gradient(90deg, rgba(255,224,102,.25), transparent); text-decoration: none; color: #ffe066; font-weight: bold"><span class="dg" style="font-size: 18px">1位</span><span style="color: #ffd6ec">[ﾎﾑﾍﾟ名]</span></a>
-<a href="#" style="display: flex; gap: 10px; align-items: center; min-height: 44px; padding: 0 10px; border-radius: 10px; background: linear-gradient(90deg, rgba(220,220,235,.22), transparent); text-decoration: none; color: #e6e6f0; font-weight: bold"><span class="dg" style="font-size: 18px">2位</span><span style="color: #ffd6ec">[ﾎﾑﾍﾟ名]</span></a>
-<a href="#" style="display: flex; gap: 10px; align-items: center; min-height: 44px; padding: 0 10px; border-radius: 10px; background: linear-gradient(90deg, rgba(232,150,90,.25), transparent); text-decoration: none; color: #f0a46e; font-weight: bold"><span class="dg" style="font-size: 18px">3位</span><span style="color: #ffd6ec">[ﾎﾑﾍﾟ名]</span></a>
-</div>
+<div id="rk" style="width: 100%; display: flex; flex-direction: column; gap: 6px; text-align: left"><p class="msg">読み込み中…</p></div>
+<a href="search.html?mode=rank" style="align-self: flex-end; font-size: 12px">→ﾗﾝｷﾝｸﾞをもっと見る</a>
 
 <h2 class="puffy" style="font-size: 26px">BBS</h2>
 <p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">♪みんなの掲示板♪</p>
@@ -157,15 +133,8 @@
 
 <h2 class="puffy" style="font-size: 26px">SOZAI</h2>
 <p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">✿素材置き場✿ ﾎﾑﾍﾟに使えるょ</p>
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%">
-<a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 84px; border-radius: 10px; background: #000; border: 2px solid #ff6fb5; text-decoration: none; color: #ffd6ec; font-size: 11px">
-<svg width="70" height="22" viewBox="0 0 70 22" aria-hidden="true"><g stroke="#fff" stroke-width="1"><path d="M11 19 C1 12 2 3 7 3 C9 3 11 5 11 7 C11 5 13 3 15 3 C20 3 21 12 11 19 Z" fill="#ff4fa3"></path><path d="M35 19 C25 12 26 3 31 3 C33 3 35 5 35 7 C35 5 37 3 39 3 C44 3 45 12 35 19 Z" fill="#b77bff"></path><path d="M59 19 C49 12 50 3 55 3 C57 3 59 5 59 7 C59 5 61 3 63 3 C68 3 69 12 59 19 Z" fill="#ff4fa3"></path></g></svg>ﾊｰﾄ罫線</a>
-<a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 84px; border-radius: 10px; background: #000; border: 2px solid #b77bff; text-decoration: none; color: #ffd6ec; font-size: 11px">
-<svg width="70" height="26" viewBox="0 0 70 26" aria-hidden="true"><path d="M35 12 C24 2 10 2 9 10 C8 18 24 17 35 12 Z M35 12 C46 2 60 2 61 10 C62 18 46 17 35 12 Z" fill="#ff8fc8" stroke="#fff" stroke-width="1.2"></path><circle cx="35" cy="12" r="4.5" fill="#e0287f" stroke="#fff" stroke-width="1.2"></circle><path d="M32 15 L25 25 M38 15 L45 25" stroke="#ff6fb5" stroke-width="3"></path></svg>ﾘﾎﾞﾝ</a>
-<a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 84px; border-radius: 10px; background: #000; border: 2px solid #4fc3ff; text-decoration: none; color: #ffd6ec; font-size: 11px">
-<span style="color: #ffe066; font-size: 16px; letter-spacing: 2px">✦✧✦✧✦</span>ｷﾗｷﾗ</a>
-</div>
-<a href="#" style="align-self: flex-end; font-size: 12px">→素材をもっと見る</a>
+<div id="sz" class="sgrid" style="width:100%"><p class="msg" style="grid-column:1/-1">読み込み中…</p></div>
+<a href="sozai.html" style="align-self: flex-end; font-size: 12px">→素材をもっと見る</a>
 
 <section class="glow" aria-labelledby="req-h" style="width: 100%; box-sizing: border-box; padding: 12px 10px; border-radius: 14px; border: 3px double #ffe066; background: rgba(255, 224, 102, .1); display: flex; flex-direction: column; gap: 8px">
 <h2 id="req-h" style="margin: 0; font-family: 'M PLUS Rounded 1c', sans-serif; font-weight: 900; font-size: 17px; color: #ffe066">★進路の資料請求★</h2>
@@ -199,7 +168,7 @@
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=4"></script>
+<script src="db.js?v=5"></script>
 <script src="kira.js?v=2"></script>
 <script>
 DB.me().then(async function(u){if(!u)return;
@@ -208,6 +177,20 @@ DB.me().then(async function(u){if(!u)return;
   var id=null;try{id=await DB.myHpId(u.id)}catch(e){}
   if(id){m.textContent='ﾎﾑﾍﾟ編集♡';m.href='hp.html?id='+id+'&edit=1'}else{m.textContent='ﾎﾑﾍﾟを作る♡';m.href='mypage.html'}
 }).catch(function(){});
+(function(){var $=function(i){return document.getElementById(i)},E=DB.esc;
+function tm(s){var d=new Date(s);return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+function isNew(s){return Date.now()-new Date(s).getTime()<3*86400000}
+function ic(h){return h.icon&&h.icon.indexOf(DB.imgBase)===0?'<img src="'+E(h.icon)+'" alt="" style="width:54px;height:54px;border-radius:50%;border:2px solid #fff;object-fit:cover">':'<span style="width:54px;height:54px;border-radius:50%;border:2px solid #fff;background:radial-gradient(#fff 1px,transparent 1.6px) 0 0/8px 8px,linear-gradient(#ff4fa3,#2a0018)"></span>'}
+$('tagchips').innerHTML=DB.TAGS.slice(0,10).map(function(t){return '<a href="search.html?tag='+encodeURIComponent(t)+'">#'+E(t)+'</a>'}).join('');
+$('rl').onclick=async function(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else alert('まだﾎﾑﾍﾟがないみたい')}catch(e){alert(e.message)}};
+var C=['#ff9ad5','#9be3ff','#5ff08f'];
+DB.newDiaries(3).then(function(L){$('nd').innerHTML=L.length?L.map(function(d,i){return '<a class="drow" href="hp.html?id='+E(d.hp_id)+'#diary"><span style="font-size:11px;color:#ffe066">['+tm(d.created_at)+']'+(isNew(d.created_at)?' <span class="blink" style="color:#ff3b3b;font-weight:bold">NEW!</span>':'')+'</span><b style="color:'+C[i%3]+'">'+E(d.title||'無題')+'</b><small>by '+E(d.nickname)+'</small></a>'}).join(''):'<p class="msg">まだ日記がないょ</p>'}).catch(function(){$('nd').innerHTML='<p class="msg">読み込めなかったょ</p>'});
+var B=['#ff6fb5','#b77bff','#4fc3ff'];
+DB.hpList('pickup','','',3).then(function(L){$('pu').innerHTML=L.length?L.map(function(h,i){return '<a href="hp.html?id='+E(h.hp_id)+'" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border:2px solid '+B[i%3]+';border-radius:10px;background:#000;text-decoration:none;color:#ffd6ec;font-size:11px;word-break:break-all">'+ic(h)+E(h.title||h.nickname)+'</a>'}).join(''):'<p class="msg" style="grid-column:1/-1">まだﾎﾑﾍﾟがないょ</p>'}).catch(function(){});
+var RC=[['rgba(255,224,102,.25)','#ffe066'],['rgba(220,220,235,.22)','#e6e6f0'],['rgba(232,150,90,.25)','#f0a46e']];
+DB.hpList('rank','','',3).then(function(L){L=L.filter(function(h){return h.claps>0});$('rk').innerHTML=L.length?L.map(function(h,i){return '<a href="hp.html?id='+E(h.hp_id)+'" style="display:flex;gap:10px;align-items:center;min-height:44px;padding:0 10px;border-radius:10px;background:linear-gradient(90deg,'+RC[i][0]+',transparent);text-decoration:none;color:'+RC[i][1]+';font-weight:bold"><span class="dg" style="font-size:18px">'+(i+1)+'位</span><span style="color:#ffd6ec">'+E(h.title||h.nickname)+'</span><span style="margin-left:auto;font-size:11px">👏'+h.claps+'</span></a>'}).join(''):'<p class="msg">拍手を集めてﾗﾝｸｲﾝしよう♪</p>'}).catch(function(){});
+DB.materials(6).then(function(L){$('sz').innerHTML=L.length?L.map(function(m){return '<a class="scell" href="sozai.html" style="text-decoration:none;color:#ffd6ec"><span class="simg"><img src="'+E(DB.sozBase+m.path)+'" alt="'+E(m.title||'素材')+'"></span>'+E(m.title||'素材')+'</a>'}).join(''):'<p class="msg" style="grid-column:1/-1">まだ素材がないょ</p>'}).catch(function(){});
+})();
 DB.posts(3).then(function(ps){var C=['#9be3ff','#ff9ad5','#5ff08f'];
 document.getElementById('topbbs').innerHTML=ps.length?ps.map(function(p,i){return '<div class="post"><span class="nm" style="color:'+C[i%3]+'">'+DB.esc(p.profiles?p.profiles.nickname:'ななしさん')+'</span> <span class="dt">'+DB.time(p.created_at)+'</span>\n'+DB.esc(p.body)+'</div>'}).join(''):'<p class="msg">まだ書き込みがないょ♪</p>'}).catch(function(){document.getElementById('topbbs').innerHTML='<p class="msg">読み込めなかったょ</p>'});
 </script>

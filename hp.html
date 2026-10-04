@@ -133,15 +133,21 @@ body.ed{padding-bottom:210px}
 .mini2{font:inherit;font-size:11px;color:var(--hi);background:none;border:1px solid var(--hi);border-radius:999px;padding:0 8px;min-height:24px;cursor:pointer}
 .modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px}
 .mbox{background:var(--card);color:var(--ink);border:3px solid var(--hi2);border-radius:14px;padding:12px;max-width:340px;width:100%}
+
+.sz{vertical-align:middle;max-width:100%}
+.tags{text-align:center;font-size:12px;margin:6px 0}.tags a{color:var(--hi);margin:0 3px}
+.tg{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px}.tg label{display:flex;align-items:center;gap:3px;min-height:28px}
+.hist .d{color:var(--hi);font-size:11px}.hist a{color:var(--ink)}
+.mbar .ic{font-size:14px;text-decoration:none}
 </style>
 </head>
 <body>
-<div class="mbar"><a class="lg" href="index.html">めろﾋﾟｮﾝ☆</a><span id="mid"></span><a href="info.html#contact">通報</a></div>
+<div class="mbar"><a class="lg" href="index.html">めろﾋﾟｮﾝ☆</a><span id="mid"></span><span style="display:flex;gap:10px;align-items:center"><a class="ic" href="search.html" aria-label="ﾎﾑﾍﾟ検索">🔍</a><a class="ic" href="#" id="rlt" aria-label="ﾎﾑﾍﾟﾙｰﾚｯﾄ">🎲</a><a href="info.html#contact">通報</a></span></div>
 <div id="root"><p class="note">読み込み中…</p></div>
 <div id="ui"></div>
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=4"></script>
+<script src="db.js?v=5"></script>
 <script>
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
@@ -171,14 +177,15 @@ function deco(t){
      .replace(/\[rb\]([\s\S]*?)\[\/rb\]/g,'<span class="dk-rb">$1</span>')
      .replace(/\[mq\]([\s\S]*?)\[\/mq\]/g,'<span class="dk-mq"><span>$1</span></span>')
      .replace(/\[center\]([\s\S]*?)\[\/center\]/g,'<span class="dk-ct">$1</span>');
+    h=h.replace(/\[s=([^\]\s]+)\]/g,function(m,x){return DB.sozOk(x)?'<img class="sz" src="'+DB.sozBase+x+'" alt="">':''});
     if(h===p)break}
   return h.replace(/\n/g,'<br>')}
-function def(nick){return {title:'☆★'+nick+'のﾎﾑﾍﾟ★☆',theme:'pink',marquee:'ようこそ(*´∀`*)ﾉﾞ ゆっくりしてってね☆',mood:'(*´∀`*)',showCounter:true,intro:'',song:'',icon:'',iconPath:'',colors:{},thanks:'拍手ありがと(*´∀`*)ﾉ\nまた遊びに来てね♪',showClaps:true,kiri:'',
+function def(nick){return {title:'☆★'+nick+'のﾎﾑﾍﾟ★☆',theme:'pink',marquee:'ようこそ(*´∀`*)ﾉﾞ ゆっくりしてってね☆',mood:'(*´∀`*)',showCounter:true,intro:'',song:'',icon:'',iconPath:'',colors:{},tags:[],thanks:'拍手ありがと(*´∀`*)ﾉ\nまた遊びに来てね♪',showClaps:true,kiri:'',
   qa:[['名前',''],['ﾆｯｸﾈｰﾑ',''],['誕生日',''],['血液型',''],['趣味',''],['好きな食べ物',''],['ﾏｲﾌﾞｰﾑ',''],['最後に一言','']],real:[],
   menu:Object.keys(BUILTIN).map(function(k){return {k:k,l:BUILTIN[k],on:true}}),pages:{}}}
 function fix(d,nick){var b=def(nick);d=d&&typeof d==='object'?d:{};Object.keys(b).forEach(function(k){if(d[k]===undefined)d[k]=b[k]});
   if(!Array.isArray(d.qa))d.qa=[];if(!Array.isArray(d.real))d.real=[];if(!Array.isArray(d.menu))d.menu=b.menu;
-  if(!d.pages||typeof d.pages!=='object')d.pages={};if(!d.colors||typeof d.colors!=='object')d.colors={};
+  if(!d.pages||typeof d.pages!=='object')d.pages={};if(!d.colors||typeof d.colors!=='object')d.colors={};if(!Array.isArray(d.tags))d.tags=[];
   Object.keys(BUILTIN).forEach(function(k){if(!d.menu.some(function(m){return m.k===k}))d.menu.push({k:k,l:BUILTIN[k],on:true})});
   d.menu=d.menu.filter(function(m){return BUILTIN[m.k]||d.pages[m.k]});return d}
 function sp(u){var m=String(u||'').match(/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(track|album|playlist|artist|episode)\/([A-Za-z0-9]{10,40})/);return m?'https://open.spotify.com/embed/'+m[1]+'/'+m[2]:''}
@@ -211,12 +218,14 @@ function top(){
   if(s)h+='<div class="song"><iframe src="'+esc(s)+'" height="152" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>';
   h+='<div class="dv" aria-hidden="true">'+DV+'</div>';
   var items=D.menu.filter(function(m){return m.on||ED});
-  h+='<nav class="menu">'+items.map(function(m,i){return '<a href="#'+esc(m.k)+'"'+(i===items.length-1&&items.length%2?' class="w"':'')+(m.on?'':' style="opacity:.45"')+'>'+esc(m.l||'ﾍﾟｰｼﾞ')+'</a>'}).join('')+'</nav>';
+  h+='<nav class="menu">'+items.map(function(m,i){return '<a href="#'+esc(m.k)+'"'+(i===items.length-1&&items.length%2?' class="w"':'')+(m.on?'':' style="opacity:.45"')+'>'+deco(m.l||'ﾍﾟｰｼﾞ')+'</a>'}).join('')+'</nav>';
   if(ED)h+='<p style="text-align:center;margin:4px 0"><button type="button" class="ebtn sub" data-act="sheet" data-v="menu">ﾒﾆｭｰを編集・ﾍﾟｰｼﾞを追加</button></p>';
+  if(D.tags.length)h+='<p class="tags">'+D.tags.map(function(t){return '<a href="search.html?tag='+encodeURIComponent(t)+'">#'+esc(t)+'</a>'}).join(' ')+'</p>';
+  if(!ED)h+=ttl('UPDATE')+'<div id="upd"><p class="empty">読み込み中…</p></div>';
   if(D.real.length){var r=D.real[0];h+=ttl('最新ﾘｱﾙ')+'<div class="ent"><div class="d">'+esc(tm(r.at))+'</div>'+deco(r.t)+'</div>'}
   h+='<p class="foot">'+esc(R.nickname)+' のﾎﾑﾍﾟ ／ Powered by めろﾋﾟｮﾝ☆</p>';
   return h}
-function label(k){var m=D.menu.filter(function(x){return x.k===k})[0];return esc(m?m.l:BUILTIN[k]||'ﾍﾟｰｼﾞ')}
+function label(k){var m=D.menu.filter(function(x){return x.k===k})[0];return deco(m?m.l:BUILTIN[k]||'ﾍﾟｰｼﾞ')}
 function prof(){
   var h=ttl(label('prof'));
   if(ED){D.qa.forEach(function(p,i){h+='<div class="qrow"><input class="ein" data-q="'+i+',0" value="'+esc(p[0])+'" placeholder="質問">'+ta('data-q="'+i+',1"',p[1],'答え',44)+'<div style="text-align:right"><button type="button" class="ebtn sub" data-act="delqa" data-i="'+i+'">この項目を消す</button></div></div>'});
@@ -275,6 +284,14 @@ async function ldFoot(){if(!owner){ap('<p class="empty">足あとゎ持ち主し
   try{var L=await DB.footprints(R.id),h='<p class="note2" style="color:var(--hi)">足あとを残す設定の人だけ記録されるょ</p>';
   if(!L.length)h+='<p class="empty">まだ足あとゎありません</p>';
   L.forEach(function(f){h+='<div class="ent"><div class="d">'+esc(tm(f.visited_at))+'</div>'+who(f.profiles)+'</div>'});ap(h)}catch(e){fail(e)}}
+function isNewD(s){return Date.now()-new Date(s).getTime()<3*86400000}
+var NEWB='<span class="new">NEW!</span>';
+async function ldUpd(){var e=document.getElementById('upd');if(!e)return;var L=[];
+  try{var d=await DB.diaries(R.id);d.slice(0,3).forEach(function(x){L.push({at:x.created_at,h:'<a href="#diary">日記「'+esc(x.title||'無題')+'」</a>'})})}catch(err){}
+  try{var ph=await DB.photos(R.id);if(ph[0])L.push({at:ph[0].created_at,h:'<a href="#photo">写真を追加</a>'})}catch(err){}
+  if(D.real[0])L.push({at:D.real[0].at,h:'<a href="#real">ﾘｱﾙ更新</a>'});
+  L.sort(function(a,b){return new Date(b.at)-new Date(a.at)});
+  e.innerHTML=L.length?'<ul class="hist">'+L.slice(0,5).map(function(x){return '<li><span class="d">'+esc(tm(x.at))+'</span> '+x.h+(isNewD(x.at)?NEWB:'')+'</li>'}).join('')+'</ul>':'<p class="empty">まだ更新ゎありません</p>'}
 function applyColors(){var st=document.documentElement.style;CV.forEach(function(c){if(hex(D.colors[c[0]]))st.setProperty('--'+c[0],D.colors[c[0]]);else st.removeProperty('--'+c[0])})}
 function draw(){
   var r=location.hash.replace(/^#/,'');
@@ -283,16 +300,19 @@ function draw(){
   var f={prof:prof,intro:intro,real:real}[r];
   if(LOAD[r]){root.innerHTML=frame(apage(r));LOAD[r]()}
   else root.innerHTML=frame(f?f():(D.pages[r]?page(r):top()));
+  if(!r&&!ED)ldUpd();
   readGlit();drawUi()}
 function cur(v){return getComputedStyle(document.documentElement).getPropertyValue('--'+v).trim()}
 function sheetHtml(){
   if(sheet==='color')return '<div class="sh"><p class="shh">文字の色（選んだ文字を囲むょ）</p><div class="sw">'+COLS.map(function(c){return '<button type="button" data-act="wrapc" data-v="'+c[1]+'" style="background:'+c[1]+'" aria-label="'+c[0]+'"></button>'}).join('')+'</div></div>';
   if(sheet==='kao')return '<div class="sh"><p class="shh">顔文字</p><div class="pal">'+KAO.map(function(k){return '<button type="button" data-act="ins" data-v="'+esc(k)+'">'+esc(k)+'</button>'}).join('')+'</div></div>';
   if(sheet==='emo')return '<div class="sh"><p class="shh">デコ絵文字</p><div class="pal emo">'+EMO.map(function(k){return '<button type="button" data-act="ins" data-v="'+esc(k)+'">'+esc(k)+'</button>'}).join('')+'</div></div>';
+  if(sheet==='sozai')return '<div class="sh"><p class="shh">素材（タップで入るょ）　<a href="sozai.html" target="_blank" style="color:#ff9ad5">素材置き場へ</a></p><div class="pal" id="szl">読み込み中…</div></div>';
   if(sheet==='design'){
     var h='<div class="sh"><p class="shh">着せ替え</p><select id="th">'+THEMES.map(function(t){return '<option value="'+t[0]+'"'+(D.theme===t[0]?' selected':'')+'>'+t[1]+'</option>'}).join('')+'</select>';
     h+='<p class="shh">色をこまかく変える</p><div class="cg">'+CV.map(function(c){var v=hex(D.colors[c[0]])?D.colors[c[0]]:cur(c[0]);if(!hex(v))v='#ffffff';return '<label>'+c[1]+'<input type="color" data-cv="'+c[0]+'" value="'+esc(v)+'"></label>'}).join('')+'</div>';
     h+='<p><button type="button" class="ebtn sub lt" data-act="resetc">色を着せ替えの元に戻す</button></p>';
+    h+='<p class="shh">タグ（5つまで。検索で見つけてもらえるょ）</p><div class="tg">'+DB.TAGS.map(function(t){return '<label><input type="checkbox" data-tag="'+esc(t)+'"'+(D.tags.indexOf(t)>=0?' checked':'')+'>'+esc(t)+'</label>'}).join('')+'</div>';
     h+='<p class="shh">ﾌﾟﾛﾌ画像</p><label class="ebtn" style="display:inline-flex;align-items:center">画像を選ぶ<input type="file" id="iconf" accept="image/*" hidden></label> '+(D.icon?'<button type="button" class="ebtn sub lt" data-act="delicon">画像を外す</button>':'');
     h+='<p class="note2">※画像ゎ自動で小さくして、撮った場所の情報を消してから保存するょ。顔や制服、家の周りが写った写真ゎ気をつけてね</p>';
     h+='<p class="shh">公開範囲</p><select id="vis"><option value="public"'+(VIS==='public'?' selected':'')+'>誰でも見れる</option><option value="members"'+(VIS==='members'?' selected':'')+'>会員だけ</option><option value="friends"'+(VIS==='friends'?' selected':'')+'>めろ友だけ</option><option value="private"'+(VIS==='private'?' selected':'')+'>自分だけ</option></select></div>';
@@ -306,7 +326,7 @@ function drawUi(){
   if(!owner){ui.innerHTML='';return}
   if(!ED){ui.innerHTML='<div class="fab"><button type="button" class="ebtn" data-act="edit" style="min-height:44px;padding:0 18px">✎ 編集する</button></div>';return}
   ui.innerHTML='<div class="edbar">'+sheetHtml()+
-   '<div class="tools" aria-label="文字の装飾"><button type="button" data-act="sheet" data-v="color" style="color:#ff6fb5">色</button><button type="button" data-act="wrap" data-v="b"><b>B</b></button><button type="button" data-act="wrap" data-v="big">大</button><button type="button" data-act="wrap" data-v="small" style="font-size:11px">小</button><button type="button" data-act="wrap" data-v="blink">点滅</button><button type="button" data-act="wrap" data-v="rb" class="rbt">虹</button><button type="button" data-act="wrap" data-v="mq">流</button><button type="button" data-act="wrap" data-v="center">中</button><button type="button" data-act="sheet" data-v="kao">顔</button><button type="button" data-act="sheet" data-v="emo">♡</button></div>'+
+   '<div class="tools" aria-label="文字の装飾"><button type="button" data-act="sheet" data-v="color" style="color:#ff6fb5">色</button><button type="button" data-act="wrap" data-v="b"><b>B</b></button><button type="button" data-act="wrap" data-v="big">大</button><button type="button" data-act="wrap" data-v="small" style="font-size:11px">小</button><button type="button" data-act="wrap" data-v="blink">点滅</button><button type="button" data-act="wrap" data-v="rb" class="rbt">虹</button><button type="button" data-act="wrap" data-v="mq">流</button><button type="button" data-act="wrap" data-v="center">中</button><button type="button" data-act="sheet" data-v="kao">顔</button><button type="button" data-act="sheet" data-v="emo">♡</button><button type="button" data-act="sheet" data-v="sozai">素材</button></div>'+
    '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾞｻﾞｲﾝ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn" data-act="save">保存する</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
    '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>';
   var th=document.getElementById('th');if(th)th.onchange=function(){D.theme=this.value;D.colors={};changed();draw()};
@@ -314,7 +334,12 @@ function drawUi(){
   ui.querySelectorAll('[data-cv]').forEach(function(el){el.oninput=function(){D.colors[el.getAttribute('data-cv')]=el.value;applyColors();readGlit();changed()}});
   ui.querySelectorAll('[data-ml]').forEach(function(el){el.oninput=function(){D.menu[+el.getAttribute('data-ml')].l=el.value;changed();if(!location.hash)redrawPage()}});
   ui.querySelectorAll('[data-mo]').forEach(function(el){el.onchange=function(){D.menu[+el.getAttribute('data-mo')].on=el.checked;changed();redrawPage()}});
+  ui.querySelectorAll('[data-tag]').forEach(function(el){el.onchange=function(){var t=el.getAttribute('data-tag');
+    if(el.checked){if(D.tags.length>=5){el.checked=false;st('タグゎ5つまでだょ');return}D.tags.push(t)}else D.tags=D.tags.filter(function(x){return x!==t});changed()}});
+  if(sheet==='sozai')ldSoz();
   var f=document.getElementById('iconf');if(f)f.onchange=function(){if(f.files[0])upIcon(f.files[0])}}
+async function ldSoz(){var e=document.getElementById('szl');if(!e)return;try{var L=await DB.materials(60);
+  e.innerHTML=L.length?L.map(function(m){return '<button type="button" data-act="ins" data-v="[s='+esc(m.path)+']" title="'+esc(m.title)+'"><img src="'+esc(DB.sozBase+m.path)+'" alt="'+esc(m.title||'素材')+'" style="max-height:32px;max-width:80px"></button>'}).join(''):'まだ素材がないょ'}catch(err){e.textContent=err.message}}
 function redrawPage(){var r=location.hash.replace(/^#/,''),fn={prof:prof,intro:intro,real:real}[r];if(LOAD[r])return;root.innerHTML=frame(fn?fn():(D.pages[r]?page(r):top()))}
 function changed(){dirty=true;st('まだ保存してないょ')}
 function st(t){var e=document.getElementById('st');if(e)e.textContent=t}
@@ -323,6 +348,7 @@ function target(){if(lastF&&document.body.contains(lastF))return lastF;st('先�
 function edit(el,a,b){var s=el.selectionStart,e=el.selectionEnd,v=el.value;el.value=v.slice(0,s)+a+v.slice(s,e)+b+v.slice(e);el.focus();el.setSelectionRange(s+a.length,e+a.length);el.dispatchEvent(new Event('input',{bubbles:true}))}
 document.addEventListener('focusin',function(e){var t=e.target;if(t.classList&&t.classList.contains('deco'))lastF=t});
 ui.addEventListener('pointerdown',function(e){if(e.target.closest('.tools button,.sw button,.pal button'))e.preventDefault()});
+function lastOk(){return lastF&&document.body.contains(lastF)}
 root.addEventListener('input',function(e){var t=e.target,k=t.getAttribute('data-k'),q=t.getAttribute('data-q'),pg=t.getAttribute('data-pg');
   if(k){D[k]=t.type==='checkbox'?t.checked:t.value;changed()}
   else if(q){var p=q.split(',');D.qa[+p[0]][+p[1]]=t.value;changed()}
@@ -394,6 +420,7 @@ window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();
 window.addEventListener('hashchange',function(){draw();scrollTo(0,0)});
 setInterval(function(){var c=document.getElementById('clk');if(c)c.textContent=clock()},30000);
 function note(t){document.documentElement.dataset.skin='gal';root.innerHTML=frame('<div class="note">'+t+'</div>')}
+document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else alert('まだﾎﾑﾍﾟがないみたい')}catch(err){alert(err.message)}};
 (async function(){
   if(!/^[a-z0-9_]{3,16}$/.test(HID)){note('ﾎﾑﾍﾟが見つからないょ<br><br><a href="index.html">めろﾋﾟｮﾝ☆TOPへ</a>');return}
   try{me=await DB.me();R=await DB.getHp(HID)}catch(e){note(esc(e.message));return}

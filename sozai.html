@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390">
-<title>ﾛｸﾞｲﾝ｜めろﾋﾟｮﾝ☆</title>
+<title>素材置き場｜めろﾋﾟｮﾝ☆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=3">
@@ -29,31 +29,26 @@
 </svg>
 <span class="puffy" style="font-size: 30px; margin-top: -4px">めろﾋﾟｮﾝ☆</span>
 </a>
-<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★ﾛｸﾞｲﾝ・無料登録★ ﾒｱﾄﾞだけでｶﾝﾀﾝ登録♪ ﾊﾟｽﾜｰﾄﾞゎ誰にも教えないでね!!</span></div>
-<h1 class="puffy" style="font-size: 30px; margin-top: 6px">LOGIN</h1>
-<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★ﾛｸﾞｲﾝ・無料登録★</p>
+<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>✿素材置き場✿ ﾎﾑﾍﾟに使える素材がいっぱい♪ 自分で作った素材を置いてね</span></div>
+<h1 class="puffy" style="font-size: 30px; margin-top: 6px">SOZAI</h1>
+<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">✿素材置き場✿</p>
 
-<div style="width:100%">
-<div class="tabs" role="tablist">
-<button type="button" role="tab" id="t-in" aria-selected="true">ﾛｸﾞｲﾝ</button>
-<button type="button" role="tab" id="t-up" aria-selected="false">無料登録♡</button>
-</div>
-<section class="sec pk glow" style="border-radius:0 0 14px 14px">
-<div id="f-in" class="fm" style="gap:8px">
-<label for="in-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="in-mail" type="email" autocomplete="email">
-<label for="in-pass">ﾊﾟｽﾜｰﾄﾞ</label><input id="in-pass" type="password" autocomplete="current-password">
-<button class="pill purple" id="b-in" type="button" style="margin-top:8px">ﾛｸﾞｲﾝ</button>
-</div>
-<div id="f-up" class="fm" style="gap:8px" hidden>
-<label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
-<label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-mail" type="email" autocomplete="email">
-<label for="up-pass">ﾊﾟｽﾜｰﾄﾞ（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
-<button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
-<p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!<br>※ﾆｯｸﾈｰﾑに本名ゎ使わないでね</p>
-</div>
-<p class="msg" id="msg" role="status"></p>
+<section class="sec gd glow">
+<h3>★使い方★</h3>
+<p style="font-size:12px">使いたい素材の「ｺｰﾄﾞをｺﾋﾟｰ」を押して、ﾎﾑﾍﾟの編集画面に貼ってね。編集画面の「素材」ボタンからも選べるょ。</p>
 </section>
+<section class="sec pk glow" id="up" hidden>
+<h3>✎素材を置く✎</h3>
+<div class="fm" style="gap:8px">
+<label for="sf">画像（gif・png・webp、300KBまで）</label><input id="sf" type="file" accept="image/gif,image/png,image/webp">
+<label for="st">素材の名前</label><input id="st" type="text" maxlength="30" placeholder="例：ﾋﾟﾝｸのﾊｰﾄ">
+<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="own" style="width:18px;height:18px;margin-top:2px">自分で作った素材です（ほかのサイトの素材や、ｷｬﾗｸﾀｰ・芸能人の画像ゎ置けないょ）</label>
+<button class="pill" id="sbtn" type="button">置く♪</button>
+<p class="msg" id="smsg" role="status"></p>
 </div>
+</section>
+<section class="sec pp glow"><h3>♡新着素材♡</h3><div id="res" class="sgrid"><p class="msg">読み込み中…</p></div></section>
+
 <svg width="300" height="34" viewBox="0 0 300 34" aria-hidden="true">
 <g stroke="#ffffff" stroke-width="1.5">
 <path d="M22 28 C4 16 6 4 15 4 C19 4 22 7 22 10 C22 7 25 4 29 4 C38 4 40 16 22 28 Z" fill="#ff4fa3"></path>
@@ -76,19 +71,25 @@
 <script src="db.js?v=5"></script>
 <script src="kira.js?v=2"></script>
 <script>
-(function(){
-var $=function(i){return document.getElementById(i)},msg=$('msg');
-function say(t,ng){msg.textContent=t;msg.className='msg'+(ng?' ng':'')}
-function tab(up){$('t-in').setAttribute('aria-selected',!up);$('t-up').setAttribute('aria-selected',up);$('f-in').hidden=up;$('f-up').hidden=!up;say('')}
-$('t-in').onclick=function(){tab(false)};$('t-up').onclick=function(){tab(true)};
-if(location.hash==='#signup')tab(true);
-DB.me().then(function(u){if(u)location.href='mypage.html'});
-$('b-in').onclick=async function(){var b=this;b.disabled=true;say('ﾛｸﾞｲﾝ中…');
-  try{await DB.logIn($('in-mail').value.trim(),$('in-pass').value);location.href='mypage.html'}catch(e){say(e.message,true)}b.disabled=false};
-$('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim();
-  if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
-  b.disabled=true;say('登録中…');
-  try{await DB.signUp($('up-mail').value.trim(),$('up-pass').value,n);say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉')}catch(e){say(e.message,true)}b.disabled=false};
-})();</script>
+var $=function(i){return document.getElementById(i)};
+function tm(s){var d=new Date(s);return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+function isNew(s){return Date.now()-new Date(s).getTime()<3*86400000}
+function hpRow(h,extra){return '<a class="hrow" href="hp.html?id='+DB.esc(h.hp_id)+'">'+(h.icon&&h.icon.indexOf(DB.imgBase)===0?'<img src="'+DB.esc(h.icon)+'" alt="">':'<span class="noimg">♡</span>')+'<span><b>'+DB.esc(h.title||h.nickname+'のﾎﾑﾍﾟ')+'</b><br><small>by '+DB.esc(h.nickname)+(extra||'')+'</small>'+(h.tags&&h.tags.length?'<br><small class="tg">'+h.tags.map(function(t){return '#'+DB.esc(t)}).join(' ')+'</small>':'')+'</span></a>'}
+async function roulette(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else alert('まだﾎﾑﾍﾟがないみたい')}catch(e){alert(e.message)}}
+
+var me=null;
+async function load(){try{var L=await DB.materials(120);
+  $('res').innerHTML=L.length?L.map(function(m){var p=m.profiles||{};return '<div class="scell"><div class="simg"><img src="'+DB.esc(DB.sozBase+m.path)+'" alt="'+DB.esc(m.title||'素材')+'"></div><b>'+DB.esc(m.title||'無題')+'</b><small>by '+(p.hp_id?'<a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a>':DB.esc(p.nickname||''))+'</small><button type="button" class="del" data-cp="'+DB.esc(m.path)+'">ｺｰﾄﾞをｺﾋﾟｰ</button>'+(me&&m.user_id===me.id?'<button type="button" class="del" data-rm="'+m.id+'" data-p="'+DB.esc(m.path)+'">削除</button>':'')+'</div>'}).join(''):'<p class="msg">まだ素材がないょ。一番乗りしてね♪</p>'}
+  catch(e){$('res').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
+$('res').onclick=async function(e){var c=e.target.getAttribute('data-cp'),r=e.target.getAttribute('data-rm');
+  if(c){var code='[s='+c+']';try{await navigator.clipboard.writeText(code);e.target.textContent='ｺﾋﾟｰしたょ✧'}catch(err){prompt('このｺｰﾄﾞをｺﾋﾟｰしてね',code)}}
+  else if(r){if(!confirm('この素材を削除する？（使ってるﾎﾑﾍﾟからも消えるょ）'))return;try{await DB.delMaterial(+r,e.target.getAttribute('data-p'));load()}catch(err){alert(err.message)}}};
+$('sbtn').onclick=async function(){var b=this,m=$('smsg'),f=$('sf').files[0];
+  if(!f){m.textContent='画像を選んでね';m.className='msg ng';return}
+  if(!$('own').checked){m.textContent='自分で作った素材だけ置けるょ';m.className='msg ng';return}
+  b.disabled=true;m.textContent='ｱｯﾌﾟﾛｰﾄﾞ中…';m.className='msg';
+  try{await DB.addMaterial(me.id,f,$('st').value.trim());m.textContent='置いたょ✧';$('sf').value='';$('st').value='';$('own').checked=false;load()}catch(e){m.textContent=e.message;m.className='msg ng'}b.disabled=false};
+DB.me().then(function(u){me=u;if(u)$('up').hidden=false;load()});
+</script>
 </body>
 </html>

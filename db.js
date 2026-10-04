@@ -4,6 +4,7 @@ var URL='https://sxlcqlgkcsavaavcoduc.supabase.co';
 var KEY='sb_publishable_YhIWbfIEOGUtrh-xPrM59w_qBJBABz0';
 var sb=window.supabase.createClient(URL,KEY);
 var IMG=URL+'/storage/v1/object/public/hp/';
+var SOZ=URL+'/storage/v1/object/public/sozai/';
 var SITE=location.origin+location.pathname.replace(/[^\/]*$/,'');
 function err(e){
   var m=(e&&e.message)||String(e);
@@ -45,7 +46,17 @@ window.DB={
   getHp:async function(hpId){var d=await run(sb.from('profiles').select('id,nickname,hp_id,homepages(data,visibility,counter,updated_at)').eq('hp_id',hpId).limit(1));
     if(!d[0])return null;var h=d[0].homepages;if(Array.isArray(h))h=h[0]||null;return {id:d[0].id,nickname:d[0].nickname,hp_id:d[0].hp_id,hp:h}},
   saveHp:function(uid,data,vis){return run(sb.from('homepages').upsert({user_id:uid,data:data,visibility:vis,updated_at:new Date().toISOString()}))},
-  imgBase:IMG,
+  imgBase:IMG,sozBase:SOZ,
+  TAGS:['音楽','ｱﾆﾒ・漫画','ｹﾞｰﾑ','推し活','平成・Y2K','ﾌｧｯｼｮﾝ','ｺｽﾒ','ｲﾗｽﾄ','創作','小説','写真','日記','ｽﾎﾟｰﾂ','勉強','ﾍﾟｯﾄ','ｸﾞﾙﾒ','ﾊﾞﾝﾄﾞ','ｱｲﾄﾞﾙ'],
+  newDiaries:function(n){return run(sb.rpc('new_diaries',{lim:n||20}))},
+  hpList:function(mode,q,tag,n){return run(sb.rpc('hp_list',{mode:mode,q:q||'',tag:tag||'',lim:n||20}))},
+  randomHp:function(){return run(sb.rpc('random_hp'))},
+  materials:function(n,uid){var x=sb.from('materials').select('id,user_id,path,title,created_at,profiles(nickname,hp_id)').order('created_at',{ascending:false}).limit(n||60);if(uid)x=x.eq('user_id',uid);return run(x)},
+  addMaterial:async function(uid,file,title){var ext={'image/gif':'gif','image/png':'png','image/webp':'webp'}[file.type];if(!ext)throw new Error('gif・png・webpだけ使えるょ');
+    if(file.size>307200)throw new Error('300KBまでだょ');var path=uid+'/'+Date.now()+'.'+ext;
+    await run(sb.storage.from('sozai').upload(path,file,{contentType:file.type,upsert:false}));await run(sb.from('materials').insert({path:path,title:title}));return path},
+  delMaterial:async function(id,path){await run(sb.from('materials').delete().eq('id',id));await run(sb.storage.from('sozai').remove([path]))},
+  sozOk:function(p){return /^[0-9a-f-]{36}\/[0-9a-z]+\.(gif|png|webp)$/.test(p||'')},
   uploadImg:async function(uid,blob){var path=uid+'/'+Date.now()+'.jpg';await run(sb.storage.from('hp').upload(path,blob,{contentType:'image/jpeg',upsert:false}));return {path:path,url:IMG+path}},
   delImg:function(path){return run(sb.storage.from('hp').remove([path]))},
   diaries:function(o){return run(sb.from('diaries').select('id,title,body,is_public,created_at').eq('user_id',o).order('created_at',{ascending:false}).limit(100))},

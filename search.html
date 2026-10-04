@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390">
-<title>ﾛｸﾞｲﾝ｜めろﾋﾟｮﾝ☆</title>
+<title>ﾎﾑﾍﾟ検索｜めろﾋﾟｮﾝ☆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=3">
@@ -29,31 +29,19 @@
 </svg>
 <span class="puffy" style="font-size: 30px; margin-top: -4px">めろﾋﾟｮﾝ☆</span>
 </a>
-<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★ﾛｸﾞｲﾝ・無料登録★ ﾒｱﾄﾞだけでｶﾝﾀﾝ登録♪ ﾊﾟｽﾜｰﾄﾞゎ誰にも教えないでね!!</span></div>
-<h1 class="puffy" style="font-size: 30px; margin-top: 6px">LOGIN</h1>
-<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★ﾛｸﾞｲﾝ・無料登録★</p>
+<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★ﾎﾑﾍﾟ検索★ ﾆｯｸﾈｰﾑ・ID・ﾎﾑﾍﾟ名・タグでさがせるょ♪ 迷ったらﾙｰﾚｯﾄ!!</span></div>
+<h1 class="puffy" style="font-size: 30px; margin-top: 6px">SEARCH</h1>
+<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★ﾎﾑﾍﾟ検索★</p>
 
-<div style="width:100%">
-<div class="tabs" role="tablist">
-<button type="button" role="tab" id="t-in" aria-selected="true">ﾛｸﾞｲﾝ</button>
-<button type="button" role="tab" id="t-up" aria-selected="false">無料登録♡</button>
+<div class="fm" style="flex-direction:row;gap:6px">
+<label for="q" class="vh">検索ワード</label><input id="q" type="search" placeholder="ﾎﾑﾍﾟをさがす♪" style="flex:1;min-width:0">
+<button class="pill purple" id="go" type="button" style="width:auto;padding:0 16px">検索</button>
 </div>
-<section class="sec pk glow" style="border-radius:0 0 14px 14px">
-<div id="f-in" class="fm" style="gap:8px">
-<label for="in-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="in-mail" type="email" autocomplete="email">
-<label for="in-pass">ﾊﾟｽﾜｰﾄﾞ</label><input id="in-pass" type="password" autocomplete="current-password">
-<button class="pill purple" id="b-in" type="button" style="margin-top:8px">ﾛｸﾞｲﾝ</button>
-</div>
-<div id="f-up" class="fm" style="gap:8px" hidden>
-<label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
-<label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-mail" type="email" autocomplete="email">
-<label for="up-pass">ﾊﾟｽﾜｰﾄﾞ（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
-<button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
-<p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!<br>※ﾆｯｸﾈｰﾑに本名ゎ使わないでね</p>
-</div>
-<p class="msg" id="msg" role="status"></p>
-</section>
-</div>
+<button class="pill" id="rl" type="button">🎲 ﾎﾑﾍﾟﾙｰﾚｯﾄ</button>
+<section class="sec pp glow"><h3>♡タグ♡</h3><div id="tags" class="chips"></div></section>
+<div class="tabs" role="tablist"><button type="button" role="tab" id="t-new" aria-selected="true">新着</button><button type="button" role="tab" id="t-rank" aria-selected="false">ﾗﾝｷﾝｸﾞ</button></div>
+<section class="sec pk glow" style="border-radius:0 0 14px 14px"><p class="msg" id="cap"></p><div id="res"><p class="msg">読み込み中…</p></div></section>
+
 <svg width="300" height="34" viewBox="0 0 300 34" aria-hidden="true">
 <g stroke="#ffffff" stroke-width="1.5">
 <path d="M22 28 C4 16 6 4 15 4 C19 4 22 7 22 10 C22 7 25 4 29 4 C38 4 40 16 22 28 Z" fill="#ff4fa3"></path>
@@ -76,19 +64,27 @@
 <script src="db.js?v=5"></script>
 <script src="kira.js?v=2"></script>
 <script>
-(function(){
-var $=function(i){return document.getElementById(i)},msg=$('msg');
-function say(t,ng){msg.textContent=t;msg.className='msg'+(ng?' ng':'')}
-function tab(up){$('t-in').setAttribute('aria-selected',!up);$('t-up').setAttribute('aria-selected',up);$('f-in').hidden=up;$('f-up').hidden=!up;say('')}
-$('t-in').onclick=function(){tab(false)};$('t-up').onclick=function(){tab(true)};
-if(location.hash==='#signup')tab(true);
-DB.me().then(function(u){if(u)location.href='mypage.html'});
-$('b-in').onclick=async function(){var b=this;b.disabled=true;say('ﾛｸﾞｲﾝ中…');
-  try{await DB.logIn($('in-mail').value.trim(),$('in-pass').value);location.href='mypage.html'}catch(e){say(e.message,true)}b.disabled=false};
-$('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim();
-  if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
-  b.disabled=true;say('登録中…');
-  try{await DB.signUp($('up-mail').value.trim(),$('up-pass').value,n);say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉')}catch(e){say(e.message,true)}b.disabled=false};
-})();</script>
+var $=function(i){return document.getElementById(i)};
+function tm(s){var d=new Date(s);return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+function isNew(s){return Date.now()-new Date(s).getTime()<3*86400000}
+function hpRow(h,extra){return '<a class="hrow" href="hp.html?id='+DB.esc(h.hp_id)+'">'+(h.icon&&h.icon.indexOf(DB.imgBase)===0?'<img src="'+DB.esc(h.icon)+'" alt="">':'<span class="noimg">♡</span>')+'<span><b>'+DB.esc(h.title||h.nickname+'のﾎﾑﾍﾟ')+'</b><br><small>by '+DB.esc(h.nickname)+(extra||'')+'</small>'+(h.tags&&h.tags.length?'<br><small class="tg">'+h.tags.map(function(t){return '#'+DB.esc(t)}).join(' ')+'</small>':'')+'</span></a>'}
+async function roulette(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else alert('まだﾎﾑﾍﾟがないみたい')}catch(e){alert(e.message)}}
+
+var P=new URLSearchParams(location.search),Q=P.get('q')||'',TAG=P.get('tag')||'',MODE=P.get('mode')==='rank'?'rank':'new';
+$('q').value=Q;
+$('tags').innerHTML=DB.TAGS.map(function(t){return '<a href="#" data-t="'+DB.esc(t)+'"'+(t===TAG?' class="on"':'')+'>#'+DB.esc(t)+'</a>'}).join('');
+$('tags').onclick=function(e){var a=e.target.closest('[data-t]');if(!a)return;e.preventDefault();TAG=TAG===a.getAttribute('data-t')?'':a.getAttribute('data-t');
+  $('tags').querySelectorAll('a').forEach(function(x){x.className=x.getAttribute('data-t')===TAG?'on':''});load()};
+function tab(m){MODE=m;$('t-new').setAttribute('aria-selected',m==='new');$('t-rank').setAttribute('aria-selected',m==='rank');load()}
+$('t-new').onclick=function(){tab('new')};$('t-rank').onclick=function(){tab('rank')};
+$('go').onclick=function(){Q=$('q').value.trim();load()};$('q').onkeydown=function(e){if(e.key==='Enter'){Q=this.value.trim();load()}};
+$('rl').onclick=roulette;
+async function load(){$('res').innerHTML='<p class="msg">読み込み中…</p>';
+  $('cap').textContent=(Q?'「'+Q+'」':'')+(TAG?' #'+TAG:'')+(MODE==='rank'?' ﾗﾝｷﾝｸﾞ（30日の拍手数）':' 新着順');
+  try{var L=await DB.hpList(Q||TAG?(MODE==='rank'?'rank':'search'):MODE,Q,TAG,50);
+    $('res').innerHTML=L.length?L.map(function(h,i){return (MODE==='rank'?'<span class="rk">'+(i+1)+'位</span>':'')+hpRow(h,MODE==='rank'?' ／ 👏'+h.claps:'')}).join(''):'<p class="msg">見つからなかったょ(´・ω・`)</p>'}
+  catch(e){$('res').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
+tab(MODE);
+</script>
 </body>
 </html>
