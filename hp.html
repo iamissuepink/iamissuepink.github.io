@@ -142,6 +142,22 @@ body.ed{padding-bottom:210px}
 
 .uhtml{display:block;width:100%;height:200px;border:0;background:#fff;border-radius:6px}
 .eta.code{font-family:"Courier New",monospace;font-size:13px;white-space:pre;overflow-x:auto}
+
+/* ===== 平成リアル寄せ ===== */
+.menu a{border-radius:0;background:var(--hi);border:2px outset var(--hi2);box-shadow:none;text-shadow:none;padding:5px 2px;font-size:12px}
+.menu a::before{display:none}
+.menu a:active{transform:none;box-shadow:none;border-style:inset}
+.ttl{border-radius:0;font-size:13px}
+.ebtn{border-radius:0;background:var(--hi);border:2px outset var(--hi2);font-size:12px}
+.ebtn.sub{background:var(--card);border:2px outset var(--line)}
+.ebtn:active{border-style:inset}
+.mini2{border-radius:0}
+.ein,.eta{border-radius:0;border:2px inset var(--hi2)}
+.tools button,.mini,.pal button,.moods button{border-radius:0}
+.sh{border-radius:0}.mbox{border-radius:0}.kiri{border-radius:0}.box{border-radius:0}
+.pgrid img{border-radius:0}.pic{border-radius:0}
+.song iframe{border-radius:0}
+.mbar .lg{font-family:"MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif}
 </style>
 </head>
 <body>
@@ -254,23 +270,7 @@ function htmlDoc(code){var base=DB.imgBase.replace(/\/hp\/$/,'/');
     '<script>(function(){function s(){parent.postMessage({melo:1,h:document.documentElement.scrollHeight},"*")}try{new ResizeObserver(s).observe(document.documentElement)}catch(e){}addEventListener("load",s);setTimeout(s,300);s()})()<\/script></body></html>'}
 function plain(t){return String(t||'').replace(/\[[^\]]*\]/g,'')}
 function starter(k){var p=D.pages[k],m=D.menu.filter(function(x){return x.k===k})[0];
-  return '<style>\nbody{margin:0;padding:12px;background:#ffd6ea;color:#6b1f45;font-family:sans-serif;font-size:14px;text-align:center}\nh1{color:#ff3d9a;font-size:20px}\n.box{background:#fff;border:2px dotted #ff8cc6;border-radius:10px;padding:10px;margin:10px 0}\n
-/* ===== 平成リアル寄せ ===== */
-.menu a{border-radius:0;background:var(--hi);border:2px outset var(--hi2);box-shadow:none;text-shadow:none;padding:5px 2px;font-size:12px}
-.menu a::before{display:none}
-.menu a:active{transform:none;box-shadow:none;border-style:inset}
-.ttl{border-radius:0;font-size:13px}
-.ebtn{border-radius:0;background:var(--hi);border:2px outset var(--hi2);font-size:12px}
-.ebtn.sub{background:var(--card);border:2px outset var(--line)}
-.ebtn:active{border-style:inset}
-.mini2{border-radius:0}
-.ein,.eta{border-radius:0;border:2px inset var(--hi2)}
-.tools button,.mini,.pal button,.moods button{border-radius:0}
-.sh{border-radius:0}.mbox{border-radius:0}.kiri{border-radius:0}.box{border-radius:0}
-.pgrid img{border-radius:0}.pic{border-radius:0}
-.song iframe{border-radius:0}
-.mbar .lg{font-family:"MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif}
-</style>\n<h1>'+esc(plain(m?m.l:'ﾍﾟｰｼﾞ'))+'</h1>\n<div class="box">\n'+esc(plain(p.b)||'ここに好きなことを書いてね♪').replace(/\n/g,'<br>\n')+'\n</div>\n'}
+  return '<style>\nbody{margin:0;padding:12px;background:#ffd6ea;color:#6b1f45;font-family:sans-serif;font-size:14px;text-align:center}\nh1{color:#ff3d9a;font-size:20px}\n.box{background:#fff;border:2px dotted #ff8cc6;border-radius:10px;padding:10px;margin:10px 0}\n</style>\n<h1>'+esc(plain(m?m.l:'ﾍﾟｰｼﾞ'))+'</h1>\n<div class="box">\n'+esc(plain(p.b)||'ここに好きなことを書いてね♪').replace(/\n/g,'<br>\n')+'\n</div>\n'}
 function frameH(k){return '<iframe class="uhtml" data-pg="'+esc(k)+'" sandbox="allow-scripts" title="'+esc(plain(label(k)))+'"></iframe>'}
 function page(k){
   var p=D.pages[k];if(!p)return ttl('ﾍﾟｰｼﾞ')+'<p class="empty">このﾍﾟｰｼﾞゎ見つからないょ</p>'+back();

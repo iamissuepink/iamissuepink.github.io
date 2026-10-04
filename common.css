@@ -91,3 +91,26 @@ button.pill:disabled{opacity:.5;cursor:wait}
 .scell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border:1px solid #6b2a55;border-radius:8px;background:#0a0006;font-size:11px;text-align:center;word-break:break-all}
 .simg{min-height:48px;display:flex;align-items:center;justify-content:center}.simg img{max-width:100%;max-height:80px;image-rendering:pixelated}
 .scell b{color:#ff9ad5}.scell .del{margin:2px 0 0}
+
+/* ===== 平成リアル寄せ（角ばり・MSPゴシック） ===== */
+#root,#root input,#root textarea,#root select,#root button{font-family:"MS PGothic","ＭＳ Ｐゴシック","Osaka","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif!important}
+#root{font-size:12px!important;line-height:1.6!important}
+#root [style*="border-radius"]{border-radius:0!important}
+.puffy{font-family:"MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif!important;font-weight:bold;letter-spacing:0;
+filter:drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff)}
+h2.puffy::before{font-family:inherit!important}
+.pill{border-radius:0;min-height:34px;font-family:inherit;font-weight:bold;font-size:13px;background:#ff3d9a;border:2px outset #ffb3d9;box-shadow:none;text-shadow:none}
+.pill::before{display:none}
+.pill.purple{background:#8a3ff0;border-color:#c9a2ff;box-shadow:none}
+.pill:active{border-style:inset}
+button.pill{border:2px outset #ffb3d9}button.pill.purple{border:2px outset #c9a2ff}
+.sec{border-radius:0}
+.sec h3{font-family:inherit;font-size:13px}
+.glow{box-shadow:none}
+.num{border-radius:0;box-shadow:none}
+.tabs button{border-radius:0;font-weight:bold}
+.chips a{border-radius:0}
+.fm input,.fm textarea,.fm select{border-radius:0;border:2px inset #ff9ad5;font-size:16px}
+.del{border-radius:0;border:1px outset #ff9ad5}
+.tag{border-radius:0}
+.hrow img,.hrow .noimg{border-radius:0}
