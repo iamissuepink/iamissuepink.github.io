@@ -45,6 +45,33 @@
 <p class="puffy" id="hello" style="font-size:24px"></p>
 <p style="font-size:11px;color:#c9a2ff">登録日 <span id="since"></span></p>
 </section>
+<section class="sec gd glow" id="setup" hidden>
+<h3>★はじめの設定★</h3>
+<p style="font-size:12px">ﾎﾑﾍﾟを作る前に1回だけ設定してね。<b>IDゎあとから変えられない</b>ょ</p>
+<div class="fm" style="gap:8px">
+<label for="hpid">ﾎﾑﾍﾟID（半角英小文字・数字・_ の3〜16文字）</label>
+<input id="hpid" type="text" maxlength="16" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="例：ayapyon">
+<p class="msg" id="idmsg" style="text-align:left"></p>
+<label for="by">生まれた年と月（ほかの人にゎ見えないょ）</label>
+<div style="display:flex;gap:6px"><select id="by" style="flex:1"></select><select id="bm" style="flex:1"></select></div>
+<div id="gbox" hidden class="fm" style="gap:4px">
+<label for="gmail">保護者のﾒｰﾙｱﾄﾞﾚｽ</label><input id="gmail" type="email" autocomplete="off">
+<p style="font-size:11px;color:#c9a2ff;margin:0">12歳以下の人ゎ、保護者の人の承認が必要だょ</p>
+</div>
+<button class="pill" id="setbtn" type="button" style="margin-top:6px">設定する♪</button>
+<p class="msg" id="setmsg" role="status"></p>
+</div>
+</section>
+<section class="sec gd glow" id="pending" hidden>
+<h3>保護者の承認待ち</h3>
+<p>保護者の人が承認すると、ﾎﾑﾍﾟ作成や掲示板への書き込みができるようになるょ。<br>（承認の仕組みゎただいま準備中です）</p>
+</section>
+<section class="sec pk glow" id="myhp" hidden>
+<h3>♡自分のﾎﾑﾍﾟ♡</h3>
+<p style="text-align:center;font-size:12px;word-break:break-all" id="hpurl"></p>
+<a class="pill" id="hpedit" href="#">ﾎﾑﾍﾟを編集する✎</a>
+<a class="pill purple" id="hpview" href="#">ﾎﾑﾍﾟを見る</a>
+</section>
 <section class="sec pp glow">
 <h3>✿ﾌﾟﾛﾌ編集✿</h3>
 <div class="fm" style="gap:8px">
@@ -57,7 +84,6 @@
 <section class="sec bl glow">
 <h3>★ﾒﾆｭｰ★</h3>
 <a class="pill" href="bbs.html">掲示板(BBS)</a>
-<a class="pill purple" href="#" style="opacity:.6">ﾎﾑﾍﾟを作る（準備中）</a>
 </section>
 <button class="pill purple" id="out" type="button">ﾛｸﾞｱｳﾄ</button>
 </div>
@@ -93,6 +119,30 @@ try{var p=await DB.getProfile(u.id);
   $('hello').textContent=(p?p.nickname:'ななしさん')+'さん';$('nick').value=p?p.nickname:'';$('bio').value=p?p.bio:'';
   var d=new Date(p?p.created_at:u.created_at);$('since').textContent=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
 }catch(e){say(e.message,true)}
+try{var info=await DB.myInfo(u.id);
+  if(!info){$('setup').hidden=false;initSetup()}
+  else if(info.needs_guardian&&!info.guardian_approved){$('pending').hidden=false}
+  else{var hid=await DB.myHpId(u.id);$('myhp').hidden=false;
+    var url=location.origin+location.pathname.replace(/[^\/]*$/,'')+'hp.html?id='+hid;
+    $('hpurl').textContent=url;$('hpview').href='hp.html?id='+hid;$('hpedit').href='hp.html?id='+hid+'&edit=1'}
+}catch(e){say(e.message,true)}
+function initSetup(){
+  var y=new Date().getFullYear(),o='<option value="">年</option>';
+  for(var i=y-6;i>=y-100;i--)o+='<option>'+i+'</option>';$('by').innerHTML=o;
+  o='<option value="">月</option>';for(i=1;i<=12;i++)o+='<option>'+i+'</option>';$('bm').innerHTML=o;
+  function chk(){var a=($('by').value&&$('bm').value)?DB.age($('by').value+'-'+$('bm').value):99;$('gbox').hidden=a>12}
+  $('by').onchange=chk;$('bm').onchange=chk;
+  var t;$('hpid').oninput=function(){var v=this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'');clearTimeout(t);
+    var m=$('idmsg');if(v.length<3){m.textContent='3文字以上にしてね';m.className='msg ng';return}
+    m.textContent='確認中…';m.className='msg';
+    t=setTimeout(async function(){try{var ok=await DB.idOk(v);if($('hpid').value!==v)return;m.textContent=ok?'そのID使えるょ✧':'そのIDゎ使えないょ';m.className='msg'+(ok?'':' ng')}catch(e){m.textContent=e.message;m.className='msg ng'}},400)};
+  $('setbtn').onclick=async function(){var b=this,sm=$('setmsg');
+    if(!$('by').value||!$('bm').value){sm.textContent='生まれた年と月を選んでね';sm.className='msg ng';return}
+    if(!confirm('ID「'+$('hpid').value+'」で設定する？（あとから変えられないょ）'))return;
+    b.disabled=true;sm.textContent='設定中…';sm.className='msg';
+    try{await DB.setup($('hpid').value,$('by').value+'-'+('0'+$('bm').value).slice(-2),$('gbox').hidden?'':$('gmail').value.trim());location.reload()}
+    catch(e){sm.textContent=e.message;sm.className='msg ng'}b.disabled=false};
+}
 $('save').onclick=async function(){var b=this,n=$('nick').value.trim();
   if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
   b.disabled=true;say('保存中…');

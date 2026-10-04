@@ -76,3 +76,4 @@ button.pill:disabled{opacity:.5;cursor:wait}
 .post .nm{font-weight:bold;white-space:normal}
 .del{font:inherit;font-size:11px;color:#ff9ad5;background:none;border:1px solid #ff9ad5;border-radius:999px;padding:0 8px;margin-left:6px;min-height:24px;cursor:pointer}
 [hidden]{display:none!important}
+.fm select{font:inherit;font-size:16px;color:#ffd6ec;background:#1a0010;border:2px solid #ff6fb5;border-radius:8px;padding:8px}
