@@ -6,7 +6,7 @@
 <title>めろﾋﾟｮﾝ☆｜平成ﾎﾑﾍﾟ作成ｻｲﾄ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="common.css?v=2">
 </head>
 <body>
 <div id="root" style="margin: 0 auto; position: relative; overflow: hidden; width: 390px; min-height: 100vh; box-sizing: border-box; padding: 18px 0 30px; font-family: 'Kosugi Maru', sans-serif; font-size: 13px; line-height: 1.7; color: #ffd6ec; background-color: #000000; background-image: radial-gradient(#ffffff 1.1px, transparent 1.8px), radial-gradient(#ff7fc4 1.3px, transparent 2px); background-size: 26px 26px, 40px 40px; background-position: 0 0, 13px 20px">
@@ -45,8 +45,8 @@
 </section>
 
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%">
-<a class="pill purple" href="login.html">ﾛｸﾞｲﾝ</a>
-<a class="pill" href="login.html#signup">無料ﾎﾑﾍﾟ作成♡</a>
+<a class="pill purple" id="b-login" href="login.html">ﾛｸﾞｲﾝ</a>
+<a class="pill" id="b-make" href="login.html#signup">無料ﾎﾑﾍﾟ作成♡</a>
 </div>
 
 <div class="glow" style="width: 100%; box-sizing: border-box; padding: 10px 8px; border: 2px dotted #ff9ad5; border-radius: 10px; display: flex; flex-direction: column; gap: 4px; color: #ffe066">
@@ -199,9 +199,15 @@
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js"></script>
-<script src="kira.js"></script>
+<script src="db.js?v=2"></script>
+<script src="kira.js?v=2"></script>
 <script>
+DB.me().then(async function(u){if(!u)return;
+  var l=document.getElementById('b-login'),m=document.getElementById('b-make');
+  l.textContent='ﾏｲﾍﾟｰｼﾞ';l.href='mypage.html';
+  var id=null;try{id=await DB.myHpId(u.id)}catch(e){}
+  if(id){m.textContent='ﾎﾑﾍﾟ編集♡';m.href='hp.html?id='+id+'&edit=1'}else{m.textContent='ﾎﾑﾍﾟを作る♡';m.href='mypage.html'}
+}).catch(function(){});
 DB.posts(3).then(function(ps){var C=['#9be3ff','#ff9ad5','#5ff08f'];
 document.getElementById('topbbs').innerHTML=ps.length?ps.map(function(p,i){return '<div class="post"><span class="nm" style="color:'+C[i%3]+'">'+DB.esc(p.profiles?p.profiles.nickname:'ななしさん')+'</span> <span class="dt">'+DB.time(p.created_at)+'</span>\n'+DB.esc(p.body)+'</div>'}).join(''):'<p class="msg">まだ書き込みがないょ♪</p>'}).catch(function(){document.getElementById('topbbs').innerHTML='<p class="msg">読み込めなかったょ</p>'});
 </script>
