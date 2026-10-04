@@ -304,6 +304,83 @@ body.ed{padding-bottom:210px}
 .sw[data-t=kr]{background:#f4ede4;box-shadow:inset 0 0 0 6px #fffdf9,inset 0 0 0 7px #e2d6c8}
 .sw[data-t=voc]{background:linear-gradient(rgba(40,224,255,.25) 1px,transparent 1px) 0 0/8px 8px,linear-gradient(90deg,rgba(40,224,255,.25) 1px,transparent 1px) 0 0/8px 8px,#070a1a;box-shadow:inset 0 0 0 1px #28e0ff}
 .sw[data-t=y2k]{background:linear-gradient(90deg,#1a3cc9,#ff8fe0) 0 0/100% 9px no-repeat,linear-gradient(135deg,#dfe8f7,#f0d6ff)}
+/* ===== テンプレ構成パーツ ===== */
+:root:not([data-tpl="garake"]) .phone{max-width:340px}
+:root:not([data-tpl="garake"]) .screen{border:6px double var(--hi);box-shadow:0 0 0 3px var(--card),0 0 0 4px var(--line)}
+.in{text-align:center}
+.hd{margin:4px 0 2px}.hsub{margin:0;font-size:11px;color:var(--hi)}
+.msg{margin:10px 0;word-break:break-all;line-height:1.75;text-align:center}
+.topimg{margin:8px 0}
+.cnt.hit{font-family:"Courier New",monospace;font-weight:bold;color:var(--hi);font-size:13px}
+.cnt.hit::before{content:"✿ ";color:var(--hi2)}
+.ln{margin:8px 0;overflow:hidden;white-space:nowrap;font-size:13px;line-height:1.2;color:var(--hi2);letter-spacing:0}
+.ln-rainbow{height:12px;background:linear-gradient(#ff5fa2 0 3px,transparent 3px 4.5px,#ffd400 4.5px 7.5px,transparent 7.5px 9px,#4fc3ff 9px 12px);margin:10px 16px}
+.ln-stars{color:var(--ink);font-size:17px;letter-spacing:-1px}
+.ln-cstars{font-size:20px;letter-spacing:-2px}
+.ln-meme{color:#ffd400;font-size:10px}
+.ln-dots{height:2px;background:radial-gradient(var(--hi2) 1px,transparent 1.5px) 0 0/6px 2px}
+.ln-eq{color:var(--hi);letter-spacing:1px}
+/* ﾒﾆｭｰ：色ﾎﾞﾀﾝ＋説明 */
+.mn-bars{display:flex;flex-direction:column;gap:3px;margin:10px auto;width:fit-content;max-width:100%}
+.mn-bars a{display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:12px}
+.mn-bars .bb{display:inline-block;width:96px;padding:1px 6px;text-align:left;color:#fff;font-weight:bold;font-family:"Courier New",monospace;text-shadow:1px 1px 0 rgba(0,0,0,.35)}
+.mn-bars .bd{white-space:nowrap}
+/* ﾒﾆｭｰ：表で左右2列＋写真 */
+.mn-table{display:grid;grid-template-columns:44% 1fr;gap:6px;margin:8px 0;text-align:left}
+.mn-table nav{display:flex;flex-direction:column;gap:3px}
+.mn-table nav a{display:flex;align-items:flex-end;min-height:44px;padding:2px 6px;color:#1a1a1a;text-decoration:none;font-weight:bold;font-size:12px}
+.mn-table nav a i{font-style:normal;color:#4fc3ff;margin-right:2px}
+.mn-table .mt-img{display:flex;align-items:center;justify-content:center;border:1px solid #bbb;background:#fff;padding:8px;box-shadow:3px 3px 6px rgba(0,0,0,.2)}
+.mn-table .mt-img img{width:100%;height:auto}
+.mn-table .mt-img span{color:#bbb;font-size:12px}
+/* ﾒﾆｭｰ：2列アイコン */
+.mn-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin:10px 8px}
+.mn-pair a{display:flex;align-items:center;gap:4px;justify-content:center;text-decoration:none;color:var(--ink);font-size:12px;min-height:26px}
+.mn-pair a i{display:inline-block;width:14px;height:14px;border:2px solid var(--hi2);background:var(--card);flex:0 0 auto}
+.mn-pair a:nth-child(3n+2) i{border-color:#ffd400}.mn-pair a:nth-child(3n) i{border-color:#4fc3ff}
+/* ﾒﾆｭｰ：タブ（横並び） */
+.mn-tabs{display:flex;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.mn-tabs a{padding:5px 8px;text-decoration:none;color:var(--ink);font-size:12px;border-right:1px solid var(--line)}
+.mn-tabs a:last-child{border-right:0}
+/* ﾒﾆｭｰ：縦リスト＋説明 */
+.mn-list{display:flex;flex-direction:column;margin:10px 0;text-align:left;counter-reset:tr}
+.mn-list a{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);counter-increment:tr}
+.mn-list .ml{font-weight:bold}.mn-list .md{font-size:10px;color:var(--hi2)}
+/* ﾒﾆｭｰ：アイコン */
+.mn-icons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 4px;margin:10px 0}
+.mn-icons a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--ink);font-size:10px}
+.mn-icons a i{display:block;width:34px;height:34px;border-radius:8px;background:linear-gradient(180deg,#fff,#c9d4e6 45%,#8e9bb8 55%,#e6ecf5);box-shadow:0 0 0 1px #4a5470,inset 0 0 0 2px rgba(255,255,255,.6)}
+.mn-icons a:nth-child(3n+1) i{background:linear-gradient(180deg,#fff,#ffc2ee 45%,#ff6fd0 55%,#ffe0f6)}
+.mn-icons a:nth-child(3n+2) i{background:linear-gradient(180deg,#fff,#c2dcff 45%,#3d6bff 55%,#e0ecff)}
+/* --- テンプレ別の仕上げ --- */
+:root[data-tpl="gal"] .hd{border:3px double #d4a017;padding:4px;background:#000}
+:root[data-tpl="gal"] .mn-bars .bb{background:linear-gradient(90deg,#000,#3a2a00)!important;border-left:4px solid #d4a017;color:#ffd700}
+:root[data-tpl="gal"] .mn-bars a:nth-child(even) .bb{border-left-color:#ff2e97;color:#ff86c4}
+:root[data-tpl="gal"] .mn-bars .bd{color:#ffe9c9}
+:root[data-tpl="gal"] .msg{color:#ffe9c9}
+:root[data-tpl="gal"] .screen{border-color:#d4a017}
+:root[data-tpl="yume"] .screen{border:6px double #e3a3ff;border-radius:0}
+:root[data-tpl="yume"] .hd h1{font-size:20px}
+:root[data-tpl="jirai"] .mn-tabs{border-top:1px solid #ffb3d1;border-bottom:1px solid #ffb3d1}
+:root[data-tpl="jirai"] .mn-tabs a{color:#ffd9ea;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;border-right-color:#5a1b38}
+:root[data-tpl="jirai"] .mn-tabs a::before{content:"✝︎ ";color:#ff6fae}
+:root[data-tpl="jirai"] .pic{border-radius:0;outline:1px solid #ffb3d1;border:4px solid #140009}
+:root[data-tpl="pop"] .screen{border:3px solid #1a1a1a;box-shadow:7px 7px 0 #1a1a1a}
+:root[data-tpl="pop"] .hd h1{font-size:20px}
+:root[data-tpl="pop"] .ttl{background:#000;color:#fff;border:0;box-shadow:none;border-left:40px solid #4fc3ff}
+:root[data-tpl="street"] .screen{border:0;border-left:6px solid #c6ff1a;box-shadow:none}
+:root[data-tpl="street"] .mn-list a{border-bottom:2px solid #333;font-weight:900;letter-spacing:.05em}
+:root[data-tpl="street"] .mn-list .ml::before{content:"→ ";color:#c6ff1a}
+:root[data-tpl="street"] .mn-list .md{color:#ff3dc5}
+:root[data-tpl="street"] .msg{text-align:left;border-left:3px solid #ff3dc5;padding-left:8px}
+:root[data-tpl="kr"] .screen{border:1px solid #e2d6c8;box-shadow:none}
+:root[data-tpl="kr"] .mn-tabs a{color:#5a4a3f;letter-spacing:.08em;border-right-color:#d8c2b0}
+:root[data-tpl="kr"] .msg{font-size:12px;color:#7a6a5f}
+:root[data-tpl="voc"] .screen{border:1px solid #28e0ff}
+:root[data-tpl="voc"] .mn-list a{border-bottom-color:#1d2c66;color:#d9f7ff}
+:root[data-tpl="voc"] .mn-list .ml::before{content:"♪ " counter(tr,decimal-leading-zero) "　";color:#28e0ff;font-family:"Courier New",monospace;font-weight:normal}
+:root[data-tpl="voc"] .mn-list .md{color:#ff3dd4;font-family:"Courier New",monospace}
+:root[data-tpl="y2k"] .screen{border:2px solid;border-color:#fff #7f8aa3 #7f8aa3 #fff}
 </style>
 </head>
 <body>
@@ -323,8 +400,16 @@ var KAO=['(*´∀`*)','(ﾉ´∀｀*)','o(^-^)o','(〃▽〃)','☆(ゝω・)v',
 var EMO=['♡','♥','❤','💕','💖','💗','💘','☆','★','✧','✦','✩','♪','♫','✿','❀','🌸','🌷','🎀','👑','💎','🍓','🍰','🍭','🧸','🐰','🐻','🌈','☁','☀','🌙','⭐','✨','💫','🔥','💋','💄','📱','✉','♨','👍','✌','🙏','💦','💤','💢','⚡','🎵','🎶','❣'];
 var COLS=[['ﾋﾟﾝｸ','#ff3d9a'],['赤','#ff2a2a'],['ｵﾚﾝｼﾞ','#ff9500'],['黄','#e6b800'],['緑','#22b35e'],['水色','#1ea7e6'],['青','#2f5bff'],['紫','#b45cff'],['金','#d4a017'],['白','#ffffff'],['黒','#000000']];
 var THEMES=[['pink','ﾋﾟﾝｸ水玉'],['gal','黒×ﾋﾟﾝｸ×ｺﾞｰﾙﾄﾞ'],['yume','ゆめかわ'],['mizu','水色'],['lemon','ﾚﾓﾝ']];
-var TPL={garake:{n:'ガラケー王道',dv:'☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆'},gal:{n:'ｷﾞｬﾙ（ﾋｮｳ柄×ｺﾞｰﾙﾄﾞ）',skin:'leo',dv:'♛ ✦ ♛ ✦ ♛ ✦ ♛ ✦ ♛'},yume:{n:'ゆめかわ',skin:'yume',dv:'☁︎ ⋆ ☾ ⋆ ☁︎ ⋆ ☾ ⋆ ☁︎'},jirai:{n:'地雷系・量産型',skin:'jirai',dv:'♡⸝⸝ ✝︎ ⸝⸝♡ ✝︎ ♡⸝⸝ ✝︎ ⸝⸝♡'},
- pop:{n:'ポップ',skin:'pop',dv:'● ▲ ■ ★ ● ▲ ■ ★ ● ▲ ■'},street:{n:'ストリート',skin:'street',dv:'/// ─── /// ─── /// ─── ///'},kr:{n:'韓国系',skin:'kr',dv:'— ♡ —'},voc:{n:'ボカロ系',skin:'voc',dv:'▁▂▃▅▆▇▆▅▃▂▁▂▃▅▆▇▆▅▃▂▁'},y2k:{n:'Y2K・サイバー',skin:'y2k',dv:'◇◆◇◆◇◆◇◆◇◆◇◆◇'}};
+var TPL={
+garake:{n:'ガラケー王道',menu:'grid',counter:'digit',order:['title','sub','marq','img','mood','counter','msg','ln:kira','menu','acts','song','tags','update','foot']},
+gal:{n:'ｷﾞｬﾙ（ﾋｮｳ柄×ｺﾞｰﾙﾄﾞ）',skin:'leo',menu:'bars',counter:'hit',order:['title','sub','img','marq','msg','ln:crown','menu','ln:crown','update','counter','acts','song','tags','foot']},
+yume:{n:'ゆめかわ',skin:'yume',menu:'pair',counter:'hit',order:['title','sub','ln:cloud','img','msg','ln:cloud','menu','ln:cstars','mood','update','counter','acts','song','tags','foot']},
+jirai:{n:'地雷系・量産型',skin:'jirai',menu:'tabs',counter:'hit',order:['title','sub','img','ln:jhrt','menu','ln:jhrt','msg','mood','update','counter','acts','song','tags','foot']},
+pop:{n:'ポップ',skin:'pop',menu:'table',counter:'digit',order:['title','sub','ln:rainbow','ln:stars','menu','ln:stars','msg','ln:cstars','update','counter','acts','song','tags','ln:rainbow','foot']},
+street:{n:'ストリート',skin:'street',menu:'list',counter:'hit',order:['title','sub','marq','img','menu','ln:slash','msg','update','counter','acts','song','tags','foot']},
+kr:{n:'韓国系',skin:'kr',menu:'tabs',counter:'hit',order:['img','title','sub','ln:kr','msg','menu','mood','update','counter','acts','song','tags','foot']},
+voc:{n:'ボカロ系',skin:'voc',menu:'list',counter:'digit',order:['title','sub','marq','ln:eq','menu','ln:eq','img','msg','song','update','counter','acts','tags','foot']},
+y2k:{n:'Y2K・サイバー',skin:'y2k',menu:'icons',counter:'hit',order:['title','sub','img','menu','ln:dia','msg','update','counter','acts','song','tags','foot']}};
 var CV=[['bg','背景'],['pat','背景の水玉'],['card','画面の中'],['ink','文字'],['hi','メイン色'],['hi2','サブ色']];
 var BUILTIN={prof:'♡ﾌﾟﾛﾌ♡',intro:'♡自己紹介♡',real:'♡ﾘｱﾙ♡',diary:'♡日記♡',photo:'♡写真♡',bbs:'♡BBS♡',ask:'♡質問箱♡',link:'♡ﾘﾝｸ♡'};
 var CLAPS=null,FR=null,KIRI=0,INFO=null,SUSP=false;
@@ -347,7 +432,7 @@ function deco(t){
     h=h.replace(/\[s=([^\]\s]+)\]/g,function(m,x){return DB.sozOk(x)?'<img class="sz" src="'+DB.sozBase+x+'" alt="">':''});
     if(h===p)break}
   return h.replace(/\n/g,'<br>')}
-function def(nick){return {tpl:'garake',title:'☆★'+nick+'のﾎﾑﾍﾟ★☆',theme:'pink',marquee:'ようこそ(*´∀`*)ﾉﾞ ゆっくりしてってね☆',mood:'(*´∀`*)',showCounter:true,intro:'',song:'',icon:'',iconPath:'',colors:{},tags:[],thanks:'拍手ありがと(*´∀`*)ﾉ\nまた遊びに来てね♪',showClaps:true,kiri:'',
+function def(nick){return {tpl:'garake',msg:DEFMSG,sub:'',title:'☆★'+nick+'のﾎﾑﾍﾟ★☆',theme:'pink',marquee:'ようこそ(*´∀`*)ﾉﾞ ゆっくりしてってね☆',mood:'(*´∀`*)',showCounter:true,intro:'',song:'',icon:'',iconPath:'',colors:{},tags:[],thanks:'拍手ありがと(*´∀`*)ﾉ\nまた遊びに来てね♪',showClaps:true,kiri:'',
   qa:[['名前',''],['ﾆｯｸﾈｰﾑ',''],['誕生日',''],['血液型',''],['趣味',''],['好きな食べ物',''],['ﾏｲﾌﾞｰﾑ',''],['最後に一言','']],real:[],
   menu:Object.keys(BUILTIN).map(function(k){return {k:k,l:BUILTIN[k],on:true}}),pages:{}}}
 function fix(d,nick){var b=def(nick);d=d&&typeof d==='object'?d:{};Object.keys(b).forEach(function(k){if(d[k]===undefined)d[k]=b[k]});
@@ -363,36 +448,50 @@ function frame(inner){return '<div class="phone"><div class="screen"><div class=
 function inp(k,v,cls,ph){return '<input class="ein '+(cls||'')+'" data-k="'+k+'" value="'+esc(v)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'>'}
 function ta(attr,v,ph,h){return '<textarea class="eta deco" '+attr+' placeholder="'+esc(ph||'')+'"'+(h?' style="min-height:'+h+'px"':'')+'>'+esc(v)+'</textarea>'}
 function iconOk(){return D.icon&&D.icon.indexOf(DB.imgBase)===0}
+var MDESC={prof:'じこしょーかい',intro:'わたしのこと',real:'いまなにしてる？',diary:'毎日更新!?',photo:'ﾌﾟﾘ・写メ',bbs:'足あと残してね',ask:'なんでも聞いて',link:'ﾘﾝｸ募集中'};
+var MEN={prof:'Profile',intro:'About',real:'Real',diary:'Diary',photo:'Photo',bbs:'BBS',ask:'Q&A',link:'Link'};
+var BARC=['#ff3d9a','#ff9500','#ffd400','#3ccf4e','#1ea7e6','#2f5bff','#9b3dff','#ff5fa2','#00c2b8','#ff7a00','#c86bff','#7a7a7a'];
+var DEFMSG='ﾖｳｺｿ(*´∀`*)ﾉ\n[big]めろﾋﾟｮﾝ☆の[/big]\n[big][c=#ff3d9a]わたしのﾎﾑﾍﾟ[/c][/big]へ\n\nﾏﾀｰﾘ更新中ﾃﾞｽ♪\n荒らしゎｽﾙｰでおねがい\n\n足あと・拍手\n[big][rb]大歓迎!![/rb][/big]\n\n↓ﾒﾆｭｰゎこちら↓';
+function ln(k){return '<div class="ln ln-'+(k||'dots')+'" aria-hidden="true">'+(LNTXT[k]||'')+'</div>'}
+var LNTXT={stars:'★★★★★★★★★★★★★',cstars:'<b style="color:#ff3d9a">★</b><b style="color:#ffd400">★</b><b style="color:#ff9500">★</b><b style="color:#3ccf4e">★</b><b style="color:#1ea7e6">★</b><b style="color:#2f5bff">★</b><b style="color:#9b3dff">★</b><b style="color:#ff2a2a">★</b><b style="color:#3ccf4e">★</b>',
+ crown:'♛ ✦ ♛ ✦ ♛ ✦ ♛ ✦ ♛',kira:'☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆',cloud:'☁︎ ⋆ ☾ ⋆ ☁︎ ⋆ ☾ ⋆ ☁︎',jhrt:'♡⸝⸝ ✝︎ ⸝⸝♡ ✝︎ ♡⸝⸝ ✝︎ ⸝⸝♡',eq:'▁▂▃▅▆▇▆▅▃▂▁▂▃▅▆▇▆▅▃▂▁',dia:'◇◆◇◆◇◆◇◆◇◆◇◆◇',kr:'— ♡ —',slash:'/// ─── /// ─── ///',meme:'memememememememememememememe'};
+function menuItems(){return D.menu.filter(function(m){return m.on||ED})}
+function mlab(m){return deco(m.l||'ﾍﾟｰｼﾞ')}
+function mdesc(m){return esc(m.d!=null?m.d:(MDESC[m.k]||''))}
+function menuHtml(type){var it=menuItems(),op=function(m){return m.on?'':' style="opacity:.45"'};
+  if(type==='bars')return '<nav class="mn-bars">'+it.map(function(m,i){return '<a href="#'+esc(m.k)+'"'+op(m)+'><span class="bb" style="background:'+BARC[i%BARC.length]+'">'+esc(MEN[m.k]||'Page')+'</span><span class="bd">&lt;&lt;'+mlab(m)+'</span></a>'}).join('')+'</nav>';
+  if(type==='table')return '<div class="mn-table"><nav>'+it.map(function(m,i){return '<a href="#'+esc(m.k)+'"'+op(m)+' style="background:'+BARC[i%BARC.length]+(m.on?'':';opacity:.45')+'"><i>Φ</i>'+esc(MEN[m.k]||'PAGE').toUpperCase()+'</a>'}).join('')+'</nav><div class="mt-img">'+(iconOk()?'<img src="'+esc(D.icon)+'" alt="TOP写真">':'<span>PHOTO</span>')+'</div></div>';
+  if(type==='pair')return '<nav class="mn-pair">'+it.map(function(m){return '<a href="#'+esc(m.k)+'"'+op(m)+'><i></i>'+mlab(m)+'</a>'}).join('')+'</nav>';
+  if(type==='tabs')return '<nav class="mn-tabs">'+it.map(function(m){return '<a href="#'+esc(m.k)+'"'+op(m)+'>'+mlab(m)+'</a>'}).join('')+'</nav>';
+  if(type==='list')return '<nav class="mn-list">'+it.map(function(m){return '<a href="#'+esc(m.k)+'"'+op(m)+'><span class="ml">'+mlab(m)+'</span><span class="md">'+mdesc(m)+'</span></a>'}).join('')+'</nav>';
+  if(type==='icons')return '<nav class="mn-icons">'+it.map(function(m){return '<a href="#'+esc(m.k)+'"'+op(m)+'><i></i><span>'+mlab(m)+'</span></a>'}).join('')+'</nav>';
+  return '<nav class="menu">'+it.map(function(m,i){return '<a href="#'+esc(m.k)+'"'+(i===it.length-1&&it.length%2?' class="w"':'')+op(m)+'>'+mlab(m)+'</a>'}).join('')+'</nav>'}
+var BLK={
+ title:function(){return ED?'<span class="elb">ﾎﾑﾍﾟ名</span>'+inp('title',D.title,'big'):'<div class="hd"><h1><span class="tw">✦</span>'+esc(D.title)+'<span class="tw b">✦</span></h1>'+(D.sub?'<p class="hsub">'+deco(D.sub)+'</p>':'')+'</div>'},
+ sub:function(){return ED?'<span class="elb">ﾎﾑﾍﾟ名の下のひとこと</span>'+inp('sub',D.sub||'','deco','例：←+--+ﾏﾀｰﾘ更新中+--+→'):''},
+ marq:function(){return ED?'<span class="elb">流れる文字</span>'+inp('marquee',D.marquee,'deco'):(D.marquee?'<div class="marq"><span>'+deco(D.marquee)+'</span></div>':'')},
+ img:function(){if(TPL[D.tpl].menu==='table')return '';return (iconOk()?'<div class="topimg"><img class="pic" src="'+esc(D.icon)+'" alt="TOP写真"></div>':'')+(ED?'<p style="text-align:center;margin:6px 0"><button type="button" class="ebtn sub" data-act="sheet" data-v="design">TOP写真・色を変える</button></p>':'')},
+ msg:function(){return ED?'<span class="elb">TOPの文（文字の大きさや色を変えて、自由にﾃﾞｺってね）</span>'+ta('data-k="msg"',D.msg,'ようこそ♪',180):(D.msg?'<div class="msg">'+deco(D.msg)+'</div>':'')},
+ mood:function(){if(ED)return '<span class="elb">今日の気分</span>'+inp('mood',D.mood)+'<div class="moods">'+MOODS.map(function(m){return '<button type="button" data-act="mood" data-v="'+esc(m)+'">'+esc(m)+'</button>'}).join('')+'</div>';return D.mood?'<p class="mood">今日の気分 <b>'+esc(D.mood)+'</b></p>':''},
+ menu:function(){return menuHtml(TPL[D.tpl].menu)+(ED?'<p style="text-align:center;margin:4px 0"><button type="button" class="ebtn sub" data-act="sheet" data-v="menu">ﾒﾆｭｰを編集・ﾍﾟｰｼﾞを追加</button></p>':'')},
+ counter:function(){if(ED)return '<label class="elb"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> カウンターを表示する</label><span class="elb">ｷﾘ番（カンマ区切り。空なら 777・1000 などゾロ目とキリのいい数）</span>'+inp('kiri',D.kiri,'','例：100,500,1000');
+   var h='';if(D.showCounter&&!isNew)h+=TPL[D.tpl].counter==='hit'?'<p class="cnt hit">'+esc(String(CNT))+'hit!</p>':'<p class="cnt">あなたは <b>'+esc(('000000'+CNT).slice(-6))+'</b> 人目のお客様です♪</p>';
+   if(KIRI)h+='<div class="kiri"><b class="dk-rb dk-big">ｷﾘ番ｹﾞｯﾄ!!</b><br>'+KIRI+' 番目のお客様です♪'+(me&&!owner?'<br><button type="button" class="ebtn" data-act="kirirep">BBSで報告する</button>':'')+'</div>';return h},
+ acts:function(){if(ED)return '<span class="elb">拍手のお礼ﾒｯｾｰｼﾞ</span>'+ta('data-k="thanks"',D.thanks,'',60)+'<label class="elb"><input type="checkbox" data-k="showClaps"'+(D.showClaps?' checked':'')+'> 拍手の数をみんなに見せる</label>';
+   var h='<div class="vact"><button type="button" class="ebtn" data-act="clap">👏 拍手'+((D.showClaps||owner)&&CLAPS!==null?' ('+CLAPS+')':'')+'</button>';
+   if(me&&!owner)h+=FR==='friend'?'<span class="ftag">めろ友だょ♡</span>':FR==='sent'?'<span class="ftag">めろ友申請中…</span>':FR==='in'?'<button type="button" class="ebtn" data-act="facc">めろ友申請を承認</button>':'<button type="button" class="ebtn sub" data-act="freq">めろ友申請</button>';
+   if(owner)h+='<a class="ebtn sub" href="#foot" style="text-decoration:none;display:inline-flex;align-items:center">足あと</a>';return h+'</div>'},
+ song:function(){var s=sp(D.song);return (ED?'<span class="elb">今のお気に入り曲（SpotifyのURL）</span>'+inp('song',D.song,'','https://open.spotify.com/track/…')+(D.song&&!s?'<p class="empty">SpotifyのURLの形じゃないかも</p>':''):'')+(s?'<div class="song"><iframe src="'+esc(s)+'" height="152" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>':'')},
+ update:function(){var h='';if(!ED)h+=ttl('New entry')+'<div id="upd"><p class="empty">読み込み中…</p></div>';
+   if(D.real.length){var r=D.real[0];h+=ttl('最新ﾘｱﾙ')+'<div class="ent"><div class="d">'+esc(tm(r.at))+'</div>'+deco(r.t)+'</div>'}return h},
+ tags:function(){return D.tags.length?'<p class="tags">'+D.tags.map(function(t){return '<a href="search.html?tag='+encodeURIComponent(t)+'">#'+esc(t)+'</a>'}).join(' ')+'</p>':''},
+ foot:function(){return '<p class="foot">[<a href="#bbs">BBS</a>] [<a href="#link">ﾘﾝｸ</a>] [<a href="index.html">ﾎﾑﾍﾟ作成</a>]<br>'+esc(R.nickname)+' のﾎﾑﾍﾟ ／ Powered by めろﾋﾟｮﾝ☆</p>'}};
 function top(){
-  var h='',s=sp(D.song);
+  var h='',T=TPL[D.tpl];
   if(SUSP)h+='<div class="kiri" style="border-color:#ff2a2a"><b>このﾎﾑﾍﾟゎ運営によって凍結されています</b><br><small>ほかの人からゎ見れない状態だょ。くわしくゎお問い合わせしてね</small></div>';
-  h+=ED?'<span class="elb">ﾎﾑﾍﾟ名</span>'+inp('title',D.title,'big'):'<h1><span class="tw">✦</span>'+esc(D.title)+'<span class="tw b">✦</span></h1>';
-  if(ED)h+='<span class="elb">流れる文字</span>'+inp('marquee',D.marquee,'deco');else if(D.marquee)h+='<div class="marq"><span>'+deco(D.marquee)+'</span></div>';
-  if(iconOk())h+='<img class="pic" src="'+esc(D.icon)+'" alt="ﾌﾟﾛﾌ画像">';
-  if(ED)h+='<p style="text-align:center;margin:6px 0"><button type="button" class="ebtn sub" data-act="sheet" data-v="design">ﾌﾟﾛﾌ画像・色を変える</button></p>';
-  if(ED){h+='<span class="elb">今日の気分</span>'+inp('mood',D.mood)+'<div class="moods">'+MOODS.map(function(m){return '<button type="button" data-act="mood" data-v="'+esc(m)+'">'+esc(m)+'</button>'}).join('')+'</div>'}
-  else if(D.mood)h+='<p class="mood">今日の気分 <b>'+esc(D.mood)+'</b></p>';
-  if(ED)h+='<label class="elb"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> カウンターを表示する</label>';
-  else if(D.showCounter&&!isNew)h+='<p class="cnt">あなたは <b>'+esc(('000000'+CNT).slice(-6))+'</b> 人目のお客様です♪</p>';
-  if(!ED&&KIRI)h+='<div class="kiri"><b class="dk-rb dk-big">ｷﾘ番ｹﾞｯﾄ!!</b><br>'+KIRI+' 番目のお客様です♪'+(me&&!owner?'<br><button type="button" class="ebtn" data-act="kirirep">BBSで報告する</button>':'')+'</div>';
-  if(ED)h+='<span class="elb">ｷﾘ番（カンマ区切り。空なら 777・1000 などゾロ目とキリのいい数）</span>'+inp('kiri',D.kiri,'','例：100,500,1000');
-  if(!ED){h+='<div class="vact">';
-    h+='<button type="button" class="ebtn" data-act="clap">👏 拍手'+((D.showClaps||owner)&&CLAPS!==null?' ('+CLAPS+')':'')+'</button>';
-    if(me&&!owner)h+=FR==='friend'?'<span class="ftag">めろ友だょ♡</span>':FR==='sent'?'<span class="ftag">めろ友申請中…</span>':FR==='in'?'<button type="button" class="ebtn" data-act="facc">めろ友申請を承認</button>':'<button type="button" class="ebtn sub" data-act="freq">めろ友申請</button>';
-    if(owner)h+='<a class="ebtn sub" href="#foot" style="text-decoration:none;display:inline-flex;align-items:center">足あと</a>';
-    h+='</div>'}
-  if(ED)h+='<span class="elb">拍手のお礼ﾒｯｾｰｼﾞ</span>'+ta('data-k="thanks"',D.thanks,'',60)+'<label class="elb"><input type="checkbox" data-k="showClaps"'+(D.showClaps?' checked':'')+'> 拍手の数をみんなに見せる</label>';
-  if(ED)h+='<span class="elb">今のお気に入り曲（SpotifyのURL）</span>'+inp('song',D.song,'','https://open.spotify.com/track/…')+(D.song&&!s?'<p class="empty">SpotifyのURLの形じゃないかも</p>':'');
-  if(s)h+='<div class="song"><iframe src="'+esc(s)+'" height="152" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>';
-  h+='<div class="dv" aria-hidden="true">'+TPL[D.tpl].dv+'</div>';
-  var items=D.menu.filter(function(m){return m.on||ED});
-  h+='<nav class="menu">'+items.map(function(m,i){return '<a href="#'+esc(m.k)+'"'+(i===items.length-1&&items.length%2?' class="w"':'')+(m.on?'':' style="opacity:.45"')+'>'+deco(m.l||'ﾍﾟｰｼﾞ')+'</a>'}).join('')+'</nav>';
-  if(ED)h+='<p style="text-align:center;margin:4px 0"><button type="button" class="ebtn sub" data-act="sheet" data-v="menu">ﾒﾆｭｰを編集・ﾍﾟｰｼﾞを追加</button></p>';
-  if(D.tags.length)h+='<p class="tags">'+D.tags.map(function(t){return '<a href="search.html?tag='+encodeURIComponent(t)+'">#'+esc(t)+'</a>'}).join(' ')+'</p>';
-  if(!ED)h+=ttl('UPDATE')+'<div id="upd"><p class="empty">読み込み中…</p></div>';
-  if(D.real.length){var r=D.real[0];h+=ttl('最新ﾘｱﾙ')+'<div class="ent"><div class="d">'+esc(tm(r.at))+'</div>'+deco(r.t)+'</div>'}
-  h+='<p class="foot">'+esc(R.nickname)+' のﾎﾑﾍﾟ ／ Powered by めろﾋﾟｮﾝ☆</p>';
+  T.order.forEach(function(b){if(b.indexOf('ln:')===0)h+=ln(b.slice(3));else if(BLK[b])h+=BLK[b]()});
   return h}
+
 function label(k){var m=D.menu.filter(function(x){return x.k===k})[0];return deco(m?m.l:BUILTIN[k]||'ﾍﾟｰｼﾞ')}
 function prof(){
   var h=ttl(label('prof'));
@@ -503,7 +602,7 @@ function sheetHtml(){
     return h}
   if(sheet==='menu'){
     var h2='<div class="sh"><p class="shh">ﾒﾆｭｰ（名前・表示・並び順）</p>';
-    D.menu.forEach(function(m,i){h2+='<div class="mrow"><input class="ein" data-ml="'+i+'" value="'+esc(m.l)+'" maxlength="20"><label class="mon"><input type="checkbox" data-mo="'+i+'"'+(m.on?' checked':'')+'>表示</label><button type="button" class="mini" data-act="mup" data-i="'+i+'" aria-label="上へ">▲</button><button type="button" class="mini" data-act="mdown" data-i="'+i+'" aria-label="下へ">▼</button>'+(BUILTIN[m.k]?'':'<button type="button" class="mini" data-act="mdel" data-i="'+i+'" aria-label="消す">×</button>')+'</div>'});
+    D.menu.forEach(function(m,i){h2+='<div class="mrow" style="flex-wrap:wrap"><input class="ein" data-ml="'+i+'" value="'+esc(m.l)+'" maxlength="20"><input class="ein" data-md="'+i+'" value="'+esc(m.d!=null?m.d:(MDESC[m.k]||''))+'" maxlength="20" placeholder="説明（ﾃﾝﾌﾟﾚによって表示）" style="order:9;flex-basis:100%;font-size:14px"><label class="mon"><input type="checkbox" data-mo="'+i+'"'+(m.on?' checked':'')+'>表示</label><button type="button" class="mini" data-act="mup" data-i="'+i+'" aria-label="上へ">▲</button><button type="button" class="mini" data-act="mdown" data-i="'+i+'" aria-label="下へ">▼</button>'+(BUILTIN[m.k]?'':'<button type="button" class="mini" data-act="mdel" data-i="'+i+'" aria-label="消す">×</button>')+'</div>'});
     return h2+'<p><button type="button" class="ebtn" data-act="padd">＋ ﾍﾟｰｼﾞを追加</button></p><p class="note2">追加したﾍﾟｰｼﾞゎﾒﾆｭｰから開いて中身を書いてね</p></div>'}
   return ''}
 function drawUi(){
@@ -518,6 +617,7 @@ function drawUi(){
   var vs=document.getElementById('vis');if(vs)vs.onchange=function(){VIS=this.value;changed()};
   ui.querySelectorAll('[data-cv]').forEach(function(el){el.oninput=function(){D.colors[el.getAttribute('data-cv')]=el.value;applyColors();readGlit();changed()}});
   ui.querySelectorAll('[data-ml]').forEach(function(el){el.oninput=function(){D.menu[+el.getAttribute('data-ml')].l=el.value;changed();if(!location.hash)redrawPage()}});
+  ui.querySelectorAll('[data-md]').forEach(function(el){el.oninput=function(){D.menu[+el.getAttribute('data-md')].d=el.value;changed();if(!location.hash)redrawPage()}});
   ui.querySelectorAll('[data-mo]').forEach(function(el){el.onchange=function(){D.menu[+el.getAttribute('data-mo')].on=el.checked;changed();redrawPage()}});
   ui.querySelectorAll('[data-tag]').forEach(function(el){el.onchange=function(){var t=el.getAttribute('data-tag');
     if(el.checked){if(D.tags.length>=8){el.checked=false;st('タグゎ8つまでだょ');return}D.tags.push(t)}else D.tags=D.tags.filter(function(x){return x!==t});changed()}});
@@ -656,7 +756,7 @@ document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{
   owner=!!(me&&me.id===R.id);
   document.getElementById('rpt').href='report.html?type=hp&hp='+encodeURIComponent(HID);
   if(owner){try{INFO=await DB.myInfo(me.id)}catch(e){}}
-  if(R.hp){D=fix(R.hp.data,R.nickname);VIS=R.hp.visibility;CNT=R.hp.counter;SUSP=!!R.hp.suspended}
+  if(R.hp){var _hadMsg=R.hp.data&&R.hp.data.msg!==undefined;D=fix(R.hp.data,R.nickname);if(!_hadMsg)D.msg='';VIS=R.hp.visibility;CNT=R.hp.counter;SUSP=!!R.hp.suspended}
   else if(owner){var info=INFO;
     if(!info||(info.needs_guardian&&!info.guardian_approved)){note('ﾏｲﾍﾟｰｼﾞで設定を済ませてね<br><br><a href="mypage.html">ﾏｲﾍﾟｰｼﾞへ</a>');return}
     D=def(R.nickname);isNew=true;VIS=DB.age(info.birth_ym.slice(0,7))<18?'members':'public';dirty=true}
