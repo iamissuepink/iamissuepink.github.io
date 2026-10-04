@@ -158,6 +158,10 @@ body.ed{padding-bottom:210px}
 .pgrid img{border-radius:0}.pic{border-radius:0}
 .song iframe{border-radius:0}
 .mbar .lg{font-family:"MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif}
+
+.edbar .ebtn.sub,.edbar .ebtn.lt{background:#2a0a20;color:#fff;border:2px outset #ff9ad5}
+.edbar .ebtn{color:#fff}
+.tgc{border-bottom:1px dotted #6b2a55;padding:4px 0}.tgc summary{cursor:pointer;font-size:12px;min-height:28px;display:flex;align-items:center}
 </style>
 </head>
 <body>
@@ -166,7 +170,7 @@ body.ed{padding-bottom:210px}
 <div id="ui"></div>
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=7"></script>
+<script src="db.js?v=9"></script>
 <script>
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
@@ -348,7 +352,7 @@ function sheetHtml(){
     var h='<div class="sh"><p class="shh">着せ替え</p><select id="th">'+THEMES.map(function(t){return '<option value="'+t[0]+'"'+(D.theme===t[0]?' selected':'')+'>'+t[1]+'</option>'}).join('')+'</select>';
     h+='<p class="shh">色をこまかく変える</p><div class="cg">'+CV.map(function(c){var v=hex(D.colors[c[0]])?D.colors[c[0]]:cur(c[0]);if(!hex(v))v='#ffffff';return '<label>'+c[1]+'<input type="color" data-cv="'+c[0]+'" value="'+esc(v)+'"></label>'}).join('')+'</div>';
     h+='<p><button type="button" class="ebtn sub lt" data-act="resetc">色を着せ替えの元に戻す</button></p>';
-    h+='<p class="shh">タグ（5つまで。検索で見つけてもらえるょ）</p><div class="tg">'+DB.TAGS.map(function(t){return '<label><input type="checkbox" data-tag="'+esc(t)+'"'+(D.tags.indexOf(t)>=0?' checked':'')+'>'+esc(t)+'</label>'}).join('')+'</div>';
+    h+='<p class="shh">タグ（8つまで。検索で見つけてもらえるょ）</p>'+Object.keys(DB.TAGCATS).map(function(c){var L=DB.TAGCATS[c],n=L.filter(function(t){return D.tags.indexOf(t)>=0}).length;return '<details class="tgc"'+(n?' open':'')+'><summary>'+esc(c)+(n?' ('+n+')':'')+'</summary><div class="tg">'+L.map(function(t){return '<label><input type="checkbox" data-tag="'+esc(t)+'"'+(D.tags.indexOf(t)>=0?' checked':'')+'>'+esc(t)+'</label>'}).join('')+'</div></details>'}).join('');
     h+='<p class="shh">ﾌﾟﾛﾌ画像</p><label class="ebtn" style="display:inline-flex;align-items:center">画像を選ぶ<input type="file" id="iconf" accept="image/*" hidden></label> '+(D.icon?'<button type="button" class="ebtn sub lt" data-act="delicon">画像を外す</button>':'');
     h+='<p class="note2">※画像ゎ自動で小さくして、撮った場所の情報を消してから保存するょ。顔や制服、家の周りが写った写真ゎ気をつけてね</p>';
     h+='<p class="shh">公開範囲</p><select id="vis"><option value="public"'+(VIS==='public'?' selected':'')+'>誰でも見れる</option><option value="members"'+(VIS==='members'?' selected':'')+'>会員だけ</option><option value="friends"'+(VIS==='friends'?' selected':'')+'>めろ友だけ</option><option value="private"'+(VIS==='private'?' selected':'')+'>自分だけ</option></select></div>';
@@ -371,7 +375,7 @@ function drawUi(){
   ui.querySelectorAll('[data-ml]').forEach(function(el){el.oninput=function(){D.menu[+el.getAttribute('data-ml')].l=el.value;changed();if(!location.hash)redrawPage()}});
   ui.querySelectorAll('[data-mo]').forEach(function(el){el.onchange=function(){D.menu[+el.getAttribute('data-mo')].on=el.checked;changed();redrawPage()}});
   ui.querySelectorAll('[data-tag]').forEach(function(el){el.onchange=function(){var t=el.getAttribute('data-tag');
-    if(el.checked){if(D.tags.length>=5){el.checked=false;st('タグゎ5つまでだょ');return}D.tags.push(t)}else D.tags=D.tags.filter(function(x){return x!==t});changed()}});
+    if(el.checked){if(D.tags.length>=8){el.checked=false;st('タグゎ8つまでだょ');return}D.tags.push(t)}else D.tags=D.tags.filter(function(x){return x!==t});changed()}});
   if(sheet==='sozai')ldSoz();
   var f=document.getElementById('iconf');if(f)f.onchange=function(){if(f.files[0])upIcon(f.files[0])}}
 async function ldSoz(){var e=document.getElementById('szl');if(!e)return;try{var L=await DB.materials(60);
@@ -485,7 +489,8 @@ document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{
     DB.friendWith(me.id,R.id).then(function(f){if(!f)FR='none';else if(f.status==='accepted')FR='friend';else if(f.from_id===me.id)FR='sent';else{FR='in';FR_ID=f.id}if(!location.hash)draw()}).catch(function(){})}
 })();
 /* glitter */
-var cv=document.getElementById('kira'),cx=cv.getContext('2d'),W=0,H=0,dpr=1,stars=[],parts=[],cols=['#fff'];
+var VIV=['#ff2d95','#ffd400','#2fc3ff','#b45cff','#ff7a00','#ffffff','#ff5fa2'];
+var cv=document.getElementById('kira'),cx=cv.getContext('2d'),W=0,H=0,dpr=1,stars=[],parts=[],rings=[],cols=['#fff'];
 var still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function readGlit(){var v=getComputedStyle(document.documentElement).getPropertyValue('--glit');if(v)cols=v.split(',').map(function(x){return x.trim()}).filter(Boolean)}
 function size(){dpr=Math.min(window.devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
@@ -494,14 +499,19 @@ function star(x,y,r,a,c){cx.globalAlpha=a;cx.fillStyle=c;cx.beginPath();cx.moveT
 function frameDraw(t){
   cx.clearRect(0,0,W,H);
   stars.forEach(function(s){var a=Math.max(0,Math.sin(s.p+t/1000*s.s));if(a>.05)star(s.x,s.y,s.r*(.4+a*.6),a*.85,cols[s.c%cols.length])});
-  for(var i=parts.length-1;i>=0;i--){var p=parts[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.l-=.022;if(p.l<=0){parts.splice(i,1);continue}star(p.x,p.y,p.r*p.l+1,p.l,p.c)}
+  for(var j=rings.length-1;j>=0;j--){var g=rings[j];g.r+=g.v;g.v*=.94;g.l-=.03;if(g.l<=0){rings.splice(j,1);continue}cx.globalAlpha=g.l;cx.strokeStyle=g.c;cx.lineWidth=2.5*g.l+.5;cx.beginPath();cx.arc(g.x,g.y,g.r,0,6.283);cx.stroke()}
+  for(var i=parts.length-1;i>=0;i--){var p=parts[i];p.x+=p.vx;p.y+=p.vy;p.vx*=.97;p.vy=p.vy*.97+p.g;p.l-=p.d;if(p.l<=0){parts.splice(i,1);continue}
+    var tw=p.tw?(.55+.45*Math.sin(t/60+p.ph)):1;star(p.x,p.y,(p.r*p.l+1.5)*tw,Math.min(1,p.l*1.4),p.c);if(p.r>6&&p.l>.5){cx.globalAlpha=p.l*.5;cx.fillStyle='#fff';cx.beginPath();cx.arc(p.x,p.y,1.6,0,6.283);cx.fill()}}
   cx.globalAlpha=1;
   if(!document.hidden)requestAnimationFrame(frameDraw);
 }
 if(!still){
   size();readGlit();addEventListener('resize',size);
   document.addEventListener('visibilitychange',function(){if(!document.hidden)requestAnimationFrame(frameDraw)});
-  addEventListener('pointerdown',function(e){for(var i=0;i<10;i++){var a=Math.random()*6.28,v=1.5+Math.random()*3;parts.push({x:e.clientX,y:e.clientY,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1.5,r:3+Math.random()*4,l:1,c:cols[i%cols.length]})}});
+  addEventListener('pointerdown',function(e){var n=26+Math.floor(Math.random()*12),x=e.clientX,y=e.clientY;
+    for(var i=0;i<n;i++){var a=Math.random()*6.283,v=1+Math.random()*(i<6?8:5);parts.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1.2,g:.06+Math.random()*.08,r:i<6?8+Math.random()*7:2+Math.random()*6,l:1,d:.012+Math.random()*.014,c:VIV[Math.floor(Math.random()*VIV.length)],tw:Math.random()<.6,ph:Math.random()*6}) }
+    rings.push({x:x,y:y,r:4,v:7,l:1,c:'#ff2d95'});rings.push({x:x,y:y,r:2,v:4.5,l:.8,c:'#fff'});
+    if(parts.length>400)parts.splice(0,parts.length-400)});
   requestAnimationFrame(frameDraw);
 }
 if(!still){}

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>めろﾋﾟｮﾝ☆｜平成ﾎﾑﾍﾟ作成ｻｲﾄ</title>
-<meta name="description" content="めろﾋﾟｮﾝ☆は、平成の携帯ﾎﾑﾍﾟみたいなﾎｰﾑﾍﾟｰｼﾞを無料で作れるｻｲﾄです。ﾌﾟﾛﾌ・日記・BBS・着せ替え・素材・占いも。">
+<meta name="description" content="めろﾋﾟｮﾝ☆は、平成の携帯ﾎﾑﾍﾟみたいなﾎｰﾑﾍﾟｰｼﾞを無料で作れるｻｲﾄです。">
 <meta property="og:title" content="めろﾋﾟｮﾝ☆｜平成ﾎﾑﾍﾟ作成ｻｲﾄ">
 <meta property="og:description" content="平成のﾎﾑﾍﾟ、いまここで。登録・利用ぜんぶ無料★">
 <meta property="og:image" content="https://iamissuepink.github.io/img/og.png">
@@ -14,12 +14,12 @@
 <link rel="apple-touch-icon" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="top.css?v=1">
+<link rel="stylesheet" href="site.css?v=1">
 </head>
 <body>
 <div class="wrap">
 <header class="hdr">
-<picture><source media="(max-width:780px)" srcset="img/header_sp.png"><img src="img/header_pc.png" alt="めろﾋﾟｮﾝ☆ 平成のﾎﾑﾍﾟ、いまここで。登録・利用ぜんぶ無料" width="960" height="250"></picture>
+<a href="index.html" aria-label="めろﾋﾟｮﾝ☆ TOPへ"><picture><source media="(max-width:780px)" srcset="img/header_sp.png"><img src="img/header_pc.png" alt="めろﾋﾟｮﾝ☆ 平成のﾎﾑﾍﾟ、いまここで。登録・利用ぜんぶ無料" width="960" height="250"></picture></a>
 <div class="qr pc-only"><div id="qr"></div>ｽﾏﾎからは<br>こちら</div>
 </header>
 <div class="ticker" aria-hidden="true"><span>☆★ﾖｳｺｿ めろﾋﾟｮﾝ☆へ★☆　ﾎﾑﾍﾟ・日記・BBS・占い・素材…ぜんぶ無料で遊べるょ(ﾉ´∀｀*)ﾉ　✧ めろ友を作ろう ✧　ｷﾘ番ゲットしたら報告してね♪</span></div>
@@ -121,10 +121,12 @@
   運営：めろﾋﾟｮﾝ☆運営<br>(c) 2026 めろﾋﾟｮﾝ☆ All Rights Reserved.
 </footer>
 </div>
+<canvas id="sky" aria-hidden="true"></canvas>
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=8"></script>
-<script src="top.js?v=1"></script>
+<script src="db.js?v=9"></script>
+<script src="site.js?v=1"></script>
+<script src="top.js?v=2"></script>
 </body>
 </html>

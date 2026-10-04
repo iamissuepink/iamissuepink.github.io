@@ -114,3 +114,4 @@ button.pill{border:2px outset #ffb3d9}button.pill.purple{border:2px outset #c9a2
 .del{border-radius:0;border:1px outset #ff9ad5}
 .tag{border-radius:0}
 .hrow img,.hrow .noimg{border-radius:0}
+.tgc2{border-bottom:1px dotted #6b2a55;padding:4px 0}.tgc2 summary{cursor:pointer;color:#ffe066;font-weight:bold;min-height:32px;display:flex;align-items:center}.tgc2 .chips{justify-content:flex-start;padding:4px 0 8px}
