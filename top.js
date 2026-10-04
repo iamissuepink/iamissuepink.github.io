@@ -13,7 +13,7 @@ safe(function(){$('catmore').onclick=function(){var c=$('cats');c.classList.togg
 safe(function(){$('rl').onclick=async function(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else alert('まだﾎﾑﾍﾟがないみたい')}catch(e){alert(e.message)}};
 });
 /* signs */
-safe(function(){
+safe(function(){if(!$('signs'))return;
 var S=['おひつじ','おうし','ふたご','かに','しし','おとめ','てんびん','さそり','いて','やぎ','みずがめ','うお'],M=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
 $('signs').innerHTML=S.map(function(s,i){return '<a href="fortune.html?s='+i+'"><span>'+M[i]+'</span>'+s+'</a>'}).join('');
 });
