@@ -381,6 +381,123 @@ body.ed{padding-bottom:210px}
 :root[data-tpl="voc"] .mn-list .ml::before{content:"♪ " counter(tr,decimal-leading-zero) "　";color:#28e0ff;font-family:"Courier New",monospace;font-weight:normal}
 :root[data-tpl="voc"] .mn-list .md{color:#ff3dd4;font-family:"Courier New",monospace}
 :root[data-tpl="y2k"] .screen{border:2px solid;border-color:#fff #7f8aa3 #7f8aa3 #fff}
+/* ===== 当時風テンプレ ===== */
+:root:not([data-tpl="garake"]) body:not(.ed) .phone{max-width:262px}
+:root[data-tpl="garake"] body:not(.ed) .phone{max-width:300px}
+body:not(.ed) .in{padding:8px 8px 12px;font-size:12px;line-height:1.55}
+.cl{text-align:center;word-break:break-all}
+.cl a{color:var(--hi)}
+.c-lk{font:inherit;font-size:11px;color:var(--hi);background:none;border:0;padding:2px 1px;cursor:pointer;text-decoration:underline;min-height:24px}
+span.c-lk{text-decoration:none}
+.c-acts{margin:8px 0;line-height:1.9}
+.c-ph{display:block;margin:6px auto;width:100%;height:auto}
+.c-mq{overflow:hidden;white-space:nowrap;font-size:11px;margin:6px 0}
+.c-mq span{display:inline-block;padding-left:100%;animation:mq 10s linear infinite}
+.c-msg{margin:10px 0;line-height:1.7}
+.c-sub{font-size:10px;color:var(--hi2)}
+.c-h{margin:8px 0 2px;font-size:11px;font-weight:bold;color:var(--hi)}
+.c-ln{margin:4px 0;font-size:10px;white-space:nowrap;overflow:hidden;color:var(--hi2);letter-spacing:-.5px}
+.c-upd{font-size:11px;margin:4px 0}
+.c-upd ul{list-style:none;margin:0;padding:0}.c-upd li{margin:1px 0}.c-upd .d{color:var(--hi2);font-size:10px;margin-right:3px}
+.c-upd .new{font-size:9px}
+.c-cnt{margin:6px 0;font-size:11px;font-family:"Courier New",monospace;font-weight:bold;color:var(--hi)}
+.c-dg{display:inline-block;background:#000;color:#5f5;padding:0 3px;font-family:"Courier New",monospace;letter-spacing:1px;margin:0 2px}
+.c-kiri{font-size:11px;color:var(--hi);margin:4px 0}
+.c-song{margin:8px 0}.c-song iframe{width:100%;border:0;display:block}
+.c-tags{font-size:10px;margin:6px 0}.c-tags a{margin:0 2px}
+.c-fl{font-size:11px;line-height:1.8}
+.c-foot{margin-top:10px;font-size:9px;opacity:.7}
+.c-small{font-size:10px;opacity:.8}
+.c-mood{font-size:11px;margin:4px 0}
+.c-cs{font-size:18px;letter-spacing:-3px;margin:2px 0}
+/* garake */
+:root[data-tpl="garake"] .c-tbox{margin:4px 2px 8px;padding:5px 2px;border:2px solid var(--hi);background:var(--card);font-weight:bold;color:var(--hi);font-size:14px}
+:root[data-tpl="garake"] .c-mq{background:var(--hi);color:#fff}
+.c-m2{width:100%;border-collapse:separate;border-spacing:3px}.c-m2 td{width:50%;padding:0}
+.c-m2 a{display:block;padding:4px 2px;background:var(--hi);color:#fff;text-decoration:none;font-size:11px;font-weight:bold;border:2px outset var(--hi2)}
+/* gal */
+:root[data-tpl="gal"] .screen{background:#000!important}
+:root[data-tpl="gal"] .c-tbox{margin:6px 10px 10px;padding:4px 2px;border:3px solid #ffd700;box-shadow:0 0 0 3px #ff2e97,0 0 0 6px #000,0 0 0 8px #ffd700;color:#ffd700;font-weight:bold;font-size:13px;background:#000}
+:root[data-tpl="gal"] .c-mq{background:#ffd700;color:#c8005f}
+:root[data-tpl="gal"] .c-msg{color:#ffe9c9}
+:root[data-tpl="gal"] .c-h{color:#ffd700}:root[data-tpl="gal"] .c-ln{color:#d4a017}
+.c-bars{display:flex;flex-direction:column;gap:2px;margin:6px auto;width:fit-content;text-align:left}
+.c-bars a{display:flex;align-items:center;gap:3px;text-decoration:none;color:#ffe9c9;font-size:10px}
+.c-bars span{display:inline-block;width:70px;padding:1px 4px;background:linear-gradient(90deg,#1a1100,#3a2a00);border-left:5px solid #ffd700;color:#ffd700;font-weight:bold;font-size:11px}
+.c-box{border:3px double #ff2e97;margin:10px 4px;padding:6px 4px}
+/* yume */
+:root[data-tpl="yume"] .screen{background:#fff!important;border:3px double #ff8fc6!important;box-shadow:none!important}
+:root[data-tpl="yume"] .in{color:#ff6fb5}
+.c-t{font-weight:bold;font-size:14px;margin:4px 0}
+:root[data-tpl="yume"] .c-t{color:#7fd77f}
+.c-icons{color:#ffb3d9;letter-spacing:2px;font-size:12px;margin:3px 0}
+.c-g2{display:grid;grid-template-columns:auto auto;justify-content:center;gap:2px 8px;margin:6px 0;font-size:10px}
+.c-g2 a{display:flex;align-items:center;gap:3px;color:#999;text-decoration:none}
+.c-g2 a i{display:inline-block;width:11px;height:11px;border:1px solid #ff8fc6}
+.c-g2 a:nth-child(4n+2) i,.c-g2 a:nth-child(4n+3) i{border-color:#ffb84d}
+.c-lt{font-size:10px;letter-spacing:3px;color:#999;margin-top:4px}
+.c-date{font-size:10px;color:#ff8fc6;margin:6px 0}
+:root[data-tpl="yume"] .c-acts{font-size:10px}
+/* jirai */
+:root[data-tpl="jirai"] .in{font-family:"Hiragino Mincho ProN","Yu Mincho",serif}
+.c-lace{height:10px;background:radial-gradient(circle at 6px 0,transparent 5px,#ffb3d1 5.5px 6.5px,transparent 7px) 0 0/12px 10px repeat-x}
+.c-lace.b{transform:rotate(180deg);margin-top:8px}
+:root[data-tpl="jirai"] .c-t{color:#ffb3d1;text-shadow:0 0 6px #ff6fae;font-weight:normal}
+.c-polar{background:#fff;padding:5px 5px 18px;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+:root[data-tpl="jirai"] .c-polar{outline:1px solid #ffb3d1}
+.c-jl{display:flex;flex-direction:column;gap:3px;margin:8px auto;width:fit-content;text-align:left;font-size:11px}
+.c-jl a{text-decoration:none;color:#ffd9ea}.c-jl span{color:#ff6fae;letter-spacing:1px}.c-jl i{font-style:normal;color:#5a1b38}
+:root[data-tpl="jirai"] .c-msg{color:#ffb3d1}
+/* pop (表型) */
+:root[data-tpl="pop"] .screen{border:6px solid #5ec6f5!important;box-shadow:none!important;background:#fff!important}
+:root[data-tpl="pop"] .in{outline:1px solid #333;outline-offset:-4px;color:#000}
+.c-rl{height:11px;margin:4px 12px;background:linear-gradient(#ff5fa2 0 3px,transparent 3px 4px,#ffe866 4px 7px,transparent 7px 8px,#5ec6f5 8px 11px)}
+:root[data-tpl="pop"] .c-t{color:#5ec6f5}
+.c-hb{display:flex;border:4px solid #5ec6f5;margin:6px 0}.c-hb span{flex:1;background:#000;color:#fff;padding:3px;font-size:11px}.c-hb i{width:30px;background:#000;border-left:4px solid #5ec6f5;color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center}
+.c-st{font-size:14px;letter-spacing:-1px;color:#000;margin:2px 0}
+.c-tm{width:100%;border-collapse:collapse}.c-tm td{vertical-align:top;padding:0}.c-tml{width:46%}
+.c-tml a{display:block;height:32px;margin-bottom:2px;padding:14px 3px 0;box-sizing:border-box;text-align:left;color:#000;text-decoration:none;font-size:10px}
+.c-tml a b{color:#5ec6f5}
+.c-tph{margin-left:4px;border:1px solid #bbb;padding:4px;box-shadow:2px 2px 4px #aaa;background:#fff;min-height:120px}.c-tph img{width:100%;display:block}
+:root[data-tpl="pop"] .c-mq{background:#ffe866;color:#ff3d6e}
+/* street */
+.c-tape{background:repeating-linear-gradient(-45deg,#ffd400 0 10px,#111 10px 20px);color:#fff;font-size:10px;font-weight:bold;padding:2px 0;text-shadow:0 0 2px #000,1px 1px 0 #000;margin:0 -8px 6px;white-space:nowrap;overflow:hidden}
+.c-stk{display:inline-block;background:#c6ff1a;color:#111;font-weight:900;font-size:15px;padding:3px 10px;transform:rotate(-3deg);box-shadow:3px 3px 0 #ff3dc5;margin:6px 0}
+:root[data-tpl="street"] .c-mq{background:#111;color:#c6ff1a;border:1px solid #333}
+.c-sl{display:flex;flex-direction:column;margin:8px 0;text-align:left;font-family:"Courier New",monospace}
+.c-sl a{display:flex;justify-content:space-between;gap:6px;padding:3px 2px;border-bottom:1px solid #333;color:#f2f2f2;text-decoration:none;font-size:11px;font-weight:bold}
+.c-sl i{font-style:normal;color:#ff3dc5;font-size:10px;font-weight:normal;font-family:"MS PGothic",sans-serif}
+:root[data-tpl="street"] .c-msg{text-align:left;border-left:3px solid #ff3dc5;padding-left:6px}
+:root[data-tpl="street"] .c-h{color:#c6ff1a;text-align:left;font-family:"Courier New",monospace}
+/* kr */
+:root[data-tpl="kr"] .in{color:#5a4a3f}
+:root[data-tpl="kr"] .c-t{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-weight:normal;letter-spacing:.2em;color:#5a4a3f}
+:root[data-tpl="kr"] .c-ln{color:#b89580}
+:root[data-tpl="kr"] .c-msg{font-size:11px;color:#7a6a5f}
+.c-kn{font-size:11px;letter-spacing:.06em;margin:8px 0}.c-kn a{color:#5a4a3f;text-decoration:none}.c-kn i{font-style:normal;color:#d8c2b0;margin:0 5px}
+:root[data-tpl="kr"] .c-h{font-weight:normal;letter-spacing:.2em;color:#b89580}
+:root[data-tpl="kr"] .c-cnt{font-weight:normal;color:#b89580}
+/* voc */
+:root[data-tpl="voc"] .c-t{color:#d9f7ff;text-shadow:-2px 0 #ff3dd4,2px 0 #28e0ff;animation:gl 3s steps(1) infinite}
+:root[data-tpl="voc"] .c-mq{background:linear-gradient(90deg,#28e0ff,#ff3dd4);color:#070a1a;font-weight:bold}
+:root[data-tpl="voc"] .c-ln{color:#28e0ff;letter-spacing:0}
+.c-np{font-size:10px;color:#ff3dd4;font-family:"Courier New",monospace;text-align:left}
+.c-pl{display:flex;flex-direction:column;margin:6px 0;text-align:left;font-size:11px}
+.c-pl a{display:grid;grid-template-columns:30px 1fr auto;gap:4px;padding:3px 2px;border-bottom:1px solid #1d2c66;color:#d9f7ff;text-decoration:none}
+.c-pl span{color:#28e0ff;font-family:"Courier New",monospace}.c-pl b{font-weight:normal}.c-pl i{font-style:normal;font-size:10px;color:#ff3dd4}
+:root[data-tpl="voc"] .c-h{color:#ff3dd4;font-family:"Courier New",monospace}
+/* y2k */
+.c-win{border:2px solid;border-color:#fff #7f8aa3 #7f8aa3 #fff;box-shadow:0 0 0 1px #4a5470;margin:6px 0;background:#f4f7fc}
+.c-wt{display:flex;justify-content:space-between;align-items:center;height:18px;padding:0 5px;color:#fff;font-size:10px;font-weight:bold;background:linear-gradient(90deg,#1a3cc9,#6f8dff 60%,#ff8fe0);font-family:"Courier New",monospace}
+.c-wt i{font-style:normal;letter-spacing:2px}
+.c-wb{padding:6px}
+:root[data-tpl="y2k"] .c-t{background:linear-gradient(180deg,#fff,#c9d4e6 40%,#6b7896 55%,#e6ecf5);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(1px 0 0 #3d6bff) drop-shadow(-1px 0 0 #3d6bff) drop-shadow(0 1px 0 #3d6bff) drop-shadow(0 -1px 0 #3d6bff);font-size:16px}
+:root[data-tpl="y2k"] .c-mq{background:linear-gradient(90deg,#9ad8ff,#ffb3ec);color:#26304a}
+.c-dk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 2px;margin:8px 0}
+.c-dk a{display:flex;flex-direction:column;align-items:center;gap:2px;color:#26304a;text-decoration:none;font-size:9px}
+.c-dk a i{width:28px;height:28px;border-radius:6px;background:linear-gradient(180deg,#fff,#c9d4e6 45%,#8e9bb8 55%,#e6ecf5);box-shadow:0 0 0 1px #4a5470}
+.c-dk a:nth-child(3n+1) i{background:linear-gradient(180deg,#fff,#ffc2ee 45%,#ff6fd0 55%,#ffe0f6)}.c-dk a:nth-child(3n+2) i{background:linear-gradient(180deg,#fff,#c2dcff 45%,#3d6bff 55%,#e0ecff)}
+:root[data-tpl="y2k"] .screen::before{display:none}
 </style>
 </head>
 <body>
@@ -389,7 +506,7 @@ body.ed{padding-bottom:210px}
 <div id="ui"></div>
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=10"></script>
+<script src="db.js?v=11"></script>
 <script>
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
@@ -486,9 +603,65 @@ var BLK={
    if(D.real.length){var r=D.real[0];h+=ttl('最新ﾘｱﾙ')+'<div class="ent"><div class="d">'+esc(tm(r.at))+'</div>'+deco(r.t)+'</div>'}return h},
  tags:function(){return D.tags.length?'<p class="tags">'+D.tags.map(function(t){return '<a href="search.html?tag='+encodeURIComponent(t)+'">#'+esc(t)+'</a>'}).join(' ')+'</p>':''},
  foot:function(){return '<p class="foot">[<a href="#bbs">BBS</a>] [<a href="#link">ﾘﾝｸ</a>] [<a href="index.html">ﾎﾑﾍﾟ作成</a>]<br>'+esc(R.nickname)+' のﾎﾑﾍﾟ ／ Powered by めろﾋﾟｮﾝ☆</p>'}};
+/* ===== 当時風テンプレ（見た目確認・公開用） ===== */
+function cE(m){return esc(MEN[m.k]||'Page')}
+function cItems(){return D.menu.filter(function(m){return m.on})}
+function cImg(w,h,cls){return iconOk()?'<img class="c-ph '+(cls||'')+'" src="'+esc(D.icon)+'" alt="TOP写真" style="max-width:'+w+'px">':''}
+function cMq(){return D.marquee?'<div class="c-mq"><span>'+deco(D.marquee)+'</span></div>':''}
+function cMsg(){return D.msg?'<div class="c-msg">'+deco(D.msg)+'</div>':''}
+function cSub(){return D.sub?'<div class="c-sub">'+deco(D.sub)+'</div>':''}
+function cUpd(){return '<div id="upd" class="c-upd"></div>'}
+function cCnt(f){if(!D.showCounter||isNew)return '';var n=String(CNT);return '<div class="c-cnt">'+(f?f(n):n+'hit!')+'</div>'}
+function cKiri(){return KIRI?'<div class="c-kiri"><b class="dk-bl">★ｷﾘ番ｹﾞｯﾄ!!★</b> '+KIRI+'番'+(me&&!owner?' <button type="button" class="c-lk" data-act="kirirep">[報告する]</button>':'')+'</div>':''}
+function cActs(l,r){l=l||'[';r=r||']';var a=[];
+  a.push('<button type="button" class="c-lk" data-act="clap">'+l+'web拍手'+((D.showClaps||owner)&&CLAPS!==null?'('+CLAPS+')':'')+r+'</button>');
+  if(me&&!owner)a.push(FR==='friend'?'<span class="c-lk">'+l+'めろ友♡'+r+'</span>':FR==='sent'?'<span class="c-lk">'+l+'申請中'+r+'</span>':FR==='in'?'<button type="button" class="c-lk" data-act="facc">'+l+'めろ友承認'+r+'</button>':'<button type="button" class="c-lk" data-act="freq">'+l+'めろ友申請'+r+'</button>');
+  if(owner)a.push('<a class="c-lk" href="#foot">'+l+'足あと'+r+'</a>');
+  return '<div class="c-acts">'+a.join(' ')+'</div>'}
+function cSong(){var s=sp(D.song);return s?'<div class="c-song"><iframe src="'+esc(s)+'" height="80" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>':''}
+function cTags(){return D.tags.length?'<div class="c-tags">'+D.tags.map(function(t){return '<a href="search.html?tag='+encodeURIComponent(t)+'">#'+esc(t)+'</a>'}).join(' ')+'</div>':''}
+function cLinks(){return '<div id="flinks" class="c-fl"></div>'}
+function cFoot(){return '<div class="c-foot">Powered by <a href="index.html">めろﾋﾟｮﾝ☆</a></div>'}
+function cMood(){return D.mood?'<div class="c-mood">今日の気分 '+esc(D.mood)+'</div>':''}
+function cStars(){var C=['#ff4f9a','#ffd400','#f5a447','#7cff4d','#5ec6f5','#2f5bff','#9b2fd6','#ff2a2a','#7cff4d'];return '<div class="c-cs">'+C.map(function(c,i){return '<b style="color:'+c+(i%2?';font-size:.75em':'')+'">★</b>'}).join('')+'</div>'}
+var CR={
+garake:function(){var it=cItems();return '<div class="c-tbox">'+esc(D.title)+cSub()+'</div>'+cMq()+cImg(150,0)+cMood()+cCnt(function(n){return 'あなたは<span class="c-dg">'+('000000'+n).slice(-6)+'</span>人目♪'})+cKiri()+cMsg()+
+  '<div class="c-h">☆MENU☆</div><div class="c-ln">☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆</div><table class="c-m2"><tr>'+it.map(function(m,i){return (i&&i%2===0?'</tr><tr>':'')+'<td><a href="#'+esc(m.k)+'">'+mlab(m)+'</a></td>'}).join('')+'</tr></table><div class="c-ln">☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆</div>'+
+  '<div class="c-h">☆UPDATE☆</div>'+cUpd()+cActs()+cSong()+cLinks()+cTags()+cFoot()},
+gal:function(){var C=['#ffd700','#ff2e97','#ffd700','#ff2e97','#ffd700','#ff2e97','#ffd700','#ff2e97','#ffd700','#ff2e97','#ffd700','#ff2e97'];
+  return '<div class="c-tbox">♛'+esc(D.title)+'♛'+cSub()+'</div>'+cImg(120)+cMq()+cMsg()+'<div class="c-h">♛MENU♛</div><div class="c-ln">♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛</div>'+
+  '<div class="c-bars">'+cItems().map(function(m,i){return '<a href="#'+esc(m.k)+'"><span style="border-left-color:'+C[i]+'">'+cE(m)+'</span>&lt;&lt;'+mlab(m)+'</a>'}).join('')+'</div><div class="c-ln">♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛</div>'+
+  cUpd()+cCnt()+cKiri()+cActs('♛','')+cSong()+'<div class="c-box"><div class="c-h">♛LINK♛</div>'+cLinks()+'</div>'+cTags()+cFoot()},
+yume:function(){var it=cItems(),a=it.slice(0,8),b=it.slice(8);
+  return '<div class="c-t">'+esc(D.title)+'</div><div class="c-icons">♡☆♡☆♡</div>'+cSub()+cImg(100)+'<div class="c-small">since '+esc(SINCE)+'</div>'+cCnt(function(n){return '→ <span class="c-dg">'+('000000'+n).slice(-6)+'</span> d(*ﾟーﾟ*)'})+cKiri()+
+  '<div class="c-icons">☁︎ ☆ ☁︎ ☆ ☁︎</div><div class="c-g2">'+a.map(function(m){return '<a href="#'+esc(m.k)+'"><i></i>'+cE(m).toUpperCase()+'</a>'}).join('')+'</div>'+
+  '<div class="c-lt">LETS TALK</div>'+cActs('','')+(b.length?'<div class="c-g2">'+b.map(function(m){return '<a href="#'+esc(m.k)+'"><i></i>'+mlab(m)+'</a>'}).join('')+'</div>':'')+
+  '<div class="c-date">'+esc(TODAY)+'</div>'+cMsg()+'<div class="c-icons">☁︎ ☆ ☁︎ ☆ ☁︎</div>'+cUpd()+cSong()+cLinks()+cTags()+cFoot()},
+jirai:function(){return '<div class="c-lace"></div><div class="c-t">♡ '+esc(D.title)+' ♡</div>'+cSub()+cImg(120,0,'c-polar')+'<div class="c-ln">♡⸝⸝ ✝︎ ⸝⸝♡ ✝︎ ♡⸝⸝ ✝︎ ⸝⸝♡</div>'+
+  '<div class="c-jl">'+cItems().map(function(m){return '<a href="#'+esc(m.k)+'"><span>✝︎ '+cE(m).toUpperCase()+'</span><i>┈┈ </i>'+mlab(m)+'</a>'}).join('')+'</div><div class="c-ln">♡⸝⸝ ✝︎ ⸝⸝♡ ✝︎ ♡⸝⸝ ✝︎ ⸝⸝♡</div>'+
+  cMsg()+cMood()+'<div class="c-h">♡ new ♡</div>'+cUpd()+cCnt()+cKiri()+cActs('♡','')+cSong()+cLinks()+cTags()+'<div class="c-lace b"></div>'+cFoot()},
+pop:function(){var C=['#ff4f9a','#ffff4d','#f5a447','#7cff4d','#9b2fd6','#2f6bd6','#00c2b8','#ff7a00','#c86bff','#ff4f9a','#ffff4d','#f5a447'];
+  return '<div class="c-rl"></div><div class="c-t">'+esc(D.title)+'</div><div class="c-rl"></div><div class="c-hb"><i>★</i><span>'+(D.sub?deco(D.sub):'ﾖｳｺｿ!!')+'</span></div><div class="c-st">★★★★★★★★★★★★★</div>'+
+  '<table class="c-tm"><tr><td class="c-tml">'+cItems().map(function(m,i){return '<a href="#'+esc(m.k)+'" style="background:'+C[i]+'"><b>Φ</b>'+cE(m).toUpperCase()+'</a>'}).join('')+'</td><td><div class="c-tph">'+(iconOk()?'<img src="'+esc(D.icon)+'" alt="TOP写真">':'')+'</div></td></tr></table>'+
+  '<div class="c-st">★★★★★★★★★★★★★</div>'+cMq()+cMsg()+'<div class="c-hb"><span>::New entry::</span><i>★</i></div>'+cStars()+cUpd()+cStars()+'<div class="c-rl"></div>'+cCnt(function(n){return ('000000'+n).slice(-6)+'hit'})+cKiri()+'<div class="c-rl"></div>'+cActs()+cSong()+cLinks()+cTags()+'<div class="c-rl"></div>'+cFoot()},
+street:function(){return '<div class="c-tape">CAUTION ✦ '+esc(D.title)+' ✦ CAUTION</div><div class="c-stk">'+esc(D.title)+'</div>'+cSub()+cImg(150)+cMq()+
+  '<div class="c-sl">'+cItems().map(function(m,i){return '<a href="#'+esc(m.k)+'"><span>'+('0'+(i+1)).slice(-2)+' → '+cE(m).toUpperCase()+'</span><i>'+mlab(m)+'</i></a>'}).join('')+'</div><div class="c-ln">/// ─── /// ─── ///</div>'+
+  cMsg()+'<div class="c-h">// NEW ENTRY</div>'+cUpd()+cCnt(function(n){return 'HIT : '+('000000'+n).slice(-6)})+cKiri()+cActs()+cSong()+cLinks()+cTags()+'<div class="c-tape">✦ STAY REAL ✦ STAY REAL ✦</div>'+cFoot()},
+kr:function(){return cImg(130,0,'c-polar')+'<div class="c-t">'+esc(D.title)+'</div>'+cSub()+'<div class="c-ln">— ♡ —</div>'+cMsg()+
+  '<div class="c-kn">'+cItems().map(function(m){return '<a href="#'+esc(m.k)+'">'+cE(m).toLowerCase()+'</a>'}).join('<i>|</i>')+'</div>'+cMood()+'<div class="c-ln">— ♡ —</div><div class="c-h">new</div>'+cUpd()+cCnt(function(n){return n+' visitors'})+cKiri()+cActs('','')+cSong()+cLinks()+cTags()+cFoot()},
+voc:function(){var s=sp(D.song);return '<div class="c-t">'+esc(D.title)+'</div>'+cSub()+cMq()+'<div class="c-ln">▁▂▃▅▆▇▆▅▃▂▁▂▃▅▆▇▆▅▃▂▁</div>'+
+  (s?'<div class="c-np">♪ NOW PLAYING</div>'+cSong():'')+'<div class="c-pl">'+cItems().map(function(m,i){return '<a href="#'+esc(m.k)+'"><span>♪'+('0'+(i+1)).slice(-2)+'</span><b>'+cE(m)+'</b><i>'+mlab(m)+'</i></a>'}).join('')+'</div><div class="c-ln">▁▂▃▅▆▇▆▅▃▂▁▂▃▅▆▇▆▅▃▂▁</div>'+
+  cImg(140)+cMsg()+'<div class="c-h">▶ NEW ENTRY</div>'+cUpd()+cCnt(function(n){return '<span class="c-dg">'+('000000'+n).slice(-6)+'</span> PLAYS'})+cKiri()+cActs()+cLinks()+cTags()+cFoot()},
+y2k:function(){return '<div class="c-win"><div class="c-wt">'+esc(D.title)+'.exe<i>_ □ ×</i></div><div class="c-wb"><div class="c-t">'+esc(D.title)+'</div>'+cSub()+cImg(130)+'</div></div>'+cMq()+
+  '<div class="c-dk">'+cItems().map(function(m){return '<a href="#'+esc(m.k)+'"><i></i>'+mlab(m)+'</a>'}).join('')+'</div><div class="c-ln">◇◆◇◆◇◆◇◆◇◆◇◆◇</div>'+
+  cMsg()+'<div class="c-win"><div class="c-wt">New entry<i>_ □ ×</i></div><div class="c-wb">'+cUpd()+'</div></div>'+cCnt(function(n){return 'visitor: '+('000000'+n).slice(-6)})+cKiri()+cActs()+cSong()+cLinks()+cTags()+cFoot()}};
+var SINCE='',TODAY=(function(){var d=new Date(),w='SunMonTueWedThuFriSat'.substr(d.getDay()*3,3);return (d.getMonth()+1)+'/'+d.getDate()+'('+w+')'})();
+async function ldLinks(){var e=document.getElementById('flinks');if(!e)return;try{var L=await DB.hpFriends(R.id);e.innerHTML=L.length?L.map(function(f){return '<a href="hp.html?id='+esc(f.hp_id)+'">♡'+esc(f.nickname)+'</a>'}).join('<br>'):'<span class="c-small">ﾘﾝｸ募集中ﾃﾞｽ</span>'}catch(err){e.innerHTML=''}}
+
 function top(){
   var h='',T=TPL[D.tpl];
   if(SUSP)h+='<div class="kiri" style="border-color:#ff2a2a"><b>このﾎﾑﾍﾟゎ運営によって凍結されています</b><br><small>ほかの人からゎ見れない状態だょ。くわしくゎお問い合わせしてね</small></div>';
+  if(!ED&&CR[D.tpl])return h+'<div class="cl">'+CR[D.tpl]()+'</div>';
   T.order.forEach(function(b){if(b.indexOf('ln:')===0)h+=ln(b.slice(3));else if(BLK[b])h+=BLK[b]()});
   return h}
 
@@ -574,7 +747,7 @@ async function ldUpd(){var e=document.getElementById('upd');if(!e)return;var L=[
   try{var ph=await DB.photos(R.id);if(ph[0])L.push({at:ph[0].created_at,h:'<a href="#photo">写真を追加</a>'})}catch(err){}
   if(D.real[0])L.push({at:D.real[0].at,h:'<a href="#real">ﾘｱﾙ更新</a>'});
   L.sort(function(a,b){return new Date(b.at)-new Date(a.at)});
-  e.innerHTML=L.length?'<ul class="hist">'+L.slice(0,5).map(function(x){return '<li><span class="d">'+esc(tm(x.at))+'</span> '+x.h+(isNewD(x.at)?NEWB:'')+'</li>'}).join('')+'</ul>':'<p class="empty">まだ更新ゎありません</p>'}
+  e.innerHTML=L.length?'<ul class="hist c-hist">'+L.slice(0,5).map(function(x){return '<li><span class="d">'+esc(tm(x.at))+'</span> '+x.h+(isNewD(x.at)?NEWB:'')+'</li>'}).join('')+'</ul>':'<p class="empty">まだ更新ゎありません</p>'}
 function applyColors(){var st=document.documentElement.style;CV.forEach(function(c){if(hex(D.colors[c[0]]))st.setProperty('--'+c[0],D.colors[c[0]]);else st.removeProperty('--'+c[0])})}
 function draw(){
   var r=location.hash.replace(/^#/,'');
@@ -583,7 +756,7 @@ function draw(){
   var f={prof:prof,intro:intro,real:real}[r];
   if(LOAD[r]){root.innerHTML=frame(apage(r));LOAD[r]()}
   else root.innerHTML=frame(f?f():(D.pages[r]?page(r):top()));
-  if(!r&&!ED)ldUpd();
+  if(!r&&!ED){ldUpd();ldLinks()}
   fillFrames();readGlit();drawUi()}
 function cur(v){return getComputedStyle(document.documentElement).getPropertyValue('--'+v).trim()}
 function sheetHtml(){
@@ -753,6 +926,7 @@ document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{
   try{me=await DB.me();R=await DB.getHp(HID)}catch(e){note(esc(e.message));return}
   if(!R){note('このIDのﾎﾑﾍﾟゎ見つからないょ<br><br><a href="index.html">めろﾋﾟｮﾝ☆TOPへ</a>');return}
   document.getElementById('mid').textContent='めろID: '+R.hp_id;
+  if(R.created_at){var _d=new Date(R.created_at);SINCE=_d.getFullYear()+'.'+(_d.getMonth()+1)+'.'+_d.getDate()}
   owner=!!(me&&me.id===R.id);
   document.getElementById('rpt').href='report.html?type=hp&hp='+encodeURIComponent(HID);
   if(owner){try{INFO=await DB.myInfo(me.id)}catch(e){}}
