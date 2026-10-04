@@ -103,6 +103,12 @@ window.DB={
   gFriends:function(){return run(sb.rpc('guardian_friend_requests'))},
   gOkFriend:function(id){return run(sb.rpc('guardian_ok_friend',{p_id:id}))},
   gNgFriend:function(id){return run(sb.rpc('guardian_ng_friend',{p_id:id}))},
+  contact:function(cat,email,body){return run(sb.from('contacts').insert({category:cat,email:email||null,body:body}))},
+  contacts:function(st){return run(sb.from('contacts').select('*').eq('status',st||'open').order('created_at',{ascending:false}).limit(100))},
+  setContact:function(id,st){return run(sb.from('contacts').update({status:st}).eq('id',id))},
+  deleteAccount:async function(uid){
+    for(var b of ['hp','sozai']){try{var l=await sb.storage.from(b).list(uid,{limit:1000});if(l.data&&l.data.length)await sb.storage.from(b).remove(l.data.map(function(f){return uid+'/'+f.name}))}catch(e){}}
+    await run(sb.rpc('delete_account'));await sb.auth.signOut()},
   visit:function(hpId){return run(sb.rpc('hp_visit',{p_hp_id:hpId}))},
   age:function(ym){var p=String(ym).split('-'),y=+p[0],m=+p[1],t=new Date(),last=new Date(y,m,0).getDate();
     var a=t.getFullYear()-y;if(t.getMonth()+1<m||(t.getMonth()+1===m&&t.getDate()<last))a--;return a}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390">
-<title>使い方｜めろﾋﾟｮﾝ☆</title>
+<title>お問い合わせ｜めろﾋﾟｮﾝ☆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&amp;family=Kosugi+Maru&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=4">
@@ -29,20 +29,25 @@
 </svg>
 <span class="puffy" style="font-size: 30px; margin-top: -4px">めろﾋﾟｮﾝ☆</span>
 </a>
-<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>☆★使い方ｶﾞｲﾄﾞ★☆ 6ｽﾃｯﾌﾟでﾎﾑﾍﾟ完成♪ ｷﾗｷﾗにﾃﾞｺってね✦</span></div>
-<h1 class="puffy" style="font-size: 30px; margin-top: 6px">HOW TO</h1>
-<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">☆めろﾋﾟｮﾝ☆の使い方☆</p>
+<div class="mq" style="width: calc(100% + 32px); margin: 0 -16px"><span>★お問い合わせ★ 質問・不具合・削除のお願いゎここから</span></div>
+<h1 class="puffy" style="font-size: 30px; margin-top: 6px">CONTACT</h1>
+<p style="margin: -10px 0 0; color: #ff9ad5; font-size: 12px">★お問い合わせ★</p>
 
-<section class="sec pk glow">
-<h3>♡ﾎﾑﾍﾟができるまで♡</h3>
-<div class="step li"><span class="num">1</span><div><span style="color: #ff9ad5; font-weight: bold">無料登録</span><br>ﾄｯﾌﾟの「無料ﾎﾑﾍﾟ作成♡」から登録♪<br>IDがそのまま自分のﾎﾑﾍﾟのURLになるょ</div></div><div class="step li"><span class="num">2</span><div><span style="color: #ff9ad5; font-weight: bold">ﾏｲﾍﾟｰｼﾞへ</span><br>ﾛｸﾞｲﾝするとﾏｲﾍﾟｰｼﾞが開くょ<br>ここからﾎﾑﾍﾟを編集できる</div></div><div class="step li"><span class="num">3</span><div><span style="color: #ff9ad5; font-weight: bold">ﾌﾟﾛﾌを書く</span><br>名前・誕生日・好きなもの…<br>質問ゎ自由に追加OK!!</div></div><div class="step li"><span class="num">4</span><div><span style="color: #ff9ad5; font-weight: bold">ﾃﾞｺる</span><br>着せ替えと素材で背景や飾りを選んで<br>自分好みにｶｽﾀﾏｲｽﾞ✦</div></div><div class="step li"><span class="num">5</span><div><span style="color: #ff9ad5; font-weight: bold">日記を書く</span><br>書いた日記ゎ新着日記に載って<br>みんなに見てもらえるかも♡</div></div><div class="step li"><span class="num">6</span><div><span style="color: #ff9ad5; font-weight: bold">URLを教える</span><br>友達にﾎﾑﾍﾟのURLを送って<br>遊びに来てもらおう♪</div></div>
-</section>
 <section class="sec gd glow">
-<h3>⚠気をつけてね⚠</h3>
-<p>ﾎﾑﾍﾟゎ誰でも見られるょ。<br><span style="color: #ffe066">本名・学校名・住所・ﾊﾞｲﾄ先・顔がはっきりわかる写真</span>など、自分が特定される情報ゎ書かないようにしよう!!</p>
-<p>知らない人から会おうって言われても、ついて行っちゃﾀﾞﾒだょ(｀・ω・´)</p>
+<h3>お問い合わせについて</h3>
+<p style="font-size:12px;text-align:left">ﾙｰﾙ違反の書き込みやﾎﾑﾍﾟを見つけたときゎ、<a href="report.html">通報ﾍﾟｰｼﾞ</a>からお願いします。<br>返信が必要なときゎﾒｰﾙｱﾄﾞﾚｽを書いてください。返信までお時間をいただくことがあります。</p>
 </section>
-<p class="neon" style="margin: 0; color: #ffe066">※ﾛｸﾞｲﾝ・ﾎﾑﾍﾟ作成ゎただいま準備中だょ</p>
+<section class="sec pk glow">
+<div class="fm" style="gap:8px" id="form">
+<label for="cat">種類</label>
+<select id="cat"><option value="">えらんでね</option><option>質問</option><option>不具合</option><option>削除・開示の依頼</option><option>保護者の方から</option><option>その他</option></select>
+<label for="em">返信用ﾒｰﾙｱﾄﾞﾚｽ（返信が必要なら）</label><input id="em" type="email" maxlength="200" autocomplete="email">
+<label for="bd">内容</label><textarea id="bd" maxlength="2000" style="min-height:140px"></textarea>
+<p style="font-size:11px;color:#c9a2ff;margin:0">※内容に、ほかの人の個人情報を書かないでね</p>
+<button class="pill" id="go" type="button">送信する</button>
+</div>
+<p class="msg" id="msg" role="status"></p>
+</section>
 
 <svg width="300" height="34" viewBox="0 0 300 34" aria-hidden="true">
 <g stroke="#ffffff" stroke-width="1.5">
@@ -62,6 +67,17 @@
 </div>
 </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="db.js?v=7"></script>
 <script src="kira.js?v=2"></script>
+<script>
+var $=function(i){return document.getElementById(i)};
+$('go').onclick=async function(){var b=this,m=$('msg');
+  if(!$('cat').value){m.textContent='種類をえらんでね';m.className='msg ng';return}
+  if(!$('bd').value.trim()){m.textContent='内容を書いてね';m.className='msg ng';return}
+  b.disabled=true;
+  try{await DB.contact($('cat').value,$('em').value.trim(),$('bd').value.trim());$('form').innerHTML='';m.textContent='送信しました。ありがとうございます！';m.className='msg'}
+  catch(e){m.textContent=e.message;m.className='msg ng';b.disabled=false}};
+</script>
 </body>
 </html>

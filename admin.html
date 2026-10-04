@@ -37,6 +37,7 @@
 <div id="main" hidden style="width:100%;display:flex;flex-direction:column;gap:14px">
 <div class="tabs" role="tablist"><button type="button" role="tab" id="t-open" aria-selected="true">未対応の通報</button><button type="button" role="tab" id="t-done" aria-selected="false">対応済み</button></div>
 <section class="sec pk glow" style="border-radius:0 0 14px 14px"><div id="reps"></div></section>
+<section class="sec bl glow"><h3>✉お問い合わせ（未対応）✉</h3><div id="cts"></div></section>
 <section class="sec pp glow"><h3>★ﾎﾑﾍﾟ見回り（更新順）★</h3><div id="hps"></div></section>
 </div>
 
@@ -52,14 +53,14 @@
 </svg>
 <a class="pill purple" href="index.html" style="width: 100%">◀ TOPにもどる</a>
 <footer style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; font-size: 11px; margin-top: 6px">
-<a href="info.html#rules">利用規約</a><a href="info.html#rules">ﾌﾟﾗｲﾊﾞｼｰ</a><a href="info.html#contact">お問い合わせ</a><a href="report.html">通報する</a>
+<a href="terms.html">利用規約</a><a href="privacy.html">ﾌﾟﾗｲﾊﾞｼｰ</a><a href="contact.html">お問い合わせ</a><a href="report.html">通報する</a>
 </footer>
 <p style="margin: 0; font-size: 11px; color: #c9a2ff">(c) めろﾋﾟｮﾝ☆</p>
 </div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=6"></script>
+<script src="db.js?v=7"></script>
 <script src="kira.js?v=2"></script>
 <script>
 var $=function(i){return document.getElementById(i)},E=DB.esc,ST='open',TY={hp:'ﾎﾑﾍﾟ',bbs:'みんなの掲示板の書き込み',hp_bbs:'ﾎﾑﾍﾟBBSの書き込み',diary:'日記',photo:'写真',question:'質問箱',material:'素材'};
@@ -80,12 +81,16 @@ document.addEventListener('click',async function(e){var t=e.target,a;
     else if(a=t.getAttribute('data-unsus')){await DB.suspend(a,false);loadHps()}
     else if(a=t.getAttribute('data-done')){await DB.setReport(+a,'done');loadReps()}
     else if(a=t.getAttribute('data-reopen')){await DB.setReport(+a,'open');loadReps()}
+    else if(a=t.getAttribute('data-cdone')){await DB.setContact(+a,'done');loadCts()}
   }catch(err){alert(err.message)}});
+async function loadCts(){try{var L=await DB.contacts('open');
+  $('cts').innerHTML=L.length?L.map(function(c){return '<div class="li"><span class="dt">'+tm(c.created_at)+'</span> <b style="color:#ffe066">'+E(c.category)+'</b>'+(c.email?' ／ '+E(c.email):'')+'<br><span style="white-space:pre-wrap">'+E(c.body)+'</span><br><button type="button" class="del" data-cdone="'+c.id+'">対応済みにする</button></div>'}).join(''):'<p>未対応のお問い合わせゎありません</p>'}
+  catch(e){$('cts').innerHTML='<p class="msg ng">'+E(e.message)+'</p>'}}
 function tab(s){ST=s;$('t-open').setAttribute('aria-selected',s==='open');$('t-done').setAttribute('aria-selected',s==='done');loadReps()}
 $('t-open').onclick=function(){tab('open')};$('t-done').onclick=function(){tab('done')};
 DB.me().then(async function(u){if(!u){$('msg').innerHTML='<a href="login.html">ﾛｸﾞｲﾝ</a>してね';return}
   if(!(await DB.isAdmin(u.id))){$('msg').textContent='このﾍﾟｰｼﾞゎ運営専用だょ';return}
-  $('msg').hidden=true;$('main').hidden=false;tab('open');loadHps()});
+  $('msg').hidden=true;$('main').hidden=false;tab('open');loadHps();loadCts()});
 </script>
 </body>
 </html>

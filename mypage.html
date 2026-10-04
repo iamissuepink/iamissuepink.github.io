@@ -97,6 +97,7 @@
 <a class="pill purple" id="adminl" href="admin.html" hidden>管理画面（運営専用）</a>
 </section>
 <button class="pill purple" id="out" type="button">ﾛｸﾞｱｳﾄ</button>
+<p style="text-align:center;margin:0"><button type="button" class="del" id="quit">退会する</button></p>
 </div>
 <svg width="300" height="34" viewBox="0 0 300 34" aria-hidden="true">
 <g stroke="#ffffff" stroke-width="1.5">
@@ -110,14 +111,14 @@
 </svg>
 <a class="pill purple" href="index.html" style="width: 100%">◀ TOPにもどる</a>
 <footer style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; font-size: 11px; margin-top: 6px">
-<a href="info.html#rules">利用規約</a><a href="info.html#rules">ﾌﾟﾗｲﾊﾞｼｰ</a><a href="info.html#contact">お問い合わせ</a><a href="report.html">通報する</a>
+<a href="terms.html">利用規約</a><a href="privacy.html">ﾌﾟﾗｲﾊﾞｼｰ</a><a href="contact.html">お問い合わせ</a><a href="report.html">通報する</a>
 </footer>
 <p style="margin: 0; font-size: 11px; color: #c9a2ff">(c) めろﾋﾟｮﾝ☆</p>
 </div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=6"></script>
+<script src="db.js?v=7"></script>
 <script src="kira.js?v=2"></script>
 <script>
 (async function(){
@@ -168,6 +169,9 @@ $('save').onclick=async function(){var b=this,n=$('nick').value.trim();
   b.disabled=true;say('保存中…');
   try{await DB.saveProfile(u.id,n,$('bio').value);$('hello').textContent=n+'さん';say('保存したょ✧')}catch(e){say(e.message,true)}b.disabled=false};
 $('out').onclick=async function(){await DB.logOut();location.href='index.html'};
+$('quit').onclick=async function(){if(!confirm('本当に退会する？\nﾎﾑﾍﾟ・日記・写真・素材・書き込みが全部消えて、元に戻せないょ'))return;
+  if(prompt('確認のため「たいかい」と入力してね')!=='たいかい')return;
+  try{await DB.deleteAccount(u.id);alert('退会しました。今までありがとう！');location.href='index.html'}catch(e){alert(e.message)}};
 })();</script>
 </body>
 </html>

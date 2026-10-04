@@ -48,6 +48,7 @@
 <label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
 <label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-mail" type="email" autocomplete="email">
 <label for="up-pass">ﾊﾟｽﾜｰﾄﾞ（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
+<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree" style="width:18px;height:18px;margin-top:2px"><span><a href="terms.html" target="_blank">利用規約</a>と<a href="privacy.html" target="_blank">ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰ</a>を読んで同意します（18歳未満の人ゎ保護者の人と一緒に読んでね）</span></label>
 <button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
 <p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!<br>※ﾆｯｸﾈｰﾑに本名ゎ使わないでね</p>
 </div>
@@ -66,14 +67,14 @@
 </svg>
 <a class="pill purple" href="index.html" style="width: 100%">◀ TOPにもどる</a>
 <footer style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; font-size: 11px; margin-top: 6px">
-<a href="info.html#rules">利用規約</a><a href="info.html#rules">ﾌﾟﾗｲﾊﾞｼｰ</a><a href="info.html#contact">お問い合わせ</a><a href="report.html">通報する</a>
+<a href="terms.html">利用規約</a><a href="privacy.html">ﾌﾟﾗｲﾊﾞｼｰ</a><a href="contact.html">お問い合わせ</a><a href="report.html">通報する</a>
 </footer>
 <p style="margin: 0; font-size: 11px; color: #c9a2ff">(c) めろﾋﾟｮﾝ☆</p>
 </div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="db.js?v=6"></script>
+<script src="db.js?v=7"></script>
 <script src="kira.js?v=2"></script>
 <script>
 (function(){
@@ -87,6 +88,7 @@ $('b-in').onclick=async function(){var b=this;b.disabled=true;say('ﾛｸﾞｲ�
   try{await DB.logIn($('in-mail').value.trim(),$('in-pass').value);location.href='mypage.html'}catch(e){say(e.message,true)}b.disabled=false};
 $('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim();
   if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
+  if(!$('agree').checked){say('利用規約とﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰに同意してね',true);return}
   b.disabled=true;say('登録中…');
   try{await DB.signUp($('up-mail').value.trim(),$('up-pass').value,n);say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉')}catch(e){say(e.message,true)}b.disabled=false};
 })();</script>
