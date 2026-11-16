@@ -597,6 +597,25 @@ body.ed.tplh{padding-bottom:140px}
 .tpl-gal .c-kiri{color:#ff7ac1;font-size:11px}
 .tpl-gal .tg-box{border:3px double #ff2e97;margin:10px 4px;padding:4px 6px 8px;background:linear-gradient(#2a0018,#000)}
 .tpl-gal .c-tags{font-size:10px;margin:6px 0}.tpl-gal .c-foot{font-size:9px;opacity:.7;margin-top:8px}
+
+/* スマホでﾎﾑﾍﾟを真ん中に */
+body .phone{margin-left:auto!important;margin-right:auto!important}
+@media (max-width:460px){body.tplh .phone{max-width:calc(100vw - 28px)!important;margin-top:16px!important}}
+/* 管理用モーダル（入口・テンプレ選択・保存BOX）はめろﾋﾟｮﾝ☆の色で固定 */
+.mbox.mgr{background:#120008!important;color:#ffd6ec!important;border:2px solid #ff3d9a!important;box-shadow:0 0 0 4px #000,0 0 0 5px #ff9ad5,0 10px 30px rgba(0,0,0,.6);font-family:"MS PGothic","Hiragino Kaku Gothic ProN",sans-serif}
+.mbox.mgr .ttl{background:linear-gradient(180deg,#ff6fb5,#c8005f)!important;color:#fff!important;border:0!important;border-bottom:2px solid #fff!important;animation:none!important;text-shadow:none!important;font-size:13px;padding:4px 8px}
+.mbox.mgr .ttl::before,.mbox.mgr .ttl::after{content:""!important}
+.mbox.mgr .mq2{text-align:center;margin:8px 0 2px;font-size:12px}
+.mbox.mgr .ebtn{background:#ff3d9a!important;color:#fff!important;border:2px outset #ffb3d9!important;font-weight:bold}
+.mbox.mgr .ebtn.sub{background:#2a0a20!important;color:#ffd6ec!important;border:2px outset #6b2a55!important}
+.mbox.mgr .note2,.mbox.mgr .empty{color:#c9a2ff!important}
+.mbox.mgr .tplc{background:#1a0010!important;color:#ffd6ec!important;border:2px outset #6b2a55!important}
+.mbox.mgr .tplc:hover{border-color:#ff9ad5!important}
+.mbox.mgr .tplc .sw{border:1px solid #ff9ad5}
+.mbox.mgr .bxr{border-bottom-color:#6b2a55}
+.mbox.mgr small{opacity:.85}
+.sw[data-t=gal]{background:#000 url(img/tpl/gal/leo.jpg) 0 0/120px 120px!important;box-shadow:inset 0 0 0 6px #000,inset 0 0 0 8px #ff2e97!important}
+:root[data-tpl="gal"]{--hi:#ff2e97;--hi2:#ffb3d9;--ink:#ffd6ec;--line:#5a1b38;--glit:#ff2e97,#ffffff,#ffb3d9}
 </style>
 </head>
 <body>
@@ -1010,6 +1029,8 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   if(a==='edit'){chooser()}
   else if(a==='m_edit'){closeM();ED=true;draw()}
   else if(a==='m_new'){await newHp()}
+  else if(a==='m_new_keep'){await loadBox();if(BOX.length>=5){alert('保存BOXがいっぱいだょ（5個まで）。いらないのを消すか「しまわずに作る」を選んでね');return boxView()}try{await DB.addBackup(stamp(),D)}catch(err){alert(err.message);return}tplPick()}
+  else if(a==='m_new_drop'){tplPick()}
   else if(a==='m_box'){await boxView()}
   else if(a==='m_close'){closeM()}
   else if(a==='m_restore'){await restore(i)}
@@ -1056,7 +1077,7 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
 });
 var FR_ID=null;
 function closeM(){var m=document.getElementById('modal');if(m)m.remove()}
-function modal(html){closeM();var m=document.createElement('div');m.id='modal';m.className='modal';m.innerHTML='<div class="mbox" role="dialog" aria-modal="true">'+html+'</div>';document.body.appendChild(m);var f=m.querySelector('button');if(f)f.focus()}
+function modal(html){closeM();var m=document.createElement('div');m.id='modal';m.className='modal';m.innerHTML='<div class="mbox mgr" role="dialog" aria-modal="true">'+html+'</div>';document.body.appendChild(m);var f=m.querySelector('button');if(f)f.focus()}
 function toast(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2200)}
 var BOX=null;
 async function loadBox(){try{BOX=await DB.backups(me.id)}catch(e){BOX=[]}return BOX}
@@ -1064,16 +1085,17 @@ function stamp(){var d=new Date();return '保存 '+(d.getMonth()+1)+'/'+d.getDat
 async function chooser(){await loadBox();
   modal('<p class="ttl">ﾎﾑﾍﾟ編集</p><div class="mch">'+
    '<button type="button" class="ebtn" data-act="m_edit">✎ 今のﾎﾑﾍﾟを編集する</button>'+
-   '<button type="button" class="ebtn" data-act="m_new">♡ 新しく作る<br><small>今のﾎﾑﾍﾟゎ保存BOXにしまうょ</small></button>'+
+   '<button type="button" class="ebtn" data-act="m_new">♡ 新しく作る<br><small>テンプレを選んで作り直すょ</small></button>'+
    '<button type="button" class="ebtn sub" data-act="m_box">📦 保存BOXを見る（'+BOX.length+'/5）</button>'+
    '<button type="button" class="ebtn sub" data-act="m_close">とじる</button></div>'+
    '<p class="note2" style="color:var(--hi)">※日記・写真・BBS・質問箱などゎ、新しく作っても消えずにそのまま残るょ</p>')}
-async function newHp(){await loadBox();
-  if(BOX.length>=5){alert('保存BOXがいっぱいだょ（5個まで）。保存BOXからいらないのを消してね');return boxView()}
-  var name=prompt('今のﾎﾑﾍﾟを保存BOXにしまうょ。名前をつけてね',stamp());if(name===null)return;
-  try{if(!isNew)await DB.addBackup(name.slice(0,30)||stamp(),D)}catch(err){alert(err.message);return}
-  var keep={icon:D.icon,iconPath:D.iconPath};D=fix(def(R.nickname),R.nickname);D.icon=keep.icon;D.iconPath=keep.iconPath;
-  modal('<p class="ttl">テンプレをえらんでね</p><div class="tplg">'+Object.keys(TPL).map(function(k){return '<button type="button" class="tplc" data-act="m_tpl" data-v="'+k+'"><span class="sw" data-t="'+k+'"></span>'+esc(TPL[k].n)+'</button>'}).join('')+'</div><p class="note2" style="color:var(--hi)">あとから「ﾃﾞｻﾞｲﾝ」でいつでも変えられるょ</p>')}
+async function newHp(){if(isNew)return tplPick();await loadBox();
+  modal('<p class="ttl">新しく作る</p><p class="mq2">今のﾎﾑﾍﾟゎどうする？</p><div class="mch">'+
+   '<button type="button" class="ebtn" data-act="m_new_keep">📦 保存BOXにしまってから作る<br><small>あとで復活できるょ（'+BOX.length+'/5）</small></button>'+
+   '<button type="button" class="ebtn sub" data-act="m_new_drop">しまわずに作る<br><small>新しいのを保存した時点で今のﾎﾑﾍﾟゎ消えるょ</small></button>'+
+   '<button type="button" class="ebtn sub" data-act="edit">← もどる</button></div>')}
+function tplPick(){var keep={icon:D.icon,iconPath:D.iconPath};D=fix(def(R.nickname),R.nickname);D.icon=keep.icon;D.iconPath=keep.iconPath;
+  modal('<p class="ttl">テンプレをえらんでね</p><div class="tplg">'+Object.keys(TPL).map(function(k){return '<button type="button" class="tplc" data-act="m_tpl" data-v="'+k+'"><span class="sw" data-t="'+k+'"></span>'+esc(TPL[k].n)+'</button>'}).join('')+'</div><p class="note2">あとから「ﾃﾝﾌﾟﾚ・色」でいつでも変えられるょ</p>')}
 async function boxView(){await loadBox();
   modal('<p class="ttl">📦 保存BOX（'+BOX.length+'/5）</p>'+(BOX.length?BOX.map(function(b){return '<div class="bxr"><div><b>'+esc(b.name||'無題')+'</b><br><small>'+esc(tm(b.created_at))+' ／ '+esc((b.data&&b.data.title)||'')+'</small></div><div class="bxa"><button type="button" class="ebtn" data-act="m_restore" data-i="'+b.id+'">復活</button><button type="button" class="ebtn sub" data-act="m_del" data-i="'+b.id+'">消す</button></div></div>'}).join(''):'<p class="empty">まだ何もしまってないょ</p>')+
    '<p style="text-align:center;margin-top:10px"><button type="button" class="ebtn sub" data-act="edit">← もどる</button></p>')}
