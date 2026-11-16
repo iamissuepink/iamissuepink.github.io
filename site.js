@@ -1,3 +1,4 @@
+if(/type=recovery/.test(location.hash)&&!/reset\.html$/.test(location.pathname))location.replace('reset.html'+location.hash);
 (function(){
 var $=function(i){return document.getElementById(i)};
 function safe(f){try{f()}catch(e){if(window.console)console.warn(e)}}

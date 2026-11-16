@@ -87,6 +87,7 @@
 <label for="in-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="in-mail" type="email" autocomplete="email">
 <label for="in-pass">ﾊﾟｽﾜｰﾄﾞ</label><input id="in-pass" type="password" autocomplete="current-password">
 <button class="pill purple" id="b-in" type="button" style="margin-top:8px">ﾛｸﾞｲﾝ</button>
+<p style="text-align:center;margin:4px 0 0;font-size:12px"><a href="#" id="forgot">ﾊﾟｽﾜｰﾄﾞを忘れた？</a></p>
 </div>
 <div id="f-up" class="fm" style="gap:8px" hidden>
 <label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
@@ -111,8 +112,8 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=9"></script>
-<script src="site.js?v=1"></script>
+<script src="db.js?v=12"></script>
+<script src="site.js?v=2"></script>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)},msg=$('msg');
@@ -121,6 +122,8 @@ function tab(up){$('t-in').setAttribute('aria-selected',!up);$('t-up').setAttrib
 $('t-in').onclick=function(){tab(false)};$('t-up').onclick=function(){tab(true)};
 if(location.hash==='#signup')tab(true);
 DB.me().then(function(u){if(u)location.href='mypage.html'});
+$('forgot').onclick=async function(e){e.preventDefault();var m=$('in-mail').value.trim()||prompt('登録したﾒｰﾙｱﾄﾞﾚｽを入れてね');if(!m)return;
+  say('送信中…');try{await DB.resetPw(m.trim());say('ﾊﾟｽﾜｰﾄﾞ再設定のﾒｰﾙを送ったょ✉ 迷惑ﾒｰﾙﾌｫﾙﾀﾞも見てね')}catch(err){say(err.message,true)}};
 $('b-in').onclick=async function(){var b=this;b.disabled=true;say('ﾛｸﾞｲﾝ中…');
   try{await DB.logIn($('in-mail').value.trim(),$('in-pass').value);location.href='mypage.html'}catch(e){say(e.message,true)}b.disabled=false};
 $('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim();
