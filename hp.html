@@ -536,6 +536,66 @@ body:not(.ed) .in .lk{font-size:11px}
 :root[data-tpl="voc"] body:not(.ed) .ent{border-bottom-color:#1d2c66}
 :root[data-tpl="y2k"] body:not(.ed) .ttl{display:flex;justify-content:space-between;align-items:center;height:20px;padding:0 6px;font-size:11px}
 :root[data-tpl="y2k"] body:not(.ed) .ttl::after{content:"_ □ ×";float:none}
+/* ===== テンプレ（HTML型）共通 ===== */
+body.tplh .phone{max-width:280px!important}
+body.tplh .in{padding:6px 6px 14px!important;font-size:12px;line-height:1.55}
+.tpl{text-align:center;word-break:break-all}
+.t-mq{display:block;overflow:hidden;white-space:nowrap}
+.t-mq>span{display:inline-block;padding-left:100%;animation:mq 10s linear infinite}
+.t-ph img{display:block;max-width:100%;margin:6px auto}
+.t-off{opacity:.4}
+.t-d{display:inline-block;width:10px;height:15px;background:#000}
+.t-cnt{display:inline-flex;gap:1px;vertical-align:middle}
+.t-upd ul{list-style:none;margin:0;padding:0;font-size:11px}.t-upd .d{font-size:10px;margin-right:3px}.t-upd .new{font-size:9px}
+.t-fl{font-size:11px;line-height:1.8}
+/* 編集中の差し込み口 */
+body.ed .es{position:relative;display:inline-block;min-width:44px;min-height:18px;outline:2px dashed rgba(255,61,154,.85);outline-offset:2px;cursor:pointer}
+body.ed div.es{display:block;margin:6px 0}
+body.ed .es:hover,body.ed .es:focus-visible{outline-color:#ffe066;outline-style:solid;background:rgba(255,224,102,.1)}
+body.ed .es::after{content:"✎";position:absolute;right:-7px;top:-9px;z-index:2;font:bold 10px/14px sans-serif;background:#ff3d9a;color:#fff;padding:0 3px;pointer-events:none}
+.eph{font-style:normal;font-size:11px;opacity:.75}
+body.ed.tplh{padding-bottom:140px}
+.ed2 .ed2-hint{margin:0;text-align:center;font-size:12px;color:#ffd6ec}
+.ed2 .shtop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;color:#ffe066;font-size:13px}
+.ed2 .shtop .ebtn{min-height:30px}
+.ed2 .ein,.ed2 .eta{color:#ffe3f1;background:#2a0a20;border:2px inset #ff9ad5}
+.ed2 .elb2{display:flex;align-items:center;gap:6px;min-height:34px;font-size:12px}
+.ed2 .tools{margin-top:6px}
+.ed2 #palbox:not(:empty){margin-top:6px}
+.ed2 .moods{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.ed2 .moods button{font:inherit;font-size:12px;color:#fff;background:#2a0a20;border:1px solid #6b2a55;padding:3px 6px;min-height:30px;cursor:pointer}
+/* ===== ｷﾞｬﾙ ===== */
+:root[data-tpl="gal"] body.tplh{background:#7a4a10 url(img/tpl/gal/leo.png) repeat!important}
+:root[data-tpl="gal"] body.tplh .screen{background:#000!important;border:3px solid #ffd700!important;box-shadow:0 0 0 3px #ff2e97,0 0 0 6px #000,0 0 0 8px #d4a017,0 0 22px rgba(255,215,0,.45)!important;border-radius:0!important}
+:root[data-tpl="gal"] body.tplh .phone{margin-top:22px}
+.tpl-gal{color:#ffe9c9}
+.tpl-gal a{color:#ff86c4}
+.tpl-gal .tg-hd{background:url(img/tpl/gal/leo.png);padding:5px;margin:4px 0 6px;border:2px solid #ffd700}
+.tpl-gal .tg-hdin{position:relative;background:#000;border:3px double #ffd700;padding:9px 14px 6px}
+.tpl-gal .tg-cr{position:absolute;top:-10px;width:16px;height:14px;image-rendering:pixelated}
+.tpl-gal .tg-cr.l{left:-7px;transform:rotate(-22deg)}.tpl-gal .tg-cr.r{right:-7px;transform:rotate(22deg)}
+.tpl-gal .tg-title{font-size:15px;font-weight:bold;line-height:1.3;color:#ffd700;text-shadow:1px 1px 0 #ff2e97,0 0 6px rgba(255,215,0,.6)}
+.tpl-gal .tg-sub{font-size:10px;color:#ff86c4;margin-top:3px}
+.tpl-gal .tg-wel{display:flex;align-items:center;justify-content:center;gap:4px;margin:4px 0}
+.tpl-gal .t-ph img{width:150px;border:3px solid #ffd700;box-shadow:0 0 0 2px #ff2e97}
+.tpl-gal .t-mq{background:#ffd700;color:#c8005f;font-size:11px;font-weight:bold;margin:6px 0;padding:1px 0}
+.tpl-gal .tg-mood{display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;margin:6px 0}
+.tpl-gal .tg-msg{margin:10px 0;line-height:1.75}
+.tpl-gal .tg-h{margin:10px 0 2px;line-height:0}
+.tpl-gal .tg-line{height:12px;background:url(img/tpl/gal/line.gif) repeat-x center;margin:4px 0}
+.tpl-gal .t-menu{display:flex;flex-direction:column;gap:3px;width:fit-content;margin:8px auto;text-align:left}
+.tpl-gal .tg-btn{display:flex;align-items:center;gap:4px;text-decoration:none;font-size:10px;color:#ffe9c9}
+.tpl-gal .tg-en{display:flex;align-items:center;gap:3px;width:84px;padding:2px 4px;background:linear-gradient(180deg,#4a3200,#140c00);border:1px solid #ffd700;color:#ffd700;font:bold 11px "Courier New",monospace;box-shadow:inset 0 1px 0 rgba(255,236,140,.55)}
+.tpl-gal .tg-btn:nth-child(even) .tg-en{border-color:#ff2e97;color:#ff86c4;background:linear-gradient(180deg,#4a0028,#140008)}
+.tpl-gal .tg-btn:hover .tg-en{background:#ffd700;color:#000}
+.tpl-gal .tg-lb{white-space:nowrap}
+.tpl-gal .t-upd{margin:4px 0;color:#ffe9c9}.tpl-gal .t-upd .d{color:#ffd700}
+.tpl-gal .tg-cnt{display:flex;align-items:center;justify-content:center;gap:3px;margin:10px 0 4px;font:bold 11px "Courier New",monospace;color:#ffd700}
+.tpl-gal .t-d{background:url(img/tpl/gal/digits.png) no-repeat}
+.tpl-gal .c-acts{margin:6px 0;line-height:1.9}.tpl-gal .c-lk{color:#ff86c4}
+.tpl-gal .c-kiri{color:#ffd700;font-size:11px}
+.tpl-gal .tg-box{border:3px double #ff2e97;margin:10px 4px;padding:4px 6px 8px;background:linear-gradient(#1a0010,#000)}
+.tpl-gal .c-tags{font-size:10px;margin:6px 0}.tpl-gal .c-foot{font-size:9px;opacity:.7;margin-top:8px}
 </style>
 </head>
 <body>
@@ -696,9 +756,93 @@ y2k:function(){return '<div class="c-win"><div class="c-wt">'+esc(D.title)+'.exe
 var SINCE='',TODAY=(function(){var d=new Date(),w='SunMonTueWedThuFriSat'.substr(d.getDay()*3,3);return (d.getMonth()+1)+'/'+d.getDate()+'('+w+')'})();
 async function ldLinks(){var e=document.getElementById('flinks');if(!e)return;try{var L=await DB.hpFriends(R.id);e.innerHTML=L.length?L.map(function(f){return '<a href="hp.html?id='+esc(f.hp_id)+'">♡'+esc(f.nickname)+'</a>'}).join('<br>'):'<span class="c-small">ﾘﾝｸ募集中ﾃﾞｽ</span>'}catch(err){e.innerHTML=''}}
 
+/* ===== テンプレ（HTML型）エンジン ===== */
+var G='img/tpl/gal/';
+var TPLH={
+gal:{html:`<div class="tg-hd"><div class="tg-hdin"><img class="tg-cr l" src="${G}crown.gif" alt=""><img class="tg-cr r" src="${G}crown.gif" alt=""><div class="tg-title">{{title}}</div><div class="tg-sub">{{sub}}</div></div></div>
+<div class="tg-wel"><img src="${G}kira.gif" alt=""><img src="${G}h_welcome.gif" alt="WELCOME"><img src="${G}kira.gif" alt=""></div>
+[PHOTO]
+<div class="tg-mq">{{marquee}}</div>
+<div class="tg-mood"><img src="${G}heart.gif" alt="">今日の気分 {{mood}}<img src="${G}heart.gif" alt=""></div>
+<div class="tg-msg">{{msg}}</div>
+<div class="tg-h"><img src="${G}h_menu.gif" alt="MENU"></div>
+<div class="tg-line"></div>
+[MENU]<a class="tg-btn{{off}}" href="{{href}}"><span class="tg-en"><img src="${G}arrow.gif" alt="">{{en}}</span><span class="tg-lb">&lt;&lt;{{label}}</span></a>[/MENU]
+<div class="tg-line"></div>
+<div class="tg-h"><img src="${G}h_new.gif" alt="NEW ENTRY"></div>
+[UPDATE]
+<div class="tg-cnt"><img src="${G}kira.gif" alt="">[COUNTER]<span>hit!</span><img src="${G}kira.gif" alt=""></div>
+[KIRI]
+[ACTS]
+[SONG]
+<div class="tg-box"><div class="tg-h"><img src="${G}h_link.gif" alt="LINK"></div>[LINKS]</div>
+[TAGS]
+<div class="tg-line"></div>
+[FOOT]`}};
+var SLOTN={title:'ﾎﾑﾍﾟ名',sub:'ﾎﾑﾍﾟ名の下のひとこと',marquee:'流れる文字',mood:'今日の気分',msg:'TOPの文',photo:'TOP写真',menu:'ﾒﾆｭｰ',opts:'ｶｳﾝﾀｰ・拍手・曲',tags:'タグ'};
+function isT(){return !!(D&&TPLH[D.tpl])}
+function eslot(k,inner,block){if(!ED)return inner;var tg=block?'div':'span';
+  return '<'+tg+' class="es" data-slot="'+k+'" role="button" tabindex="0" aria-label="'+esc(SLOTN[k]||k)+'を編集">'+(inner||'<i class="eph">＋'+esc(SLOTN[k]||'')+'</i>')+'</'+tg+'>'}
+function tval(k){var v=D[k]||'';if(!v)return '';if(k==='title'||k==='mood')return esc(v);if(k==='marquee')return '<span class="t-mq"><span>'+deco(v)+'</span></span>';return deco(v)}
+var TB={
+ PHOTO:function(){var i=iconOk()?'<div class="t-ph"><img src="'+esc(D.icon)+'" alt="TOP写真"></div>':'';return ED?eslot('photo',i,1):i},
+ UPDATE:function(){return '<div id="upd" class="t-upd"></div>'},
+ COUNTER:function(){var c='';if(D.showCounter){var n=('000000'+(isNew?0:CNT)).slice(-6);c='<span class="t-cnt" aria-label="'+n+'">'+n.split('').map(function(d){return '<i class="t-d" style="background-position:-'+(+d*10)+'px 0"></i>'}).join('')+'</span>'}
+   return ED?eslot('opts',c||'<i class="eph">ｶｳﾝﾀｰ非表示</i>'):c},
+ KIRI:function(){return cKiri()},
+ ACTS:function(){var a=cActs('♛','');return ED?eslot('opts',a,1):a},
+ SONG:function(){var s=cSong();return ED?eslot('opts',s||'<i class="eph">＋お気に入り曲</i>',1):s},
+ LINKS:function(){return '<div id="flinks" class="t-fl"></div>'},
+ TAGS:function(){var t=cTags();return ED?eslot('tags',t||'<i class="eph">＋タグ</i>',1):t},
+ FOOT:function(){return cFoot()}};
+function renderT(id){var h=TPLH[id].html;
+  h=h.replace(/\[MENU\]([\s\S]*?)\[\/MENU\]/,function(m,it){var s=menuItems().map(function(x,i){
+      return it.replace(/\{\{href\}\}/g,'#'+esc(x.k)).replace(/\{\{en\}\}/g,cE(x)).replace(/\{\{label\}\}/g,mlab(x)).replace(/\{\{desc\}\}/g,mdesc(x)).replace(/\{\{n\}\}/g,('0'+(i+1)).slice(-2)).replace(/\{\{color\}\}/g,BARC[i%BARC.length]).replace(/\{\{off\}\}/g,x.on?'':' t-off')}).join('');
+    return eslot('menu','<div class="t-menu">'+s+'</div>',1)});
+  h=h.replace(/\{\{(title|sub|marquee|mood|msg)\}\}/g,function(m,k){return eslot(k,tval(k),k==='msg'||k==='marquee')});
+  h=h.replace(/\[(PHOTO|UPDATE|COUNTER|KIRI|ACTS|SONG|LINKS|TAGS|FOOT)\]/g,function(m,k){return TB[k]()});
+  return '<div class="tpl tpl-'+id+'">'+h+'</div>'}
+function afterTop(){ldUpd();ldLinks()}
+/* 編集：差し込み口をタップ */
+var SLOTSHEET={photo:'photo',menu:'menu',opts:'opts',tags:'design'};
+function openSlot(k){sheet=SLOTSHEET[k]||('slot:'+k);drawUi();
+  var f=ui.querySelector('[data-k="'+k+'"]');if(f){f.focus();lastF=f.classList.contains('deco')?f:lastF;try{var L=f.value.length;f.setSelectionRange(L,L)}catch(e){}}}
+function palHtml(k){
+  if(k==='color')return '<p class="shh">文字の色（選んだ文字を囲むょ）</p><div class="sw">'+COLS.map(function(c){return '<button type="button" data-act="wrapc" data-v="'+c[1]+'" style="background:'+c[1]+'" aria-label="'+c[0]+'"></button>'}).join('')+'</div>';
+  if(k==='kao')return '<p class="shh">顔文字</p><div class="pal">'+KAO.map(function(x){return '<button type="button" data-act="ins" data-v="'+esc(x)+'">'+esc(x)+'</button>'}).join('')+'</div>';
+  if(k==='emo')return '<p class="shh">デコ絵文字</p><div class="pal emo">'+EMO.map(function(x){return '<button type="button" data-act="ins" data-v="'+esc(x)+'">'+esc(x)+'</button>'}).join('')+'</div>';
+  if(k==='sozai')return '<p class="shh">素材（タップで入るょ）</p><div class="pal" id="szl">読み込み中…</div>';
+  return ''}
+var TOOLS2='<div class="tools"><button type="button" data-act="pal" data-v="color" style="color:#ff6fb5">色</button><button type="button" data-act="wrap" data-v="b"><b>B</b></button><button type="button" data-act="wrap" data-v="big">大</button><button type="button" data-act="wrap" data-v="small" style="font-size:11px">小</button><button type="button" data-act="wrap" data-v="blink">点滅</button><button type="button" data-act="wrap" data-v="rb" class="rbt">虹</button><button type="button" data-act="wrap" data-v="mq">流</button><button type="button" data-act="wrap" data-v="center">中</button><button type="button" data-act="pal" data-v="kao">顔</button><button type="button" data-act="pal" data-v="emo">♡</button><button type="button" data-act="pal" data-v="sozai">素材</button></div><div id="palbox"></div>';
+function shTop(t){return '<div class="shtop"><b>✎ '+esc(t)+'</b><button type="button" class="ebtn" data-act="sheet" data-v="">できた</button></div>'}
+function sheet2(){
+  if(sheet.indexOf('slot:')===0){var k=sheet.slice(5),h='<div class="sh">'+shTop(SLOTN[k]||k);
+    if(k==='title')h+=inp('title',D.title,'big');
+    else if(k==='mood')h+=inp('mood',D.mood)+'<div class="moods">'+MOODS.map(function(m){return '<button type="button" data-act="mood" data-v="'+esc(m)+'">'+esc(m)+'</button>'}).join('')+'</div>';
+    else if(k==='sub'||k==='marquee')h+='<input class="ein deco" data-k="'+k+'" value="'+esc(D[k]||'')+'">'+TOOLS2;
+    else h+=ta('data-k="'+k+'"',D[k]||'','自由に書いてね♪ 文字を選んでから下のﾎﾞﾀﾝで飾れるょ',150)+TOOLS2;
+    return h+'</div>'}
+  if(sheet==='photo')return '<div class="sh">'+shTop('TOP写真')+'<p><label class="ebtn" style="display:inline-flex;align-items:center">写真を選ぶ<input type="file" id="iconf" accept="image/*" hidden></label> '+(D.icon?'<button type="button" class="ebtn sub lt" data-act="delicon">写真を外す</button>':'')+'</p><p class="note2">※自動で小さくして、撮った場所の情報を消してから保存するょ。顔や制服、家の周りが写った写真ゎ気をつけてね</p></div>';
+  if(sheet==='opts')return '<div class="sh">'+shTop('ｶｳﾝﾀｰ・拍手・曲')+
+    '<label class="elb2"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> ｶｳﾝﾀｰを表示する</label>'+
+    '<p class="shh">ｷﾘ番（カンマ区切り。空なら777・1000などゾロ目とキリのいい数）</p><input class="ein" data-k="kiri" value="'+esc(D.kiri||'')+'" placeholder="例：100,500,1000">'+
+    '<p class="shh">拍手のお礼ﾒｯｾｰｼﾞ</p><textarea class="eta" data-k="thanks" style="min-height:60px">'+esc(D.thanks||'')+'</textarea>'+
+    '<label class="elb2"><input type="checkbox" data-k="showClaps"'+(D.showClaps?' checked':'')+'> 拍手の数をみんなに見せる</label>'+
+    '<p class="shh">今のお気に入り曲（SpotifyのURL）</p><input class="ein" data-k="song" value="'+esc(D.song||'')+'" placeholder="https://open.spotify.com/track/…"></div>';
+  if(sheet==='design'||sheet==='menu'){var o=sheetHtml();return o.replace('<div class="sh">','<div class="sh">'+shTop(sheet==='menu'?'ﾒﾆｭｰ':'ﾃﾝﾌﾟﾚ・色・公開範囲'))}
+  return ''}
+function drawUi2(){
+  var s=sheet2();
+  ui.innerHTML='<div class="edbar ed2">'+s+(s?'':'<p class="ed2-hint">✎ 書き換えたいところを<b>タップ</b>してね</p>')+
+   '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾝﾌﾟﾚ・色</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">設定</button><button type="button" class="ebtn" data-act="save">保存する</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
+   '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>'}
+var rpT=null;
+function livePreview(){clearTimeout(rpT);rpT=setTimeout(function(){if(!location.hash){root.innerHTML=frame(top());afterTop();readGlit()}},200)}
+
 function top(){
   var h='',T=TPL[D.tpl];
   if(SUSP)h+='<div class="kiri" style="border-color:#ff2a2a"><b>このﾎﾑﾍﾟゎ運営によって凍結されています</b><br><small>ほかの人からゎ見れない状態だょ。くわしくゎお問い合わせしてね</small></div>';
+  if(isT())return h+renderT(D.tpl);
   if(!ED&&CR[D.tpl])return h+'<div class="cl">'+CR[D.tpl]()+'</div>';
   T.order.forEach(function(b){if(b.indexOf('ln:')===0)h+=ln(b.slice(3));else if(BLK[b])h+=BLK[b]()});
   return h}
@@ -790,12 +934,12 @@ function applyColors(){var st=document.documentElement.style;CV.forEach(function
 function draw(){
   var r=location.hash.replace(/^#/,'');
   document.documentElement.dataset.tpl=D.tpl;document.documentElement.dataset.skin=D.tpl==='garake'?(D.theme||'pink'):TPL[D.tpl].skin;applyColors();
-  document.title=(D.title||'ﾎﾑﾍﾟ')+'｜めろﾋﾟｮﾝ☆';document.body.classList.toggle('ed',ED);
+  document.title=(D.title||'ﾎﾑﾍﾟ')+'｜めろﾋﾟｮﾝ☆';document.body.classList.toggle('ed',ED);document.body.classList.toggle('tplh',isT());
   var f={prof:prof,intro:intro,real:real}[r];
   var mini=(r&&!ED)?'<div class="c-mini"><a href="#">'+esc(D.title)+'</a></div>':'';
   if(LOAD[r]){root.innerHTML=frame(mini+apage(r));LOAD[r]()}
   else root.innerHTML=frame(mini+(f?f():(D.pages[r]?page(r):top())));
-  if(!r&&!ED){ldUpd();ldLinks()}
+  if(!r&&(!ED||isT())){ldUpd();ldLinks()}
   fillFrames();readGlit();drawUi()}
 function cur(v){return getComputedStyle(document.documentElement).getPropertyValue('--'+v).trim()}
 function sheetHtml(){
@@ -820,10 +964,11 @@ function sheetHtml(){
 function drawUi(){
   if(!owner){ui.innerHTML='';return}
   if(!ED){ui.innerHTML='<div class="fab"><button type="button" class="ebtn" data-act="edit" style="min-height:44px;padding:0 18px">✎ 編集する</button></div>';return}
+  if(isT())drawUi2();else{
   ui.innerHTML='<div class="edbar">'+sheetHtml()+
    '<div class="tools" aria-label="文字の装飾"><button type="button" data-act="sheet" data-v="color" style="color:#ff6fb5">色</button><button type="button" data-act="wrap" data-v="b"><b>B</b></button><button type="button" data-act="wrap" data-v="big">大</button><button type="button" data-act="wrap" data-v="small" style="font-size:11px">小</button><button type="button" data-act="wrap" data-v="blink">点滅</button><button type="button" data-act="wrap" data-v="rb" class="rbt">虹</button><button type="button" data-act="wrap" data-v="mq">流</button><button type="button" data-act="wrap" data-v="center">中</button><button type="button" data-act="sheet" data-v="kao">顔</button><button type="button" data-act="sheet" data-v="emo">♡</button><button type="button" data-act="sheet" data-v="sozai">素材</button></div>'+
    '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾞｻﾞｲﾝ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn" data-act="save">保存する</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
-   '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>';
+   '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>';}
   var tp=document.getElementById('tp');if(tp)tp.onchange=function(){D.tpl=this.value;D.colors={};changed();draw()};
   var th=document.getElementById('th');if(th)th.onchange=function(){D.theme=this.value;D.colors={};changed();draw()};
   var vs=document.getElementById('vis');if(vs)vs.onchange=function(){VIS=this.value;changed()};
@@ -837,7 +982,7 @@ function drawUi(){
   var f=document.getElementById('iconf');if(f)f.onchange=function(){if(f.files[0])upIcon(f.files[0])}}
 async function ldSoz(){var e=document.getElementById('szl');if(!e)return;try{var L=await DB.materials(60);
   e.innerHTML=L.length?L.map(function(m){return '<button type="button" data-act="ins" data-v="[s='+esc(m.path)+']" title="'+esc(m.title)+'"><img src="'+esc(DB.sozBase+m.path)+'" alt="'+esc(m.title||'素材')+'" style="max-height:32px;max-width:80px"></button>'}).join(''):'まだ素材がないょ'}catch(err){e.textContent=err.message}}
-function redrawPage(){var r=location.hash.replace(/^#/,''),fn={prof:prof,intro:intro,real:real}[r];if(LOAD[r])return;root.innerHTML=frame(fn?fn():(D.pages[r]?page(r):top()));fillFrames()}
+function redrawPage(){var r=location.hash.replace(/^#/,''),fn={prof:prof,intro:intro,real:real}[r];if(LOAD[r])return;root.innerHTML=frame(fn?fn():(D.pages[r]?page(r):top()));fillFrames();if(!r&&isT())afterTop()}
 function fillFrames(){document.querySelectorAll('iframe.uhtml').forEach(function(f){var p=D.pages[f.getAttribute('data-pg')];if(p)f.srcdoc=htmlDoc(p.h)})}
 window.addEventListener('message',function(e){if(!e.data||e.data.melo!==1)return;document.querySelectorAll('iframe.uhtml').forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(Math.max(+e.data.h||0,120),6000)+'px'})});
 var pvT=null;
@@ -847,6 +992,11 @@ function st(t){var e=document.getElementById('st');if(e)e.textContent=t}
 function target(){if(lastF&&document.body.contains(lastF))return lastF;st('先に文字を書く欄をタップしてね');return null}
 function edit(el,a,b){var s=el.selectionStart,e=el.selectionEnd,v=el.value;el.value=v.slice(0,s)+a+v.slice(s,e)+b+v.slice(e);el.focus();el.setSelectionRange(s+a.length,e+a.length);el.dispatchEvent(new Event('input',{bubbles:true}))}
 document.addEventListener('focusin',function(e){var t=e.target;if(t.classList&&t.classList.contains('deco'))lastF=t});
+root.addEventListener('click',function(e){if(!ED||!isT())return;var sl=e.target.closest('[data-slot]');
+  if(sl){e.preventDefault();e.stopPropagation();openSlot(sl.getAttribute('data-slot'));return}
+  var an=e.target.closest('a');if(an&&!location.hash){e.preventDefault();e.stopPropagation()}},true);
+root.addEventListener('keydown',function(e){if(!ED||!isT())return;var sl=e.target.closest&&e.target.closest('[data-slot]');if(sl&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openSlot(sl.getAttribute('data-slot'))}});
+ui.addEventListener('input',function(e){var t=e.target,k=t.getAttribute&&t.getAttribute('data-k');if(!k||!isT())return;D[k]=t.type==='checkbox'?t.checked:t.value;changed();livePreview()});
 ui.addEventListener('pointerdown',function(e){if(e.target.closest('.tools button,.sw button,.pal button'))e.preventDefault()});
 function lastOk(){return lastF&&document.body.contains(lastF)}
 root.addEventListener('input',function(e){var t=e.target,k=t.getAttribute('data-k'),q=t.getAttribute('data-q'),pg=t.getAttribute('data-pg');
@@ -882,6 +1032,7 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='resetc'){D.colors={};applyColors();readGlit();changed();drawUi()}
   else if(a==='delicon'){if(confirm('ﾌﾟﾛﾌ画像を外す？')){var old=D.iconPath;D.icon='';D.iconPath='';await save(null,true);if(old)DB.delImg(old).catch(function(){});draw()}}
   else if(a==='save'){await save(b)}
+  else if(a==='pal'){var pb=document.getElementById('palbox');if(pb){var nv=pb.dataset.v===v?'':v;pb.dataset.v=nv;pb.innerHTML=palHtml(nv);if(nv==='sozai')ldSoz()}}
   else if(a==='fmt'){D.pages[v].fmt=i===1?'html':'tpl';changed();draw()}
   else if(a==='kaizo'){if(D.pages[v].h&&!confirm('今のHTMLを上書きする？'))return;D.pages[v].h=starter(v);changed();draw()}
   else if(a==='blank'){if(D.pages[v].h&&!confirm('HTMLを全部消す？'))return;D.pages[v].h='';changed();draw()}
