@@ -52,6 +52,26 @@ window.DB={
     if(d&&d.user&&Array.isArray(d.user.identities)&&!d.user.identities.length)throw new Error('そのﾒｱﾄﾞゎもう登録されてるょ。ﾛｸﾞｲﾝしてね（ﾊﾟｽﾜｰﾄﾞを忘れたら「ﾊﾟｽﾜｰﾄﾞを忘れた？」から）');
     return d},
   meta:async function(){var r=await sb.auth.getUser();return (r.data&&r.data.user&&r.data.user.user_metadata)||{}},
+  /* おしらせ：めろ友申請・質問・BBS・拍手・足あと・めろ友の新着日記をまとめる（最後に見た時刻ゎﾛｸﾞｲﾝ情報に保存→どの端末でも同じ） */
+  notices:async function(uid){var safe=async function(f,d){try{return await f()}catch(e){return d}};
+    var md=await safe(async function(){var r=await sb.auth.getUser();return r.data.user.user_metadata||{}},{}),seen=md.seen||{},at=seen.at||'1970-01-01';
+    var fr=await safe(function(){return DB.incoming(uid)},[]);
+    var qs=(await safe(function(){return DB.questions(uid)},[])).filter(function(q){return !q.answer});
+    var bb=(await safe(function(){return DB.hpPosts(uid)},[])).filter(function(p){return p.user_id!==uid}).slice(0,20);
+    var cl=+(await safe(function(){return DB.clapCount(uid)},0))||0;
+    var ft=(await safe(function(){return DB.footprints(uid)},[])).slice(0,20);
+    var fids={};(await safe(function(){return DB.hpFriends(uid)},[])).forEach(function(f){if(f.hp_id)fids[f.hp_id]=1});
+    var feed=Object.keys(fids).length?(await safe(function(){return DB.newDiaries(100)},[])).filter(function(d){return fids[d.hp_id]}).slice(0,20):[];
+    function nw(t){return t&&t>at}
+    var n=fr.length+qs.filter(function(q){return nw(q.created_at)}).length+bb.filter(function(p){return nw(p.created_at)}).length+Math.max(0,cl-(seen.claps||0));
+    return {count:n,seenAt:at,claps:cl,newClaps:Math.max(0,cl-(seen.claps||0)),friendReq:fr,questions:qs,bbs:bb,foot:ft,feed:feed,isNew:nw}},
+  noticeCount:async function(uid){var md={};try{md=(await sb.auth.getUser()).data.user.user_metadata||{}}catch(e){}var seen=md.seen||{},at=seen.at||'1970-01-01',n=0;
+    try{n+=(await DB.incoming(uid)).length}catch(e){}
+    try{n+=(await run(sb.from('questions').select('id').eq('owner',uid).is('answer',null).gt('created_at',at))).length}catch(e){}
+    try{n+=(await run(sb.from('hp_bbs').select('id').eq('owner',uid).neq('user_id',uid).gt('created_at',at))).length}catch(e){}
+    try{n+=Math.max(0,(+(await DB.clapCount(uid))||0)-(seen.claps||0))}catch(e){}
+    return n},
+  markSeen:function(claps){return run(sb.auth.updateUser({data:{seen:{at:new Date().toISOString(),claps:claps||0}}}))},
   setMeta:function(o){return run(sb.auth.updateUser({data:o}))},
   exportAll:async function(uid){
     var p=await run(sb.from('profiles').select('nickname,bio,hp_id,created_at').eq('id',uid).limit(1));p=p[0]||{};

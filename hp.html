@@ -606,6 +606,10 @@ body.ed.tplh{padding-bottom:140px}
 /* スマホでﾎﾑﾍﾟを真ん中に */
 body .phone{margin-left:auto!important;margin-right:auto!important}
 @media (max-width:460px){body.tplh .phone{max-width:calc(100vw - 28px)!important;margin-top:16px!important}}
+/* PCでゎ少し広く。長い英数字やURLも枠の中で折り返す */
+@media (min-width:700px){.mbar{max-width:420px}:root:not([data-tpl="garake"]) body:not(.ed) .phone{max-width:400px}:root[data-tpl="garake"] body:not(.ed) .phone{max-width:360px}body.tplh .phone{max-width:420px!important}body.tplh .in{font-size:13px}}
+.in,.screen{overflow-wrap:anywhere}.in img,.in iframe,.in video{max-width:100%}.in pre{white-space:pre-wrap}
+.tpl-gal .tg-hd{overflow:hidden}
 /* 管理用モーダル（入口・テンプレ選択・保存BOX）はめろﾋﾟｮﾝ☆の色で固定 */
 .mbox.mgr{background:#120008!important;color:#ffd6ec!important;border:2px solid #ff3d9a!important;box-shadow:0 0 0 4px #000,0 0 0 5px #ff9ad5,0 10px 30px rgba(0,0,0,.6);font-family:"MS PGothic","Hiragino Kaku Gothic ProN",sans-serif}
 .mbox.mgr .ttl{background:linear-gradient(180deg,#ff6fb5,#c8005f)!important;color:#fff!important;border:0!important;border-bottom:2px solid #fff!important;animation:none!important;text-shadow:none!important;font-size:13px;padding:4px 8px}
@@ -630,7 +634,7 @@ body .phone{margin-left:auto!important;margin-right:auto!important}
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="ui.js?v=1"></script>
-<script src="db.js?v=13"></script>
+<script src="db.js?v=14"></script>
 <script>
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
@@ -859,19 +863,24 @@ function sheet2(){
     else h+=ta('data-k="'+k+'"',D[k]||'','自由に書いてね♪ 文字を選んでから下のﾎﾞﾀﾝで飾れるょ',150)+TOOLS2;
     return h+'</div>'}
   if(sheet==='photo')return '<div class="sh">'+shTop('TOP写真')+'<p><label class="ebtn" style="display:inline-flex;align-items:center">写真を選ぶ<input type="file" id="iconf" accept="image/*" hidden></label> '+(D.icon?'<button type="button" class="ebtn sub lt" data-act="delicon">写真を外す</button>':'')+'</p><p class="note2">※自動で小さくして、撮った場所の情報を消してから保存するょ。顔や制服、家の周りが写った写真ゎ気をつけてね</p></div>';
-  if(sheet==='opts')return '<div class="sh">'+shTop('ｶｳﾝﾀｰ・拍手・曲')+
+  if(sheet==='opts')return '<div class="sh">'+shTop('設定')+
+    '<p class="shh">★ 公開範囲（だれが見れるか）</p><select data-set="vis"><option value="public"'+(VIS==='public'?' selected':'')+'>誰でも見れる（ﾎﾑﾍﾟ検索・新着にも出る）</option><option value="members"'+(VIS==='members'?' selected':'')+'>会員だけ</option><option value="friends"'+(VIS==='friends'?' selected':'')+'>めろ友だけ</option><option value="private"'+(VIS==='private'?' selected':'')+'>自分だけ</option></select>'+
+    (INFO&&INFO.vis_locked?'<p class="note2">※公開範囲ゎ保護者の人がロックしてるょ</p>':'')+
+    '<p class="shh">★ 足あと</p><label class="elb2"><input type="checkbox" data-set="foot"'+(INFO&&INFO.leave_footprints?' checked':'')+'> ほかの人のﾎﾑﾍﾟを見たとき、自分の足あとを残す</label><p class="note2">※この設定ゎすぐ保存されるょ（ﾏｲﾍﾟｰｼﾞと同じ設定）</p>'+
+    '<p class="shh">★ ﾀｸﾞ（ﾎﾑﾍﾟ検索で見つけてもらう）</p><p class="note2">いま：'+(D.tags.length?D.tags.map(esc).join('、'):'なし')+'　<button type="button" class="ebtn sub" data-act="sheet" data-v="design">ﾀｸﾞを選ぶ</button></p>'+
+    '<p class="shh">★ ｶｳﾝﾀｰ・ｷﾘ番</p>'+
     '<label class="elb2"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> ｶｳﾝﾀｰを表示する</label>'+
     '<p class="shh">ｷﾘ番（カンマ区切り。空なら777・1000などゾロ目とキリのいい数）</p><input class="ein" data-k="kiri" value="'+esc(D.kiri||'')+'" placeholder="例：100,500,1000">'+
-    '<p class="shh">拍手のお礼ﾒｯｾｰｼﾞ</p><textarea class="eta" data-k="thanks" style="min-height:60px">'+esc(D.thanks||'')+'</textarea>'+
+    '<p class="shh">★ web拍手</p><p class="shh" style="font-weight:normal">拍手のお礼ﾒｯｾｰｼﾞ</p><textarea class="eta" data-k="thanks" style="min-height:60px">'+esc(D.thanks||'')+'</textarea>'+
     '<label class="elb2"><input type="checkbox" data-k="showClaps"'+(D.showClaps?' checked':'')+'> 拍手の数をみんなに見せる</label>'+
-    '<p class="shh">今のお気に入り曲（SpotifyのURL）</p><input class="ein" data-k="song" value="'+esc(D.song||'')+'" placeholder="https://open.spotify.com/track/…"></div>';
+    '<p class="shh">★ 今のお気に入り曲（SpotifyのURL）</p><input class="ein" data-k="song" value="'+esc(D.song||'')+'" placeholder="https://open.spotify.com/track/…"></div>';
   if(sheet==='design'||sheet==='menu'){var o=sheetHtml();return o.replace('<div class="sh">','<div class="sh">'+shTop(sheet==='menu'?'ﾒﾆｭｰ':'ﾃﾝﾌﾟﾚ・色・公開範囲'))}
   return ''}
 function drawUi2(){
   var s=sheet2();
   var inner=!!location.hash.replace(/^#/,'');
   ui.innerHTML='<div class="edbar ed2">'+s+(s?'':inner?'<div class="sh"><p class="ed2-hint" style="margin:0 0 4px">✎ 書く欄をタップ→文字を選んでﾎﾞﾀﾝで飾れるょ　<a href="#" style="color:inherit">◀ TOPへ</a></p>'+TOOLS2+'</div>':'<p class="ed2-hint">✎ 書き換えたいところを<b>タップ</b>してね（ﾍﾟｰｼﾞの中身ゎ「ﾒﾆｭｰ」の✎から）</p>')+
-   '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾝﾌﾟﾚ・色</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">設定</button><button type="button" class="ebtn" data-act="save">保存する</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
+   '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾝﾌﾟﾚ・色</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">⚙ 設定</button><button type="button" class="ebtn" data-act="save">保存する</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
    '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>'}
 var rpT=null;
 function livePreview(){clearTimeout(rpT);rpT=setTimeout(function(){if(!location.hash){root.innerHTML=frame(top());afterTop();readGlit()}},200)}
@@ -889,7 +898,7 @@ function prof(){
   var h=ttl(label('prof'));
   if(ED){D.qa.forEach(function(p,i){h+='<div class="qrow"><input class="ein" data-q="'+i+',0" value="'+esc(p[0])+'" placeholder="質問">'+ta('data-q="'+i+',1"',p[1],'答え',44)+'<div style="text-align:right"><button type="button" class="ebtn sub" data-act="delqa" data-i="'+i+'">この項目を消す</button></div></div>'});
     return h+'<p style="text-align:center"><button type="button" class="ebtn" data-act="addqa">＋ 項目を追加</button></p><p class="empty">※住んでる場所・学校名・本名ゎ書かないでね</p>'+back()}
-  var n=0;h+='<dl>';D.qa.forEach(function(p){if(!p[0]&&!p[1])return;n++;h+='<dt>'+esc(p[0])+'</dt><dd>'+deco(p[1])+'</dd>'});h+='</dl>';
+  var n=0;h+='<dl>';D.qa.forEach(function(p){if(!String(p[1]||'').trim())return;n++;h+='<dt>'+esc(p[0])+'</dt><dd>'+deco(p[1])+'</dd>'});h+='</dl>';
   if(!n)h+='<p class="empty">まだﾌﾟﾛﾌがありません</p>';return h+back()}
 var INTRO_T=[
  ['ｷﾎﾝの自己紹介','☆★自己紹介★☆\n呼んでほしい名前：\n年代（中学生・20代とか）：\nすきなこと：\n最近ﾊﾏってること：\n推し：\nよく聴く曲：\nﾎﾑﾍﾟを作ったきっかけ：\nめろ友になりたい人：\nひとこと：'],
@@ -900,7 +909,12 @@ var INTRO_T=[
 function intro(){
   var h=ttl(label('intro'));
   if(ED)return h+'<p class="note2" style="margin:0 0 4px">何を書けばいいか迷ったら、型を入れて「：」のあとを埋めてね👇</p><div class="vact" style="flex-wrap:wrap">'+INTRO_T.map(function(t,n){return '<button type="button" class="ebtn sub" data-act="itpl" data-i="'+n+'">'+esc(t[0])+'</button>'}).join('')+'</div>'+ta('data-k="intro"',D.intro,'自由に書いてね♪',260)+'<p class="empty">※本名・学校名・住んでる場所ゎ書かないでね</p>'+back();
-  return h+(D.intro?'<p style="word-break:break-all">'+deco(D.intro)+'</p>':'<p class="empty">まだ自己紹介がありません</p>')+back()}
+  var it=fillOnly(D.intro);return h+(it.trim()?'<p style="word-break:break-all">'+deco(it)+'</p>':'<p class="empty">まだ自己紹介がありません</p>')+back()}
+/* 型の「：」のあとが空っぽの行や、答えのない Q. ゎ公開側でかくす */
+function fillOnly(t){var L=String(t||'').split('\n'),o=[];for(var i=0;i<L.length;i++){var l=L[i];
+  if(/^\s*Q\d*[.．]/.test(l)&&i+1<L.length&&/^\s*A[.．]\s*$/.test(L[i+1])){i++;continue}
+  if(/^\s*A[.．]\s*$/.test(l))continue;if(/[：:]\s*$/.test(l)&&l.replace(/[：:]\s*$/,'').length<24)continue;o.push(l)}
+  return o.join('\n').replace(/\n{3,}/g,'\n\n')}
 function real(){
   var h=ttl(label('real'));
   if(ED)h+=ta('id="newreal" maxlength="200"','','いまなにしてる？',60)+'<p style="text-align:right;margin:4px 0"><button type="button" class="ebtn" data-act="addreal">ﾘｱﾙる♪</button></p>';
@@ -934,16 +948,16 @@ function fail(e){ap('<p class="empty">'+esc(e.message)+'</p>')}
 function rep(t,id){return '<a class="mini2" style="text-decoration:none;display:inline-flex;align-items:center" href="report.html?type='+t+'&id='+encodeURIComponent(id)+'&hp='+encodeURIComponent(HID)+'">通報</a>'}
 function who(p){return p&&p.hp_id?'<a href="hp.html?id='+esc(p.hp_id)+'">'+esc(p.nickname)+'</a>':esc(p?p.nickname:'ななしさん')}
 async function ldDiary(){try{var L=await DB.diaries(R.id),h='',W=ED||owner;
-  if(owner&&!ED)h+='<details class="dia dnew"><summary>✎ 日記を書く</summary><div class="bd"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><a href="hp.html?id='+esc(HID)+'&amp;edit=1#diary" style="font-size:11px;margin-right:8px">色や文字の飾りを使って書く</a><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div></details>';
+  if(owner&&!ED)h+='<details class="dia dnew"'+(/[?&]w=1/.test(location.search)?' open':'')+'><summary>✎ 日記を書く</summary><div class="bd"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><a href="hp.html?id='+esc(HID)+'&amp;edit=1#diary" style="font-size:11px;margin-right:8px">色や文字の飾りを使って書く</a><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div></details>';
   if(ED)h+='<div class="box"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div>';
   if(!L.length)h+='<p class="empty">まだ日記ゎありません</p>';
   L.forEach(function(d,i){h+='<details class="dia"'+(i===0?' open':'')+'><summary><span class="d">'+esc(tm(d.created_at))+'</span> '+esc(d.title||'無題')+(d.is_public?'':' <span class="ptag">非公開</span>')+(i===0?'<span class="new">NEW!</span>':'')+'</summary><div class="bd">'+deco(d.body)+'</div>'+(!owner?'<p style="text-align:right;margin:2px 0">'+rep('diary',d.id)+'</p>':'')+
     (W?'<p style="text-align:right;margin:4px 0"><button type="button" class="ebtn sub" data-act="dpub" data-i="'+d.id+'" data-v="'+(d.is_public?'0':'1')+'">'+(d.is_public?'非公開にする':'公開する')+'</button> <button type="button" class="ebtn sub" data-act="ddel" data-i="'+d.id+'">消す</button></p>':'')+'</details>'});
   ap(h)}catch(e){fail(e)}}
 async function ldPhoto(){try{var L=await DB.photos(R.id),h='';
-  if(ED)h+='<div class="box"><label class="ebtn" style="display:inline-flex;align-items:center">写真を選ぶ<input type="file" id="pf" accept="image/*" hidden></label> <input class="ein" id="pc" maxlength="100" placeholder="ひとこと（なくてもOK）" style="margin-top:6px"><p class="note2" style="color:var(--hi)">※自動で小さくして、撮った場所の情報を消すょ</p></div>';
+  if(ED||owner)h+='<div class="box"><label class="ebtn" style="display:inline-flex;align-items:center">'+(ED?'':'📷 ')+'写真を'+(ED?'選ぶ':'追加する')+'<input type="file" id="pf" accept="image/*" hidden></label> <input class="ein" id="pc" maxlength="100" placeholder="ひとこと（なくてもOK）" style="margin-top:6px"><p class="note2" style="color:var(--hi)">※自動で小さくして、撮った場所の情報を消すょ</p></div>';
   if(!L.length)h+='<p class="empty">まだ写真ゎありません</p>';
-  h+='<div class="pgrid">'+L.map(function(p){return '<figure>'+(ED?'':'<a class="pz" href="'+esc(DB.imgBase+p.path)+'" target="_blank" rel="noopener">')+'<img src="'+esc(DB.imgBase+p.path)+'" alt="'+esc(p.caption||'写真')+'" loading="lazy">'+(ED?'':'</a>')+(p.caption?'<figcaption>'+esc(p.caption)+'</figcaption>':'')+(!owner?rep('photo',p.id):'')+(ED?'<button type="button" class="ebtn sub" data-act="pdel" data-i="'+p.id+'" data-v="'+esc(p.path)+'">消す</button>':'')+'</figure>'}).join('')+'</div>';
+  h+='<div class="pgrid">'+L.map(function(p){return '<figure>'+(ED?'':'<a class="pz" href="'+esc(DB.imgBase+p.path)+'" target="_blank" rel="noopener">')+'<img src="'+esc(DB.imgBase+p.path)+'" alt="'+esc(p.caption||'写真')+'" loading="lazy">'+(ED?'':'</a>')+(p.caption?'<figcaption>'+esc(p.caption)+'</figcaption>':'')+(!owner?rep('photo',p.id):'')+(ED||owner?'<button type="button" class="ebtn sub" data-act="pdel" data-i="'+p.id+'" data-v="'+esc(p.path)+'">消す</button>':'')+'</figure>'}).join('')+'</div>';
   ap(h);var f=document.getElementById('pf');if(f)f.onchange=function(){if(f.files[0])upPhoto(f.files[0])}}catch(e){fail(e)}}
 async function upPhoto(file){st('写真を準備中…');try{var blob=await shrink(file,1000),r=await DB.uploadImg(me.id,blob);await DB.addPhoto(r.path,(document.getElementById('pc')||{}).value||'');st('写真を追加したょ✧');ldPhoto()}catch(e){st(e.message)}}
 async function ldBbs(){try{var L=await DB.hpPosts(R.id),h='';
@@ -1044,6 +1058,9 @@ root.addEventListener('click',function(e){if(!ED||!isT())return;var sl=e.target.
   var an=e.target.closest('a');if(an&&!location.hash){e.preventDefault();e.stopPropagation()}},true);
 root.addEventListener('keydown',function(e){if(!ED||!isT())return;var sl=e.target.closest&&e.target.closest('[data-slot]');if(sl&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openSlot(sl.getAttribute('data-slot'))}});
 ui.addEventListener('input',function(e){var t=e.target,k=t.getAttribute&&t.getAttribute('data-k');if(!k||!isT())return;D[k]=t.type==='checkbox'?t.checked:t.value;changed();livePreview()});
+ui.addEventListener('change',async function(e){var t=e.target,k=t.getAttribute&&t.getAttribute('data-set');if(!k)return;
+  if(k==='vis'){VIS=t.value;changed();toast('公開範囲ゎ「保存する」で決定だょ')}
+  else if(k==='foot'){var v=t.checked;try{await DB.setFoot(v);if(INFO)INFO.leave_footprints=v;toast(v?'足あとを残すようにしたょ':'足あとを残さないようにしたょ')}catch(err){t.checked=!v;UI.tell(err.message)}}});
 ui.addEventListener('pointerdown',function(e){if(e.target.closest('.tools button,.sw button,.pal button'))e.preventDefault()});
 function lastOk(){return lastF&&document.body.contains(lastF)}
 root.addEventListener('input',function(e){var t=e.target,k=t.getAttribute('data-k'),q=t.getAttribute('data-q'),pg=t.getAttribute('data-pg');

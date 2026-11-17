@@ -115,3 +115,5 @@ button.pill{border:2px outset #ffb3d9}button.pill.purple{border:2px outset #c9a2
 .tag{border-radius:0}
 .hrow img,.hrow .noimg{border-radius:0}
 .tgc2{border-bottom:1px dotted #6b2a55;padding:4px 0}.tgc2 summary{cursor:pointer;color:#ffe066;font-weight:bold;min-height:32px;display:flex;align-items:center}.tgc2 .chips{justify-content:flex-start;padding:4px 0 8px}
+
+.ntbadge{display:inline-block;margin-left:6px;min-width:18px;padding:0 5px;border-radius:9px;background:#ff2a6a;color:#fff;font-size:11px;line-height:18px;text-align:center;font-weight:bold;animation:ntp 1s steps(2) infinite}@keyframes ntp{50%{background:#ff7ab8}}

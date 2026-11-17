@@ -14,8 +14,14 @@
 <link rel="apple-touch-icon" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css?v=5">
+<link rel="stylesheet" href="common.css?v=6">
 <link rel="stylesheet" href="site.css?v=1">
+<style>.ntb{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:#ff2a6a;color:#fff;font-size:12px;line-height:20px;text-align:center;vertical-align:middle;animation:ntp 1s steps(2) infinite}@keyframes ntp{50%{background:#ff7ab8}}
+.nt{display:flex;gap:6px;align-items:flex-start;padding:6px 4px;border-bottom:1px dotted #6b1f45;font-size:12px;text-align:left;color:#ffd6ec;text-decoration:none}.nt b{color:#ff9ad5}.nt small{color:#c9a2ff;margin-left:auto;white-space:nowrap}.nt .nn{color:#ffe066;font-weight:bold;font-size:10px}
+.nth{font-size:12px;color:#ffe066;margin:10px 0 2px;text-align:left}
+.qbtn{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}.qbtn .pill{font-size:12px;padding-left:4px;padding-right:4px}
+.share{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}.myqr{background:#fff;padding:6px;line-height:0}.shbtns{display:flex;flex-direction:column;gap:6px;min-width:140px}
+@media (max-width:420px){.qbtn{grid-template-columns:1fr}}</style>
 </head>
 <body class="sub">
 <div class="wrap">
@@ -111,11 +117,23 @@
 <h3>保護者の承認待ち</h3>
 <p>保護者の人が承認すると、ﾎﾑﾍﾟ作成や掲示板への書き込みができるようになるょ。<br><br>保護者の人に、登録のときに入れたﾒｰﾙｱﾄﾞﾚｽでめろﾋﾟｮﾝ☆に会員登録してもらって、このﾍﾟｰｼﾞを開いてもらってね👇</p><p style="word-break:break-all;color:#ffe066" id="gurl"></p>
 </section>
+<section class="sec gd glow" id="ntbox" hidden>
+<h3>★おしらせ★ <span class="ntb" id="ntn" hidden></span></h3>
+<div id="ntlist"><p class="msg">読み込み中…</p></div>
+<button class="pill purple" id="ntseen" type="button" hidden>ぜんぶ見た♪</button>
+</section>
 <section class="sec pk glow" id="myhp" hidden>
 <h3>♡自分のﾎﾑﾍﾟ♡</h3>
 <p style="text-align:center;font-size:12px;word-break:break-all" id="hpurl"></p>
 <a class="pill" id="hpedit" href="#">ﾎﾑﾍﾟを編集する✎</a>
 <a class="pill purple" id="hpview" href="#">ﾎﾑﾍﾟを見る</a>
+<div class="qbtn"><a class="pill" id="qdia" href="#">✎ 日記を書く</a><a class="pill" id="qpho" href="#">📷 写真を追加</a><a class="pill" id="qreal" href="#">♡ ﾘｱﾙを書く</a></div>
+<h3 style="margin-top:12px">♡ﾎﾑﾍﾟを広める♡</h3>
+<div class="share"><div id="myqr" class="myqr"></div><div class="shbtns">
+<button class="pill" id="cpurl" type="button">URLをｺﾋﾟｰ</button>
+<a class="pill" id="xshare" href="#" target="_blank" rel="noopener">𝕏 でｼｪｱ</a>
+<button class="pill purple" id="dlqr" type="button">QRを保存</button></div></div>
+<p style="font-size:11px;color:#c9a2ff;margin:6px 0 0" id="srchtip"></p>
 </section>
 <section class="sec pp glow" id="frs" hidden>
 <h3>♡めろ友申請♡</h3>
@@ -170,8 +188,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="ui.js?v=1"></script>
-<script src="db.js?v=13"></script>
-<script src="site.js?v=3"></script>
+<script src="db.js?v=14"></script>
+<script src="site.js?v=4"></script>
 <script>
 (async function(){
 var $=function(i){return document.getElementById(i)},msg=$('msg');
@@ -197,7 +215,15 @@ try{var info=await DB.myInfo(u.id);
     $('hpurl').textContent=url;$('hpview').href='hp.html?id='+hid;$('hpedit').href='hp.html?id='+hid+'&edit=1';
     $('frs').hidden=false;$('fset').hidden=false;$('dbox').hidden=false;$('lf').checked=!!info.leave_footprints;
     $('lf').onchange=async function(){try{await DB.setFoot(this.checked)}catch(e){UI.tell(e.message)}};
-    loadFr()}
+    loadFr();
+    $('qdia').href='hp.html?id='+hid+'&w=1#diary';$('qpho').href='hp.html?id='+hid+'#photo';$('qreal').href='hp.html?id='+hid+'&edit=1#real';
+    try{new QRCode($('myqr'),{text:url,width:110,height:110,colorDark:'#c8005f',colorLight:'#ffffff'})}catch(e){}
+    $('xshare').href='https://x.com/intent/post?text='+encodeURIComponent('ﾎﾑﾍﾟ作ったょ♡ 見に来てね☆\n')+'&url='+encodeURIComponent(url)+'&hashtags='+encodeURIComponent('めろぴょん');
+    $('cpurl').onclick=async function(){try{await navigator.clipboard.writeText(url);UI.tell('URLをｺﾋﾟｰしたょ✧')}catch(e){UI.input('このURLをｺﾋﾟｰしてね',url)}};
+    $('dlqr').onclick=function(){var c=$('myqr').querySelector('canvas'),a=document.createElement('a');if(!c)return;a.href=c.toDataURL('image/png');a.download='meropyon_qr_'+hid+'.png';document.body.appendChild(a);a.click();a.remove()};
+    DB.getHp(hid).then(function(r){var v=r&&r.hp&&r.hp.visibility,t=r&&r.hp&&r.hp.data&&r.hp.data.tags||[];
+      $('srchtip').innerHTML=v==='public'?(t.length?'✓ ﾎﾑﾍﾟ検索・新着に出てるょ（ﾀｸﾞ：'+t.map(DB.esc).join('、')+'）':'ﾀｸﾞをつけると、ﾎﾑﾍﾟ検索で見つけてもらいやすいょ → <a href="hp.html?id='+hid+'&edit=1">編集画面の「設定」でﾀｸﾞを選ぶ</a>'):'いまの公開範囲だと、ﾎﾑﾍﾟ検索・新着にゎ出ないょ。みんなに見てほしいときゎ <a href="hp.html?id='+hid+'&edit=1">編集画面の「設定」</a>で公開範囲を「誰でも」にしてね'}).catch(function(){});
+    loadNt()}
 async function loadFr(){try{var L=await DB.incoming(u.id);
   $('frlist').innerHTML=L.length?L.map(function(r){var p=r.profiles||{};return '<div class="li"><a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a> さんから申請♪<br><button type="button" class="del" data-acc="'+r.id+'">承認する</button><button type="button" class="del" data-dec="'+r.id+'">断る</button></div>'}).join(''):'<p>届いてる申請ゎないょ</p>';
 }catch(e){$('frlist').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
@@ -241,6 +267,18 @@ $('imp').onchange=async function(){var f=this.files[0];this.value='';if(!f)retur
   try{var x=JSON.parse(await f.text());if(!x||x.app!=='meropyon'||!x.homepage||!x.homepage.data)throw new Error('めろﾋﾟｮﾝ☆で書き出したﾌｧｲﾙじゃないみたい');
     if(!(await UI.ask('「'+(x.homepage.data.title||'ﾎﾑﾍﾟ')+'」（'+String(x.exported_at||'').slice(0,10)+' に書き出し）に戻す？\n今のﾎﾑﾍﾟゎ保存BOXにしまうょ')))return;
     dmsg('戻してるょ…');await DB.importHp(u.id,x.homepage);dmsg('戻したょ✧ ﾎﾑﾍﾟを見てみてね')}catch(e){dmsg(e.message,true)}};
+var NT=null;
+async function loadNt(){var b=$('ntbox');b.hidden=false;try{var n=NT=await DB.notices(u.id),h='',E=DB.esc;
+  function row(href,txt,t,isn){return '<a class="nt" href="'+href+'">'+(isn?'<span class="nn">NEW</span>':'')+'<span>'+txt+'</span><small>'+DB.time(t)+'</small></a>'}
+  var hid=await DB.myHpId(u.id),base='hp.html?id='+encodeURIComponent(hid);
+  if(n.friendReq.length)h+='<p class="nth">♡めろ友申請（'+n.friendReq.length+'件）</p>'+n.friendReq.map(function(r){var p=r.profiles||{};return row('#frs','<b>'+E(p.nickname||'だれか')+'</b>さんから、めろ友申請がきてるょ',r.created_at,true)}).join('');
+  if(n.questions.length)h+='<p class="nth">♡質問箱（まだ答えてない '+n.questions.length+'件）</p>'+n.questions.slice(0,5).map(function(q){return row(base+'&edit=1#ask','「'+E(String(q.body).slice(0,30))+'」',q.created_at,n.isNew(q.created_at))}).join('');
+  if(n.bbs.length)h+='<p class="nth">♡BBSへの書きこみ</p>'+n.bbs.slice(0,5).map(function(p){var pr=p.profiles||{};return row(base+'#bbs','<b>'+E(pr.nickname||'だれか')+'</b>「'+E(String(p.body).slice(0,30))+'」',p.created_at,n.isNew(p.created_at))}).join('');
+  h+='<p class="nth">♡web拍手</p><div class="nt"><span>いままでの拍手：<b>'+n.claps+'</b>回'+(n.newClaps?'　<span class="nn">+'+n.newClaps+' NEW</span>':'')+'</span></div>';
+  if(n.foot.length)h+='<p class="nth">♡足あと</p>'+n.foot.slice(0,5).map(function(f){var p=f.profiles||{};return row('hp.html?id='+encodeURIComponent(p.hp_id||''),'<b>'+E(p.nickname||'ひみつ')+'</b>さんが来てくれたょ',f.visited_at,n.isNew(f.visited_at))}).join('');
+  h+='<p class="nth">♡めろ友の新着日記</p>'+(n.feed.length?n.feed.slice(0,8).map(function(d){return row('hp.html?id='+encodeURIComponent(d.hp_id)+'#diary','<b>'+E(d.nickname||'')+'</b>「'+E(d.title||'無題')+'」',d.created_at,n.isNew(d.created_at))}).join(''):'<p class="msg" style="font-size:11px">めろ友が日記を書くとここに出るょ</p>');
+  $('ntlist').innerHTML=h;var c=n.count;$('ntn').hidden=!c;$('ntn').textContent=c;$('ntseen').hidden=!c}catch(e){$('ntlist').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
+$('ntseen').onclick=async function(){try{await DB.markSeen(NT&&NT.claps);loadNt();var bd=document.getElementById('ntbadge');if(bd)bd.hidden=true}catch(e){UI.tell(e.message)}};
 $('out').onclick=async function(){await DB.logOut();location.href='index.html'};
 $('quit').onclick=async function(){if(!await UI.ask('本当に退会する？\nﾎﾑﾍﾟ・日記・写真・素材・書き込みが全部消えて、元に戻せないょ'))return;
   if(await UI.input('確認のため「たいかい」と入力してね')!=='たいかい')return;

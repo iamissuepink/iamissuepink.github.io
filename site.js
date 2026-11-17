@@ -9,7 +9,8 @@ safe(function(){if(!$('loginbox')||!window.DB)return;
   async function who(){var u=await DB.me();if(!u)return;
     $('lb-out').hidden=true;$('lb-in').hidden=false;if($('regbtn'))$('regbtn').hidden=true;
     try{var p=await DB.getProfile(u.id);$('wname').textContent=DB.san(p&&p.nickname)}catch(e){}
-    try{var id=await DB.myHpId(u.id);if(id)$('hpe').href='hp.html?id='+id+'&edit=1'}catch(e){}}
+    safe(function(){if(!DB.noticeCount)return;DB.noticeCount(u.id).then(function(n){if(!n)return;var a=document.querySelector('#lb-in a[href="mypage.html"]');if(!a||document.getElementById('ntbadge'))return;var b=document.createElement('span');b.id='ntbadge';b.className='ntbadge';b.textContent=n;b.title='おしらせ '+n+'件';a.appendChild(b)}).catch(function(){})});
+    try{var id=await DB.myHpId(u.id),he=$('hpe');if(id)he.href='hp.html?id='+id+'&edit=1';else{he.href='mypage.html#setup';he.textContent='はじめの設定をする♪';he.onclick=function(){var t=document.getElementById('setup');if(t&&!t.hidden){t.scrollIntoView({behavior:'smooth'});return false}}}}catch(e){}}
   $('lgo').onclick=async function(){var b=this,m=$('lmsg');b.disabled=true;m.textContent='ﾛｸﾞｲﾝ中…';
     try{await DB.logIn($('lm').value.trim(),$('lp').value);m.textContent='';location.reload()}catch(e){m.textContent=e.message}b.disabled=false};
   $('lp').onkeydown=function(e){if(e.key==='Enter')$('lgo').click()};
