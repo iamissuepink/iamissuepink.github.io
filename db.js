@@ -35,7 +35,7 @@ function err(e){
   if(/cannot_approve/.test(m))return '承認できなかったょ（ﾒｰﾙｱﾄﾞﾚｽを確認してね）';
   if(/not_guardian|not_admin/.test(m))return 'この操作ゎできないょ';
   if(/not_deleted/.test(m))return '消せなかったょ（自分のものじゃないか、もう消えてるかも）';
-  if(/hp_backups/.test(m)&&/row-level/.test(m))return '保存BOXがいっぱいだょ（5個まで）。いらないのを消してね';
+  if(/hp_backups/.test(m)&&/row-level/.test(m))return '保存BOXがいっぱいだょ。いらないのを消してね';
   if(/exceeded the maximum|too large/i.test(m))return '画像が大きすぎるょ';
   if(/row-level security|permission denied|Unauthorized/i.test(m))return 'この操作ゎできなかったょ。ﾏｲﾍﾟｰｼﾞで「はじめの設定」が終わってるか確認してね'+tag;
   return 'ｴﾗｰ: '+m+tag;
@@ -176,6 +176,7 @@ window.DB={
     await run(sb.rpc('delete_account'));await sb.auth.signOut()},
   backups:function(uid){return run(sb.from('hp_backups').select('id,name,data,created_at').eq('user_id',uid).order('created_at',{ascending:false}))},
   addBackup:function(name,data){return run(sb.from('hp_backups').insert({name:name,data:data}))},
+  renBackup:async function(id,name){var r=await run(sb.from('hp_backups').update({name:name}).eq('id',id).select('id'));if(!r||!r.length)throw new Error('名前を変えられなかったょ（運営の設定待ち：step10.sql）');return r},
   delBackup:function(id){return del(sb.from('hp_backups').delete().eq('id',id))},
   visit:function(hpId){return run(sb.rpc('hp_visit',{p_hp_id:hpId}))},
   age:function(ym){var p=String(ym).split('-'),y=+p[0],m=+p[1],t=new Date(),last=new Date(y,m,0).getDate();
