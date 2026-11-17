@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -90,14 +90,15 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
 var $=function(i){return document.getElementById(i)};
 function tm(s){var d=new Date(s);return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
 function isNew(s){return Date.now()-new Date(s).getTime()<3*86400000}
 function hpRow(h,extra){return '<a class="hrow" href="hp.html?id='+DB.esc(h.hp_id)+'">'+(h.icon&&h.icon.indexOf(DB.imgBase)===0?'<img src="'+DB.esc(h.icon)+'" alt="">':'<span class="noimg">♡</span>')+'<span><b>'+DB.esc(h.title||h.nickname+'のﾎﾑﾍﾟ')+'</b><br><small>by '+DB.esc(h.nickname)+(extra||'')+'</small>'+(h.tags&&h.tags.length?'<br><small class="tg">'+h.tags.map(function(t){return '#'+DB.esc(t)}).join(' ')+'</small>':'')+'</span></a>'}
-async function roulette(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else alert('まだﾎﾑﾍﾟがないみたい')}catch(e){alert(e.message)}}
+async function roulette(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else UI.tell('まだﾎﾑﾍﾟがないみたい')}catch(e){UI.tell(e.message)}}
 
 DB.newDiaries(50).then(function(L){$('res').innerHTML=L.length?L.map(function(d){return '<a class="drow" href="hp.html?id='+DB.esc(d.hp_id)+'#diary"><span class="dt">'+tm(d.created_at)+(isNew(d.created_at)?' <span class="blink" style="color:#ff3b3b;font-weight:bold">NEW!</span>':'')+'</span><b>'+DB.esc(d.title||'無題')+'</b><small>by '+DB.esc(d.nickname)+'</small></a>'}).join(''):'<p class="msg">まだ日記がないょ</p>'})
 .catch(function(e){$('res').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'});

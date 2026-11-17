@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -91,11 +91,24 @@
 </div>
 <div id="f-up" class="fm" style="gap:8px" hidden>
 <label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
+<label for="up-id">めろID（ﾎﾑﾍﾟのURLになるょ。半角英小文字・数字・_ の3〜16文字。<b>あとから変えられない</b>）</label>
+<input id="up-id" type="text" maxlength="16" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="例：ayapyon">
+<p class="msg" id="idmsg" style="text-align:left;margin:0"></p>
+<label for="up-by">生まれた年と月（ほかの人にゎ見えないょ）</label>
+<div style="display:flex;gap:6px"><select id="up-by" style="flex:1"></select><select id="up-bm" style="flex:1"></select></div>
+<p style="font-size:11px;color:#c9a2ff;margin:0">※年齢にあわせて安全のための設定をするのに使うょ。日にちゎ聞かないょ</p>
+<div id="up-gbox" hidden class="fm" style="gap:4px">
+<label for="up-gmail">保護者のﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-gmail" type="email" autocomplete="off">
+<p style="font-size:11px;color:#c9a2ff;margin:0">12歳以下の人ゎ、保護者の人の承認が必要だょ。保護者の人と一緒に登録してね（<a href="guardian.html" target="_blank">保護者の方へ</a>）</p>
+</div>
+<label for="up-ref">めろﾋﾟｮﾝ☆をどこで知った？</label>
+<select id="up-ref"><option value="">えらんでね</option><option value="friend">友だちに聞いた・誘われた</option><option value="sns">SNS（X・Instagram・TikTokなど）</option><option value="hp">だれかのﾎﾑﾍﾟで見た</option><option value="event">ｲﾍﾞﾝﾄ・作り会</option><option value="search">検索して見つけた</option><option value="other">そのほか</option></select>
 <label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-mail" type="email" autocomplete="email">
 <label for="up-pass">ﾊﾟｽﾜｰﾄﾞ（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
-<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree" style="width:18px;height:18px;margin-top:2px"><span><a href="terms.html" target="_blank">利用規約</a>と<a href="privacy.html" target="_blank">ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰ</a>を読んで同意します（18歳未満の人ゎ保護者の人と一緒に読んでね）</span></label>
+<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree" style="width:18px;height:18px;margin-top:2px;flex:none"><span><a href="terms.html" target="_blank">利用規約</a>と<a href="privacy.html" target="_blank">ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰ</a>を読んで同意します（18歳未満の人ゎ保護者の人と一緒に読んでね）</span></label>
+<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree2" style="width:18px;height:18px;margin-top:2px;flex:none"><span>使い方のﾃﾞｰﾀ（どのﾍﾟｰｼﾞをいつ使ったか等）を、個人がわからない形にして<a href="privacy.html#research" target="_blank">運営の研究</a>に使うことに同意します（同意しなくても登録できるょ）</span></label>
 <button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
-<p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!<br>※ﾆｯｸﾈｰﾑに本名ゎ使わないでね</p>
+<p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!（迷惑ﾒｰﾙﾌｫﾙﾀﾞも見てね）<br>※ﾆｯｸﾈｰﾑ・めろIDに本名ゎ使わないでね</p>
 </div>
 <p class="msg" id="msg" role="status"></p>
 </section>
@@ -112,8 +125,9 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)},msg=$('msg');
@@ -122,15 +136,33 @@ function tab(up){$('t-in').setAttribute('aria-selected',!up);$('t-up').setAttrib
 $('t-in').onclick=function(){tab(false)};$('t-up').onclick=function(){tab(true)};
 if(location.hash==='#signup')tab(true);
 DB.me().then(function(u){if(u)location.href='mypage.html'});
-$('forgot').onclick=async function(e){e.preventDefault();var m=$('in-mail').value.trim()||prompt('登録したﾒｰﾙｱﾄﾞﾚｽを入れてね');if(!m)return;
+$('forgot').onclick=async function(e){e.preventDefault();var m=$('in-mail').value.trim()||await UI.input('登録したﾒｰﾙｱﾄﾞﾚｽを入れてね');if(!m)return;
   say('送信中…');try{await DB.resetPw(m.trim());say('ﾊﾟｽﾜｰﾄﾞ再設定のﾒｰﾙを送ったょ✉ 迷惑ﾒｰﾙﾌｫﾙﾀﾞも見てね')}catch(err){say(err.message,true)}};
 $('b-in').onclick=async function(){var b=this;b.disabled=true;say('ﾛｸﾞｲﾝ中…');
   try{await DB.logIn($('in-mail').value.trim(),$('in-pass').value);location.href='mypage.html'}catch(e){say(e.message,true)}b.disabled=false};
-$('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim();
+(function(){var y=new Date().getFullYear(),o='<option value="">年</option>';for(var i=y-6;i>=y-100;i--)o+='<option>'+i+'</option>';$('up-by').innerHTML=o;
+  o='<option value="">月</option>';for(i=1;i<=12;i++)o+='<option>'+i+'</option>';$('up-bm').innerHTML=o})();
+function ym(){return ($('up-by').value&&$('up-bm').value)?$('up-by').value+'-'+('0'+$('up-bm').value).slice(-2):''}
+function chkAge(){var v=ym();$('up-gbox').hidden=!(v&&DB.age(v)<=12)}
+$('up-by').onchange=chkAge;$('up-bm').onchange=chkAge;
+var idT,idOK=false;
+$('up-id').oninput=function(){var v=this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,''),m=$('idmsg');clearTimeout(idT);idOK=false;
+  if(v.length<3){m.textContent='3文字以上にしてね';m.className='msg ng';return}
+  m.textContent='確認中…';m.className='msg';
+  idT=setTimeout(async function(){try{var ok=await DB.idOk(v);if($('up-id').value!==v)return;idOK=!!ok;m.textContent=ok?'そのID使えるょ✧':'そのIDゎ使えないょ';m.className='msg'+(ok?'':' ng')}catch(e){m.textContent='（IDの確認ゎ登録のあとにするね）';m.className='msg'}},400)};
+$('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim(),id=$('up-id').value,bym=ym(),g=$('up-gmail').value.trim(),mail=$('up-mail').value.trim();
   if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
+  if(!/^[a-z0-9_]{3,16}$/.test(id)){say('めろIDを3〜16文字で入れてね',true);return}
+  if(!bym){say('生まれた年と月を選んでね',true);return}
+  var age=DB.age(bym);if(age<6){say('生まれた年と月を確認してね',true);return}
+  if(age<=12&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g)){say('保護者のﾒｰﾙｱﾄﾞﾚｽを入れてね',true);return}
+  if(age<=12&&g.toLowerCase()===mail.toLowerCase()){say('保護者のﾒｰﾙｱﾄﾞﾚｽゎ、自分のとちがうのを入れてね',true);return}
+  if(!$('up-ref').value){say('どこで知ったか選んでね',true);return}
   if(!$('agree').checked){say('利用規約とﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰに同意してね',true);return}
   b.disabled=true;say('登録中…');
-  try{await DB.signUp($('up-mail').value.trim(),$('up-pass').value,n);say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉')}catch(e){say(e.message,true)}b.disabled=false};
+  try{var ok=null;try{ok=await DB.idOk(id)}catch(e){}if(ok===false)throw new Error('そのめろIDゎ使えないか、もう使われてるょ。別のにしてね');
+    await DB.signUp(mail,$('up-pass').value,n,{hp_id:id,birth:bym,guardian:age<=12?g:'',ref:$('up-ref').value,research:$('agree2').checked,agreed_at:new Date().toISOString()});
+    say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉ ﾘﾝｸを押すとﾏｲﾍﾟｰｼﾞで設定が自動で終わるょ')}catch(e){say(e.message,true)}b.disabled=false};
 })();</script>
 </body>
 </html>

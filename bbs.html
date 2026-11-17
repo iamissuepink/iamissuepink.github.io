@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -107,8 +107,9 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
 (async function(){
 var $=function(i){return document.getElementById(i)},msg=$('msg'),C=['#9be3ff','#ff9ad5','#5ff08f','#ffe066','#c9a2ff'];
@@ -118,14 +119,14 @@ async function load(){try{var ps=await DB.posts(50);
   $('list').innerHTML=ps.length?ps.map(function(p,i){var n=p.profiles?p.profiles.nickname:'ななしさん';
     return '<div class="post"><span class="nm" style="color:'+C[i%C.length]+'">'+DB.esc(n)+'</span> <span class="dt">'+DB.time(p.created_at)+'</span>'+(u&&p.user_id===u.id?'<button class="del" type="button" data-id="'+p.id+'">削除</button>':'')+(u&&p.user_id===u.id?'':'<a class="del" style="text-decoration:none" href="report.html?type=bbs&id='+p.id+'">通報</a>')+'\n'+DB.esc(p.body)+'</div>'}).join(''):'<p class="msg">まだ書き込みがないょ。一番乗りしてね♪</p>';
 }catch(e){$('list').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
-if(u){$('can').hidden=false;try{var p=await DB.getProfile(u.id);$('who').textContent=(p?p.nickname:'ななしさん')+'さん'}catch(e){}}else{$('need').hidden=false}
+if(u){$('can').hidden=false;try{var p=await DB.getProfile(u.id);$('who').textContent=DB.san(p&&p.nickname)}catch(e){}}else{$('need').hidden=false}
 $('send').onclick=async function(){var b=this,t=$('body').value.trim();
   if(!t){say('何か書いてね',true);return}
   b.disabled=true;say('書き込み中…');
   try{await DB.addPost(t);$('body').value='';say('書き込んだょ✧');await load()}catch(e){say(e.message,true)}b.disabled=false};
 $('list').onclick=async function(e){var b=e.target.closest('.del');if(!b)return;
-  if(!confirm('この書き込みを削除する？'))return;
-  try{await DB.delPost(b.dataset.id);await load()}catch(e){alert(e.message)}};
+  if(!await UI.ask('この書き込みを削除する？'))return;
+  try{await DB.delPost(b.dataset.id);await load()}catch(e){UI.tell(e.message)}};
 load();
 })();</script>
 </body>

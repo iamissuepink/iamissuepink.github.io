@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -89,6 +89,10 @@
 <select id="rs"><option value="">えらんでね</option><option>個人情報</option><option>悪口・いじめ</option><option>出会い・勧誘</option><option>宣伝・詐欺</option><option>著作権</option><option>その他</option></select>
 <label for="hp">めろID（わかれば）</label><input id="hp" type="text" maxlength="16" autocapitalize="off">
 <label for="dt">くわしく（めろIDがわからないときゎ書いてね）</label><textarea id="dt" maxlength="500"></textarea>
+<div id="gbox" hidden class="fm" style="gap:4px">
+<label for="em">返事がほしいときのﾒｰﾙｱﾄﾞﾚｽ（なくてもOK）</label><input id="em" type="email" autocomplete="email">
+<p style="font-size:11px;color:#c9a2ff;margin:0">※ﾛｸﾞｲﾝしてなくても通報できるょ。ﾛｸﾞｲﾝしてると、運営の確認が早くなるょ</p>
+</div>
 <button class="pill" id="go" type="button">通報する</button>
 </div>
 <p class="msg" id="msg" role="status"></p>
@@ -105,18 +109,22 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
 var $=function(i){return document.getElementById(i)},P=new URLSearchParams(location.search),T=P.get('type')||'hp',ID=P.get('id')||'',HP=(P.get('hp')||'').toLowerCase();
 var TY={hp:'ﾎﾑﾍﾟ',bbs:'みんなの掲示板の書き込み',hp_bbs:'ﾎﾑﾍﾟBBSの書き込み',diary:'日記',photo:'写真',question:'質問箱',material:'素材'};if(!TY[T])T='hp';
 $('hp').value=HP;$('tgt').textContent='通報するもの：'+TY[T]+(HP?'（めろID: '+HP+'）':'');
-DB.me().then(function(u){if(!u){$('form').innerHTML='<p>通報するにゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してね。ﾛｸﾞｲﾝできないときゎ、まわりの大人に相談してね。</p>'}});
+var GUEST=false;
+DB.me().then(function(u){if(!u){GUEST=true;$('gbox').hidden=false}});
 $('go').onclick=async function(){var b=this,m=$('msg'),hp=$('hp').value.trim().toLowerCase();
   if(!$('rs').value){m.textContent='理由をえらんでね';m.className='msg ng';return}
   if(!ID&&!hp&&!$('dt').value.trim()){m.textContent='めろIDがわからないときゎ「くわしく」に、どんなことがあったか書いてね';m.className='msg ng';return}
   b.disabled=true;
-  try{await DB.report(T,ID||hp||'-',hp,$('rs').value,$('dt').value.trim());$('form').innerHTML='';m.textContent='通報を受け付けたょ。教えてくれてありがとう。';m.className='msg'}
+  try{if(GUEST){var body='【通報（ﾛｸﾞｲﾝなし）】\n種類：'+TY[T]+'\n対象ID：'+(ID||'-')+'\nめろID：'+(hp||'-')+'\n理由：'+$('rs').value+'\nﾍﾟｰｼﾞ：'+(document.referrer||'-')+'\n\n'+$('dt').value.trim();
+      try{await DB.contact('通報',$('em').value.trim(),body)}catch(e1){await DB.contact('その他',$('em').value.trim(),body)}}
+    else await DB.report(T,ID||hp||'-',hp,$('rs').value,$('dt').value.trim());$('form').innerHTML='';m.textContent='通報を受け付けたょ。教えてくれてありがとう。';m.className='msg'}
   catch(e){m.textContent=e.message;m.className='msg ng';b.disabled=false}};
 </script>
 </body>

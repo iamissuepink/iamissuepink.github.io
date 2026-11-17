@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -91,7 +91,8 @@
 <p class="msg" id="smsg" role="status"></p>
 </div>
 </section>
-<section class="sec pp glow"><h3>♡新着素材♡</h3><div id="res" class="sgrid"><p class="msg">読み込み中…</p></div></section>
+<section class="sec pk glow"><h3>★運営の素材★</h3><p style="font-size:12px">めろﾋﾟｮﾝ☆運営が作ったｵﾘｼﾞﾅﾙ素材だょ。ﾎﾑﾍﾟでなら自由に使ってOK♪（ほかのｻｲﾄへの持ち出し・再配布ゎﾅｼでおねがい）</p><div id="off" class="sgrid"></div></section>
+<section class="sec pp glow"><h3>♡みんなの新着素材♡</h3><div id="res" class="sgrid"><p class="msg">読み込み中…</p></div></section>
 </div></div></section>
 </main>
 </div>
@@ -104,22 +105,25 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
 var $=function(i){return document.getElementById(i)};
 function tm(s){var d=new Date(s);return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
 function isNew(s){return Date.now()-new Date(s).getTime()<3*86400000}
 function hpRow(h,extra){return '<a class="hrow" href="hp.html?id='+DB.esc(h.hp_id)+'">'+(h.icon&&h.icon.indexOf(DB.imgBase)===0?'<img src="'+DB.esc(h.icon)+'" alt="">':'<span class="noimg">♡</span>')+'<span><b>'+DB.esc(h.title||h.nickname+'のﾎﾑﾍﾟ')+'</b><br><small>by '+DB.esc(h.nickname)+(extra||'')+'</small>'+(h.tags&&h.tags.length?'<br><small class="tg">'+h.tags.map(function(t){return '#'+DB.esc(t)}).join(' ')+'</small>':'')+'</span></a>'}
-async function roulette(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else alert('まだﾎﾑﾍﾟがないみたい')}catch(e){alert(e.message)}}
+async function roulette(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else UI.tell('まだﾎﾑﾍﾟがないみたい')}catch(e){UI.tell(e.message)}}
 
+$('off').innerHTML=DB.OFFICIAL.map(function(m){return '<div class="scell"><div class="simg"><img src="'+DB.esc(DB.sozUrl(m[0]))+'" alt="'+DB.esc(m[1])+'"></div><b>'+DB.esc(m[1])+'</b><small>by 運営</small><button type="button" class="del" data-cp="'+DB.esc(m[0])+'">ｺｰﾄﾞをｺﾋﾟｰ</button></div>'}).join('');
+$('off').onclick=function(e){$('res').onclick(e)};
 var me=null;
 async function load(){try{var L=await DB.materials(120);
-  $('res').innerHTML=L.length?L.map(function(m){var p=m.profiles||{};return '<div class="scell"><div class="simg"><img src="'+DB.esc(DB.sozBase+m.path)+'" alt="'+DB.esc(m.title||'素材')+'"></div><b>'+DB.esc(m.title||'無題')+'</b><small>by '+(p.hp_id?'<a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a>':DB.esc(p.nickname||''))+'</small><button type="button" class="del" data-cp="'+DB.esc(m.path)+'">ｺｰﾄﾞをｺﾋﾟｰ</button>'+(me&&m.user_id===me.id?'<button type="button" class="del" data-rm="'+m.id+'" data-p="'+DB.esc(m.path)+'">削除</button>':'<a class="del" style="text-decoration:none" href="report.html?type=material&id='+m.id+'&hp='+encodeURIComponent(p.hp_id||'')+'">通報</a>')+'</div>'}).join(''):'<p class="msg">まだ素材がないょ。一番乗りしてね♪</p>'}
+  $('res').innerHTML=L.length?L.map(function(m){var p=m.profiles||{};return '<div class="scell"><div class="simg"><img src="'+DB.esc(DB.sozUrl(m.path))+'" alt="'+DB.esc(m.title||'素材')+'"></div><b>'+DB.esc(m.title||'無題')+'</b><small>by '+(p.hp_id?'<a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a>':DB.esc(p.nickname||''))+'</small><button type="button" class="del" data-cp="'+DB.esc(m.path)+'">ｺｰﾄﾞをｺﾋﾟｰ</button>'+(me&&m.user_id===me.id?'<button type="button" class="del" data-rm="'+m.id+'" data-p="'+DB.esc(m.path)+'">削除</button>':'<a class="del" style="text-decoration:none" href="report.html?type=material&id='+m.id+'&hp='+encodeURIComponent(p.hp_id||'')+'">通報</a>')+'</div>'}).join(''):'<p class="msg">まだ素材がないょ。一番乗りしてね♪</p>'}
   catch(e){$('res').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
 $('res').onclick=async function(e){var c=e.target.getAttribute('data-cp'),r=e.target.getAttribute('data-rm');
-  if(c){var code='[s='+c+']';try{await navigator.clipboard.writeText(code);e.target.textContent='ｺﾋﾟｰしたょ✧'}catch(err){prompt('このｺｰﾄﾞをｺﾋﾟｰしてね',code)}}
-  else if(r){if(!confirm('この素材を削除する？（使ってるﾎﾑﾍﾟからも消えるょ）'))return;try{await DB.delMaterial(+r,e.target.getAttribute('data-p'));load()}catch(err){alert(err.message)}}};
+  if(c){var code='[s='+c+']';try{await navigator.clipboard.writeText(code);e.target.textContent='ｺﾋﾟｰしたょ✧'}catch(err){UI.input('このｺｰﾄﾞをｺﾋﾟｰしてね',code)}}
+  else if(r){if(!await UI.ask('この素材を削除する？（使ってるﾎﾑﾍﾟからも消えるょ）'))return;try{await DB.delMaterial(+r,e.target.getAttribute('data-p'));load()}catch(err){UI.tell(err.message)}}};
 $('sbtn').onclick=async function(){var b=this,m=$('smsg'),f=$('sf').files[0];
   if(!f){m.textContent='画像を選んでね';m.className='msg ng';return}
   if(!$('own').checked){m.textContent='自分で作った素材だけ置けるょ';m.className='msg ng';return}

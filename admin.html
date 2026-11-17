@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -96,8 +96,9 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
 var $=function(i){return document.getElementById(i)},E=DB.esc,ST='open',TY={hp:'ﾎﾑﾍﾟ',bbs:'みんなの掲示板の書き込み',hp_bbs:'ﾎﾑﾍﾟBBSの書き込み',diary:'日記',photo:'写真',question:'質問箱',material:'素材'};
 function tm(s){var d=new Date(s);return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
@@ -111,14 +112,14 @@ async function loadHps(){try{var L=await DB.adminHps();
   catch(e){$('hps').innerHTML='<p class="msg ng">'+E(e.message)+'</p>'}}
 document.addEventListener('click',async function(e){var t=e.target,a;
   try{
-    if(a=t.getAttribute('data-del')){if(!confirm('この中身を削除する？'))return;await DB.adminDel(t.getAttribute('data-t'),t.getAttribute('data-tid'));alert('削除したょ');}
-    else if(a=t.getAttribute('data-sus')){if(!confirm(a+' のﾎﾑﾍﾟを凍結する？'))return;var uid=await DB.userByHp(a);if(!uid)throw new Error('ﾎﾑﾍﾟが見つからないょ');await DB.suspend(uid,true);alert('凍結したょ');loadHps()}
-    else if(a=t.getAttribute('data-susu')){if(!confirm('凍結する？'))return;await DB.suspend(a,true);loadHps()}
+    if(a=t.getAttribute('data-del')){if(!await UI.ask('この中身を削除する？'))return;await DB.adminDel(t.getAttribute('data-t'),t.getAttribute('data-tid'));UI.tell('削除したょ');}
+    else if(a=t.getAttribute('data-sus')){if(!await UI.ask(a+' のﾎﾑﾍﾟを凍結する？'))return;var uid=await DB.userByHp(a);if(!uid)throw new Error('ﾎﾑﾍﾟが見つからないょ');await DB.suspend(uid,true);UI.tell('凍結したょ');loadHps()}
+    else if(a=t.getAttribute('data-susu')){if(!await UI.ask('凍結する？'))return;await DB.suspend(a,true);loadHps()}
     else if(a=t.getAttribute('data-unsus')){await DB.suspend(a,false);loadHps()}
     else if(a=t.getAttribute('data-done')){await DB.setReport(+a,'done');loadReps()}
     else if(a=t.getAttribute('data-reopen')){await DB.setReport(+a,'open');loadReps()}
     else if(a=t.getAttribute('data-cdone')){await DB.setContact(+a,'done');loadCts()}
-  }catch(err){alert(err.message)}});
+  }catch(err){UI.tell(err.message)}});
 async function loadCts(){try{var L=await DB.contacts('open');
   $('cts').innerHTML=L.length?L.map(function(c){return '<div class="li"><span class="dt">'+tm(c.created_at)+'</span> <b style="color:#ffe066">'+E(c.category)+'</b>'+(c.email?' ／ '+E(c.email):'')+'<br><span style="white-space:pre-wrap">'+E(c.body)+'</span><br><button type="button" class="del" data-cdone="'+c.id+'">対応済みにする</button></div>'}).join(''):'<p>未対応のお問い合わせゎありません</p>'}
   catch(e){$('cts').innerHTML='<p class="msg ng">'+E(e.message)+'</p>'}}

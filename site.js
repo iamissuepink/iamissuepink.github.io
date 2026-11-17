@@ -8,7 +8,7 @@ safe(function(){if(window.QRCode&&$('qr'))new QRCode($('qr'),{text:location.orig
 safe(function(){if(!$('loginbox')||!window.DB)return;
   async function who(){var u=await DB.me();if(!u)return;
     $('lb-out').hidden=true;$('lb-in').hidden=false;if($('regbtn'))$('regbtn').hidden=true;
-    try{var p=await DB.getProfile(u.id);$('wname').textContent=p?p.nickname:'ななし'}catch(e){}
+    try{var p=await DB.getProfile(u.id);$('wname').textContent=DB.san(p&&p.nickname)}catch(e){}
     try{var id=await DB.myHpId(u.id);if(id)$('hpe').href='hp.html?id='+id+'&edit=1'}catch(e){}}
   $('lgo').onclick=async function(){var b=this,m=$('lmsg');b.disabled=true;m.textContent='ﾛｸﾞｲﾝ中…';
     try{await DB.logIn($('lm').value.trim(),$('lp').value);m.textContent='';location.reload()}catch(e){m.textContent=e.message}b.disabled=false};
@@ -16,7 +16,7 @@ safe(function(){if(!$('loginbox')||!window.DB)return;
   $('lout').onclick=async function(){await DB.logOut();location.href='index.html'};
   who().catch(function(){})});
 /* めろID一発ｱｸｾｽ */
-safe(function(){if(!$('qid'))return;function go(){var v=$('qid').value.trim().toLowerCase();if(/^[a-z0-9_]{3,16}$/.test(v))location.href='hp.html?id='+v;else alert('めろIDゎ半角英小文字・数字・_ の3〜16文字だょ')}
+safe(function(){if(!$('qid'))return;function go(){var v=$('qid').value.trim().toLowerCase();if(/^[a-z0-9_]{3,16}$/.test(v))location.href='hp.html?id='+v;else UI.tell('めろIDゎ半角英小文字・数字・_ の3〜16文字だょ')}
   $('qgo').onclick=go;$('qid').onkeydown=function(e){if(e.key==='Enter')go()}});
 /* キラキラ（背景のまたたき＋タップでピカッ） */
 var still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;

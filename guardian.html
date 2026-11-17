@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -101,8 +101,9 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
 var $=function(i){return document.getElementById(i)},E=DB.esc,V={public:'誰でも見れる',members:'会員だけ',friends:'めろ友だけ',private:'自分だけ'};
 async function load(){try{var K=await DB.gChildren();
@@ -114,11 +115,11 @@ async function load(){try{var K=await DB.gChildren();
   catch(e){$('kids').innerHTML='<p class="msg ng">'+E(e.message)+'</p>'}}
 document.addEventListener('click',async function(e){var t=e.target,a;
   try{
-    if(a=t.getAttribute('data-ok')){if(!confirm('お子さまの利用を承認しますか？'))return;await DB.gApprove(a);load()}
-    else if(a=t.getAttribute('data-save')){await DB.gSet(a,document.querySelector('[data-vis="'+a+'"]').value,document.querySelector('[data-lock="'+a+'"]').checked);alert('保存しました')}
+    if(a=t.getAttribute('data-ok')){if(!await UI.ask('お子さまの利用を承認しますか？'))return;await DB.gApprove(a);load()}
+    else if(a=t.getAttribute('data-save')){await DB.gSet(a,document.querySelector('[data-vis="'+a+'"]').value,document.querySelector('[data-lock="'+a+'"]').checked);UI.tell('保存しました')}
     else if(a=t.getAttribute('data-fok')){await DB.gOkFriend(+a);load()}
-    else if(a=t.getAttribute('data-fng')){if(!confirm('この申請を断りますか？'))return;await DB.gNgFriend(+a);load()}
-  }catch(err){alert(err.message)}});
+    else if(a=t.getAttribute('data-fng')){if(!await UI.ask('この申請を断りますか？'))return;await DB.gNgFriend(+a);load()}
+  }catch(err){UI.tell(err.message)}});
 DB.me().then(function(u){if(!u){$('msg').innerHTML='<a href="login.html#signup">会員登録</a>または<a href="login.html">ﾛｸﾞｲﾝ</a>してください';return}$('msg').hidden=true;$('main').hidden=false;load()});
 </script>
 </body>

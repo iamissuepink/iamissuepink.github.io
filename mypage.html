@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -135,6 +135,20 @@
 <p class="msg" id="msg" role="status"></p>
 </div>
 </section>
+<section class="sec gd glow" id="dbox" hidden>
+<h3>★ﾃﾞｰﾀの書き出し★</h3>
+<p style="font-size:12px">ﾎﾑﾍﾟ・日記・写真のﾘｽﾄ・保存BOX・ﾌﾟﾛﾌを1つのﾌｧｲﾙにして保存できるょ。ときどき書き出しておくと、もしものときも安心♪</p>
+<button class="pill" id="exp" type="button">ﾌｧｲﾙに書き出す📥</button>
+<label class="pill purple" style="cursor:pointer">書き出したﾌｧｲﾙからﾎﾑﾍﾟを戻す<input type="file" id="imp" accept="application/json,.json" hidden></label>
+<p style="font-size:11px;color:#c9a2ff">※戻すと、今のﾎﾑﾍﾟゎ保存BOXにしまってから入れかわるょ（日記・写真ゎ戻らないょ）</p>
+<p class="msg" id="dmsg" role="status"></p>
+</section>
+<section class="sec pp glow">
+<h3>★研究への協力★</h3>
+<label style="display:flex;gap:8px;align-items:flex-start;min-height:36px;font-size:12px"><input type="checkbox" id="rsch" style="width:20px;height:20px;flex:none"> 使い方のﾃﾞｰﾀを、個人がわからない形にして運営の研究に使ってOK</label>
+<p style="font-size:11px;color:#c9a2ff">※くわしくゎ<a href="privacy.html#research">ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰの「研究への利用」</a>を見てね。いつでも外せるょ。18歳未満の人ゎ保護者の人と相談してね</p>
+<p class="msg" id="rmsg" role="status"></p>
+</section>
 <section class="sec bl glow">
 <h3>★ﾒﾆｭｰ★</h3>
 <a class="pill" href="bbs.html">掲示板(BBS)</a>
@@ -155,8 +169,9 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
 (async function(){
 var $=function(i){return document.getElementById(i)},msg=$('msg');
@@ -165,38 +180,47 @@ var u=await DB.me();$('loading').hidden=true;
 if(!u){$('guest').hidden=false;return}
 $('member').hidden=false;
 try{var p=await DB.getProfile(u.id);
-  $('hello').textContent=(p?p.nickname:'ななしさん')+'さん';$('nick').value=p?p.nickname:'';$('bio').value=p?p.bio:'';
+  $('hello').textContent=DB.san(p&&p.nickname);$('nick').value=p?p.nickname:'';$('bio').value=p?p.bio:'';
   var d=new Date(p?p.created_at:u.created_at);$('since').textContent=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
 }catch(e){say(e.message,true)}
 DB.isAdmin(u.id).then(function(a){if(a)$('adminl').hidden=false}).catch(function(){});
 try{var info=await DB.myInfo(u.id);
-  if(!info){$('setup').hidden=false;initSetup()}
+  if(!info){var md={};try{md=await DB.meta()}catch(e){}
+    var tried=false;try{tried=sessionStorage.getItem('autoset')==='1';sessionStorage.setItem('autoset','1')}catch(e){}
+    if(md.hp_id&&md.birth&&!tried){$('loading').hidden=false;$('loading').textContent='登録のときの内容で設定中…';
+      try{await DB.setup(md.hp_id,md.birth,md.guardian||'');try{await DB.clearMeta(['birth','guardian'])}catch(e){}location.reload();return}
+      catch(e){$('loading').hidden=true;$('setup').hidden=false;initSetup(md);var sm=$('setmsg');sm.textContent='自動で設定できなかったょ：'+e.message+'　内容を確認して「設定する♪」を押してね';sm.className='msg ng'}}
+    else{$('setup').hidden=false;initSetup(md)}}
   else if(info.needs_guardian&&!info.guardian_approved){$('pending').hidden=false;$('gurl').textContent=location.origin+location.pathname.replace(/[^\/]*$/,'')+'guardian.html'}
   else{var hid=await DB.myHpId(u.id);$('myhp').hidden=false;
     var url=location.origin+location.pathname.replace(/[^\/]*$/,'')+'hp.html?id='+hid;
     $('hpurl').textContent=url;$('hpview').href='hp.html?id='+hid;$('hpedit').href='hp.html?id='+hid+'&edit=1';
-    $('frs').hidden=false;$('fset').hidden=false;$('lf').checked=!!info.leave_footprints;
-    $('lf').onchange=async function(){try{await DB.setFoot(this.checked)}catch(e){alert(e.message)}};
+    $('frs').hidden=false;$('fset').hidden=false;$('dbox').hidden=false;$('lf').checked=!!info.leave_footprints;
+    $('lf').onchange=async function(){try{await DB.setFoot(this.checked)}catch(e){UI.tell(e.message)}};
     loadFr()}
 async function loadFr(){try{var L=await DB.incoming(u.id);
   $('frlist').innerHTML=L.length?L.map(function(r){var p=r.profiles||{};return '<div class="li"><a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a> さんから申請♪<br><button type="button" class="del" data-acc="'+r.id+'">承認する</button><button type="button" class="del" data-dec="'+r.id+'">断る</button></div>'}).join(''):'<p>届いてる申請ゎないょ</p>';
 }catch(e){$('frlist').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
 $('frlist').onclick=async function(e){var a=e.target.getAttribute('data-acc'),d=e.target.getAttribute('data-dec');
-  try{if(a){await DB.acceptFriend(+a);alert('めろ友になったょ♡')}else if(d){if(!confirm('この申請を断る？'))return;await DB.delFriend(+d)}else return;loadFr()}catch(err){alert(err.message)}}
+  try{if(a){await DB.acceptFriend(+a);UI.tell('めろ友になったょ♡')}else if(d){if(!await UI.ask('この申請を断る？'))return;await DB.delFriend(+d)}else return;loadFr()}catch(err){UI.tell(err.message)}}
 }catch(e){say(e.message,true)}
-function initSetup(){
+function initSetup(md){md=md||{};
   var y=new Date().getFullYear(),o='<option value="">年</option>';
   for(var i=y-6;i>=y-100;i--)o+='<option>'+i+'</option>';$('by').innerHTML=o;
   o='<option value="">月</option>';for(i=1;i<=12;i++)o+='<option>'+i+'</option>';$('bm').innerHTML=o;
   function chk(){var a=($('by').value&&$('bm').value)?DB.age($('by').value+'-'+$('bm').value):99;$('gbox').hidden=a>12}
   $('by').onchange=chk;$('bm').onchange=chk;
+  if(md.birth){var bp=String(md.birth).split('-');$('by').value=bp[0];$('bm').value=String(+bp[1]);chk()}
+  if(md.guardian)$('gmail').value=md.guardian;
+  if(md.hp_id){$('hpid').value=md.hp_id;setTimeout(function(){$('hpid').oninput()},0)}
   var t;$('hpid').oninput=function(){var v=this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'');clearTimeout(t);
     var m=$('idmsg');if(v.length<3){m.textContent='3文字以上にしてね';m.className='msg ng';return}
     m.textContent='確認中…';m.className='msg';
     t=setTimeout(async function(){try{var ok=await DB.idOk(v);if($('hpid').value!==v)return;m.textContent=ok?'そのID使えるょ✧':'そのIDゎ使えないょ';m.className='msg'+(ok?'':' ng')}catch(e){m.textContent=e.message;m.className='msg ng'}},400)};
   $('setbtn').onclick=async function(){var b=this,sm=$('setmsg');
+    if(!/^[a-z0-9_]{3,16}$/.test($('hpid').value)){sm.textContent='めろIDを3〜16文字で入れてね';sm.className='msg ng';return}
     if(!$('by').value||!$('bm').value){sm.textContent='生まれた年と月を選んでね';sm.className='msg ng';return}
-    if(!confirm('めろID「'+$('hpid').value+'」で設定する？（あとから変えられないょ）'))return;
+    if(!await UI.ask('めろID「'+$('hpid').value+'」で設定する？（あとから変えられないょ）'))return;
     b.disabled=true;sm.textContent='設定中…';sm.className='msg';
     try{await DB.setup($('hpid').value,$('by').value+'-'+('0'+$('bm').value).slice(-2),$('gbox').hidden?'':$('gmail').value.trim());location.reload()}
     catch(e){sm.textContent=e.message;sm.className='msg ng'}b.disabled=false};
@@ -204,11 +228,23 @@ function initSetup(){
 $('save').onclick=async function(){var b=this,n=$('nick').value.trim();
   if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
   b.disabled=true;say('保存中…');
-  try{await DB.saveProfile(u.id,n,$('bio').value);$('hello').textContent=n+'さん';say('保存したょ✧')}catch(e){say(e.message,true)}b.disabled=false};
+  try{await DB.saveProfile(u.id,n,$('bio').value);$('hello').textContent=DB.san(n);say('保存したょ✧')}catch(e){say(e.message,true)}b.disabled=false};
+DB.meta().then(function(md){$('rsch').checked=md.research===true}).catch(function(){});
+$('rsch').onchange=async function(){var c=this.checked,m=$('rmsg');try{await DB.setMeta({research:c,research_at:new Date().toISOString()});m.textContent=c?'ありがとう♡ 協力してくれるの、すごくうれしい':'外したょ。これからのﾃﾞｰﾀゎ研究に使わないょ';m.className='msg'}catch(e){m.textContent=e.message;m.className='msg ng';this.checked=!c}};
+function dmsg(t,ng){var m=$('dmsg');m.textContent=t;m.className='msg'+(ng?' ng':'')}
+$('exp').onclick=async function(){var b=this;b.disabled=true;dmsg('まとめてるょ…');
+  try{var x=await DB.exportAll(u.id);var blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'}),a=document.createElement('a');
+    var d=new Date(),ds=d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2);
+    a.href=URL.createObjectURL(blob);a.download='meropyon_'+(x.hp_id||'data')+'_'+ds+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
+    dmsg('書き出したょ✧ ﾀﾞｳﾝﾛｰﾄﾞﾌｫﾙﾀﾞを見てね（写真ゎURLのﾘｽﾄだけ入ってるょ）')}catch(e){dmsg(e.message,true)}b.disabled=false};
+$('imp').onchange=async function(){var f=this.files[0];this.value='';if(!f)return;
+  try{var x=JSON.parse(await f.text());if(!x||x.app!=='meropyon'||!x.homepage||!x.homepage.data)throw new Error('めろﾋﾟｮﾝ☆で書き出したﾌｧｲﾙじゃないみたい');
+    if(!(await UI.ask('「'+(x.homepage.data.title||'ﾎﾑﾍﾟ')+'」（'+String(x.exported_at||'').slice(0,10)+' に書き出し）に戻す？\n今のﾎﾑﾍﾟゎ保存BOXにしまうょ')))return;
+    dmsg('戻してるょ…');await DB.importHp(u.id,x.homepage);dmsg('戻したょ✧ ﾎﾑﾍﾟを見てみてね')}catch(e){dmsg(e.message,true)}};
 $('out').onclick=async function(){await DB.logOut();location.href='index.html'};
-$('quit').onclick=async function(){if(!confirm('本当に退会する？\nﾎﾑﾍﾟ・日記・写真・素材・書き込みが全部消えて、元に戻せないょ'))return;
-  if(prompt('確認のため「たいかい」と入力してね')!=='たいかい')return;
-  try{await DB.deleteAccount(u.id);alert('退会しました。今までありがとう！');location.href='index.html'}catch(e){alert(e.message)}};
+$('quit').onclick=async function(){if(!await UI.ask('本当に退会する？\nﾎﾑﾍﾟ・日記・写真・素材・書き込みが全部消えて、元に戻せないょ'))return;
+  if(await UI.input('確認のため「たいかい」と入力してね')!=='たいかい')return;
+  try{await DB.deleteAccount(u.id);await UI.tell('退会しました。今までありがとう！');location.href='index.html'}catch(e){UI.tell(e.message)}};
 })();</script>
 </body>
 </html>

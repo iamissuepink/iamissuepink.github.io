@@ -7,13 +7,22 @@ var IMG=URL+'/storage/v1/object/public/hp/';
 var SOZ=URL+'/storage/v1/object/public/sozai/';
 var SITE=location.origin+location.pathname.replace(/[^\/]*$/,'');
 function err(e){
-  var m=(e&&e.message)||String(e);
-  if(/Invalid login/i.test(m))return 'ﾒｱﾄﾞかﾊﾟｽﾜｰﾄﾞがちがうょ';
-  if(/Email not confirmed/i.test(m))return '確認ﾒｰﾙのﾘﾝｸを押してからﾛｸﾞｲﾝしてね';
-  if(/already registered/i.test(m))return 'そのﾒｱﾄﾞゎもう登録されてるょ';
-  if(/at least 6/i.test(m))return 'ﾊﾟｽﾜｰﾄﾞゎ6文字以上にしてね';
-  if(/rate limit/i.test(m))return '混みあってるみたい…少し時間をおいてね';
-  if(/invalid/i.test(m)&&/email/i.test(m))return 'ﾒｱﾄﾞの形がおかしいかも';
+  var m=(e&&e.message)||String(e),c=(e&&e.code)||'',st=(e&&e.status)||'';
+  if(window.console)console.warn('[めろﾋﾟｮﾝ☆] ｴﾗｰ',c,st,m,e);
+  var tag=' ['+(c||st||'error')+']';
+  /* 認証まわり（Supabase Auth のｴﾗｰｺｰﾄﾞ） */
+  if(c==='over_email_send_rate_limit'||/email rate limit/i.test(m))return 'ﾒｰﾙの送信回数が上限に達してるょ。めろﾋﾟｮﾝ☆側のﾒｰﾙ設定の問題で、あなたのせいじゃないょ。運営が直すまで少し待ってね'+tag;
+  if(c==='email_address_not_authorized'||/not authorized/i.test(m))return '今ゎ確認ﾒｰﾙを送れない設定になってるょ（運営がﾒｰﾙ設定を準備中）。少し待ってね'+tag;
+  if(c==='over_request_rate_limit'||/after (\d+) seconds?/i.test(m)){var s=(m.match(/after (\d+) seconds?/i)||[])[1];return (s?'あと'+s+'秒':'少し')+'待ってからもう一回押してね（短い間に何回も送れないょ）'+tag}
+  if(/rate limit|too many/i.test(m)||st===429)return '短い間に何回も送られたから、ちょっとお休み中…数分あけてね'+tag;
+  if(c==='signup_disabled')return '今ゎ新しい登録を止めてるょ'+tag;
+  if(c==='weak_password'||/at least 6/i.test(m))return 'ﾊﾟｽﾜｰﾄﾞゎ6文字以上にしてね';
+  if(c==='email_address_invalid'||(/invalid/i.test(m)&&/email/i.test(m)))return 'ﾒｱﾄﾞの形がおかしいかも（使えないﾄﾞﾒｲﾝのこともあるょ）'+tag;
+  if(c==='user_already_exists'||c==='email_exists'||/already registered/i.test(m))return 'そのﾒｱﾄﾞゎもう登録されてるょ。ﾛｸﾞｲﾝしてね';
+  if(c==='invalid_credentials'||/Invalid login/i.test(m))return 'ﾒｱﾄﾞかﾊﾟｽﾜｰﾄﾞがちがうょ';
+  if(c==='email_not_confirmed'||/Email not confirmed/i.test(m))return '確認ﾒｰﾙのﾘﾝｸを押してからﾛｸﾞｲﾝしてね';
+  if(/Failed to fetch|NetworkError|Load failed/i.test(m))return '通信できなかったょ。電波を確認してもう一回ためしてね'+tag;
+  /* めろﾋﾟｮﾝ☆の決まり（SQLの関数から返るｺｰﾄﾞ） */
   if(/id_taken/.test(m))return 'そのIDゎ使えないか、もう使われてるょ';
   if(/already_set/.test(m))return 'はじめの設定ゎもう終わってるょ';
   if(/need_guardian/.test(m))return '12歳以下の人ゎ保護者のﾒｱﾄﾞが必要だょ';
@@ -25,17 +34,40 @@ function err(e){
   if(/vis_locked/.test(m))return '公開範囲ゎ保護者の人がロックしてるょ';
   if(/cannot_approve/.test(m))return '承認できなかったょ（ﾒｰﾙｱﾄﾞﾚｽを確認してね）';
   if(/not_guardian|not_admin/.test(m))return 'この操作ゎできないょ';
+  if(/not_deleted/.test(m))return '消せなかったょ（自分のものじゃないか、もう消えてるかも）';
   if(/hp_backups/.test(m)&&/row-level/.test(m))return '保存BOXがいっぱいだょ（5個まで）。いらないのを消してね';
   if(/exceeded the maximum|too large/i.test(m))return '画像が大きすぎるょ';
-  if(/row-level security|permission denied|Unauthorized/i.test(m))return 'ﾏｲﾍﾟｰｼﾞで「はじめの設定」をしてからね';
-  return 'ｴﾗｰ: '+m;
+  if(/row-level security|permission denied|Unauthorized/i.test(m))return 'この操作ゎできなかったょ。ﾏｲﾍﾟｰｼﾞで「はじめの設定」が終わってるか確認してね'+tag;
+  return 'ｴﾗｰ: '+m+tag;
 }
 async function run(p){var r=await p;if(r.error)throw new Error(err(r.error));return r.data}
+/* 消したはずなのに消えてない（権限で0件になった）ときにちゃんとｴﾗｰにする */
+async function del(q){var d=await run(q.select('id'));if(!d||!d.length)throw new Error(err({message:'not_deleted'}));return d}
 window.DB={
   esc:function(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})},
   time:function(s){var d=new Date(s);return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)},
   me:async function(){var r=await sb.auth.getSession();return r.data.session?r.data.session.user:null},
-  signUp:function(email,pass,nickname){return run(sb.auth.signUp({email:email,password:pass,options:{data:{nickname:nickname},emailRedirectTo:SITE+'mypage.html'}}))},
+  signUp:async function(email,pass,nickname,extra){var data=Object.assign({nickname:nickname},extra||{});
+    var d=await run(sb.auth.signUp({email:email,password:pass,options:{data:data,emailRedirectTo:SITE+'mypage.html'}}));
+    if(d&&d.user&&Array.isArray(d.user.identities)&&!d.user.identities.length)throw new Error('そのﾒｱﾄﾞゎもう登録されてるょ。ﾛｸﾞｲﾝしてね（ﾊﾟｽﾜｰﾄﾞを忘れたら「ﾊﾟｽﾜｰﾄﾞを忘れた？」から）');
+    return d},
+  meta:async function(){var r=await sb.auth.getUser();return (r.data&&r.data.user&&r.data.user.user_metadata)||{}},
+  setMeta:function(o){return run(sb.auth.updateUser({data:o}))},
+  exportAll:async function(uid){
+    var p=await run(sb.from('profiles').select('nickname,bio,hp_id,created_at').eq('id',uid).limit(1));p=p[0]||{};
+    var h=await run(sb.from('homepages').select('data,visibility,counter,updated_at').eq('user_id',uid).limit(1));
+    var safe=async function(f){try{return await f()}catch(e){return {error:e.message}}};
+    return {app:'meropyon',version:1,exported_at:new Date().toISOString(),hp_id:p.hp_id||'',profile:p,homepage:h[0]||null,
+      diaries:await safe(function(){return run(sb.from('diaries').select('title,body,is_public,created_at').eq('user_id',uid).order('created_at',{ascending:true}))}),
+      photos:await safe(async function(){var L=await run(sb.from('photos').select('path,caption,created_at').eq('user_id',uid).order('created_at',{ascending:true}));return L.map(function(x){return {url:IMG+x.path,caption:x.caption,created_at:x.created_at}})}),
+      backups:await safe(function(){return run(sb.from('hp_backups').select('name,data,created_at').eq('user_id',uid).order('created_at',{ascending:true}))}),
+      questions:await safe(function(){return run(sb.from('questions').select('body,answer,answered_at,created_at').eq('owner',uid).not('answer','is',null))})}},
+  importHp:async function(uid,hp){var cur=await run(sb.from('homepages').select('data,visibility').eq('user_id',uid).limit(1));
+    if(cur[0]&&cur[0].data){var d=new Date();await run(sb.from('hp_backups').insert({name:'戻す前 '+(d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2),data:cur[0].data}))}
+    var vis=cur[0]?cur[0].visibility:(hp.visibility||'members');
+    return run(sb.from('homepages').upsert({user_id:uid,data:hp.data,visibility:vis,updated_at:new Date().toISOString()}))},
+  clearMeta:function(keys){var o={};keys.forEach(function(k){o[k]=null});return run(sb.auth.updateUser({data:o}))},
+  san:function(n){n=String(n||'').trim()||'ななし';return /(さん|ちゃん|ﾁｬﾝ|くん|様|さま)[☆★♪♡✧]*$/.test(n)?n:n+'さん'},
   resetPw:function(email){return run(sb.auth.resetPasswordForEmail(email,{redirectTo:SITE+'reset.html'}))},
   newPw:function(pass){return run(sb.auth.updateUser({password:pass}))},
   onAuth:function(f){return sb.auth.onAuthStateChange(f)},
@@ -45,7 +77,7 @@ window.DB={
   saveProfile:function(id,nickname,bio){return run(sb.from('profiles').update({nickname:nickname,bio:bio}).eq('id',id))},
   posts:function(n){return run(sb.from('bbs_posts').select('id,user_id,body,created_at,profiles(nickname)').order('created_at',{ascending:false}).limit(n||50))},
   addPost:function(body){return run(sb.from('bbs_posts').insert({body:body}))},
-  delPost:function(id){return run(sb.from('bbs_posts').delete().eq('id',id))},
+  delPost:function(id){return del(sb.from('bbs_posts').delete().eq('id',id))},
   myInfo:async function(id){var d=await run(sb.from('private_info').select('birth_ym,needs_guardian,guardian_approved,leave_footprints,vis_locked,created_at').eq('id',id).limit(1));return d[0]||null},
   myHpId:async function(id){var d=await run(sb.from('profiles').select('hp_id').eq('id',id).limit(1));return d[0]?d[0].hp_id:null},
   idOk:function(p){return run(sb.rpc('hp_id_available',{p:p}))},
@@ -64,25 +96,27 @@ window.DB={
   addMaterial:async function(uid,file,title){var ext={'image/gif':'gif','image/png':'png','image/webp':'webp'}[file.type];if(!ext)throw new Error('gif・png・webpだけ使えるょ');
     if(file.size>307200)throw new Error('300KBまでだょ');var path=uid+'/'+Date.now()+'.'+ext;
     await run(sb.storage.from('sozai').upload(path,file,{contentType:file.type,upsert:false}));await run(sb.from('materials').insert({path:path,title:title}));return path},
-  delMaterial:async function(id,path){await run(sb.from('materials').delete().eq('id',id));await run(sb.storage.from('sozai').remove([path]))},
-  sozOk:function(p){return /^[0-9a-f-]{36}\/[0-9a-z]+\.(gif|png|webp)$/.test(p||'')},
+  delMaterial:async function(id,path){await del(sb.from('materials').delete().eq('id',id));await run(sb.storage.from('sozai').remove([path]))},
+  sozOk:function(p){return /^[0-9a-f-]{36}\/[0-9a-z]+\.(gif|png|webp)$/.test(p||'')||/^m\/[a-z0-9_]{1,30}\.(gif|png)$/.test(p||'')},
+  sozUrl:function(p){p=String(p||'');return p.indexOf('m/')===0?SITE+'img/sozai/'+p.slice(2):SOZ+p},
+  OFFICIAL:[['m/heart_pink.gif','ﾋﾟﾝｸのﾊｰﾄ'],['m/heart_beat.gif','ﾄﾞｷﾄﾞｷﾊｰﾄ'],['m/heart_blue.gif','水色のﾊｰﾄ'],['m/heart_purple.gif','むらさきのﾊｰﾄ'],['m/kira_twinkle.gif','ｷﾗｷﾗ'],['m/star_yellow.gif','きいろの星'],['m/star_pink.gif','ﾋﾟﾝｸの星'],['m/ribbon_pink.gif','ﾋﾟﾝｸﾘﾎﾞﾝ'],['m/ribbon_black.gif','黒ﾘﾎﾞﾝ'],['m/new_blink.gif','NEW!'],['m/up.gif','UP!'],['m/love.gif','LOVE'],['m/thanks.gif','THANKS!'],['m/arrow_pink.gif','やじるし'],['m/clover.gif','ｸﾛｰﾊﾞｰ'],['m/moon.gif','おつきさま'],['m/note_pink.gif','おんぷ'],['m/usagi.gif','うさぎ'],['m/line_heart.gif','ﾊｰﾄのﾗｲﾝ'],['m/line_dot.gif','しましまﾗｲﾝ'],['m/line_star.gif','星のﾗｲﾝ']],
   uploadImg:async function(uid,blob){var path=uid+'/'+Date.now()+'.jpg';await run(sb.storage.from('hp').upload(path,blob,{contentType:'image/jpeg',upsert:false}));return {path:path,url:IMG+path}},
   delImg:function(path){return run(sb.storage.from('hp').remove([path]))},
   diaries:function(o){return run(sb.from('diaries').select('id,title,body,is_public,created_at').eq('user_id',o).order('created_at',{ascending:false}).limit(100))},
   addDiary:function(t,b,pub){return run(sb.from('diaries').insert({title:t,body:b,is_public:pub}))},
   setDiaryPub:function(id,pub){return run(sb.from('diaries').update({is_public:pub}).eq('id',id))},
-  delDiary:function(id){return run(sb.from('diaries').delete().eq('id',id))},
+  delDiary:function(id){return del(sb.from('diaries').delete().eq('id',id))},
   photos:function(o){return run(sb.from('photos').select('id,path,caption,created_at').eq('user_id',o).order('created_at',{ascending:false}).limit(100))},
   addPhoto:function(path,cap){return run(sb.from('photos').insert({path:path,caption:cap}))},
-  delPhoto:function(id){return run(sb.from('photos').delete().eq('id',id))},
+  delPhoto:function(id){return del(sb.from('photos').delete().eq('id',id))},
   hpPosts:function(o){return run(sb.from('hp_bbs').select('id,user_id,body,created_at,profiles!hp_bbs_user_id_fkey(nickname,hp_id)').eq('owner',o).order('created_at',{ascending:false}).limit(100))},
   addHpPost:function(o,b){return run(sb.from('hp_bbs').insert({owner:o,body:b}))},
-  delHpPost:function(id){return run(sb.from('hp_bbs').delete().eq('id',id))},
+  delHpPost:function(id){return del(sb.from('hp_bbs').delete().eq('id',id))},
   block:function(u){return run(sb.from('hp_blocks').insert({blocked:u}))},
   questions:function(o){return run(sb.from('questions').select('id,body,answer,answered_at,created_at').eq('owner',o).order('created_at',{ascending:false}).limit(100))},
   ask:function(o,b){return run(sb.from('questions').insert({owner:o,body:b}))},
   answer:function(id,a){return run(sb.from('questions').update({answer:a,answered_at:new Date().toISOString()}).eq('id',id))},
-  delQ:function(id){return run(sb.from('questions').delete().eq('id',id))},
+  delQ:function(id){return del(sb.from('questions').delete().eq('id',id))},
   blockAsker:function(id){return run(sb.rpc('block_asker',{p_qid:id}))},
   clap:function(o){return run(sb.rpc('hp_clap',{p_owner:o}))},
   clapCount:function(o){return run(sb.rpc('hp_clap_count',{p_owner:o}))},
@@ -92,7 +126,7 @@ window.DB={
   friendWith:async function(me,o){var d=await run(sb.from('friend_requests').select('id,from_id,status').or('and(from_id.eq.'+me+',to_id.eq.'+o+'),and(from_id.eq.'+o+',to_id.eq.'+me+')').limit(1));return d[0]||null},
   requestFriend:function(o){return run(sb.rpc('request_friend',{p_to:o}))},
   acceptFriend:function(id){return run(sb.rpc('accept_friend',{p_id:id}))},
-  delFriend:function(id){return run(sb.from('friend_requests').delete().eq('id',id))},
+  delFriend:function(id){return del(sb.from('friend_requests').delete().eq('id',id))},
   incoming:function(me){return run(sb.from('friend_requests').select('id,created_at,profiles!friend_requests_from_id_fkey(nickname,hp_id)').eq('to_id',me).eq('status','pending').order('created_at',{ascending:false}))},
   hpFriends:function(o){return run(sb.rpc('hp_friends',{p_owner:o}))},
   report:function(t,id,hp,reason,detail){return run(sb.from('reports').insert({target_type:t,target_id:String(id),hp_id:hp||null,reason:reason,detail:detail||''}))},
@@ -117,7 +151,7 @@ window.DB={
     await run(sb.rpc('delete_account'));await sb.auth.signOut()},
   backups:function(uid){return run(sb.from('hp_backups').select('id,name,data,created_at').eq('user_id',uid).order('created_at',{ascending:false}))},
   addBackup:function(name,data){return run(sb.from('hp_backups').insert({name:name,data:data}))},
-  delBackup:function(id){return run(sb.from('hp_backups').delete().eq('id',id))},
+  delBackup:function(id){return del(sb.from('hp_backups').delete().eq('id',id))},
   visit:function(hpId){return run(sb.rpc('hp_visit',{p_hp_id:hpId}))},
   age:function(ym){var p=String(ym).split('-'),y=+p[0],m=+p[1],t=new Date(),last=new Date(y,m,0).getDate();
     var a=t.getFullYear()-y;if(t.getMonth()+1<m||(t.getMonth()+1===m&&t.getDate()<last))a--;return a}

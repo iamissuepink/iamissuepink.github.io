@@ -35,7 +35,7 @@
       <button type="button" class="btn slvb" id="lgo">ﾛｸﾞｲﾝ</button>
     </div>
     <div class="bb" id="lb-in" hidden>
-      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b> さん</p>
+      <p class="welcome">ﾖｳｺｿ♪<br><b id="wname"></b></p>
       <div style="display:flex;flex-direction:column;gap:6px">
         <a class="btn" href="mypage.html">ﾏｲﾍﾟｰｼﾞ</a>
         <a class="btn" id="hpe" href="mypage.html">ﾎﾑﾍﾟを編集♡</a>
@@ -105,10 +105,11 @@
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="db.js?v=12"></script>
-<script src="site.js?v=2"></script>
+<script src="ui.js?v=1"></script>
+<script src="db.js?v=13"></script>
+<script src="site.js?v=3"></script>
 <script>
-document.addEventListener('click',function(e){var a=e.target.closest('[data-ext]');if(!a)return;if(!confirm('めろﾋﾟｮﾝ☆の外のｻｲﾄに移動するょ。いい？'))e.preventDefault();else a.target='_blank'});
+document.addEventListener('click',function(e){var a=e.target.closest('[data-ext]');if(!a)return;e.preventDefault();UI.ask('めろﾋﾟｮﾝ☆の外のｻｲﾄに移動するょ。いい？').then(function(ok){if(ok)window.open(a.href,'_blank','noopener')})});
 </script>
 </body>
 </html>
