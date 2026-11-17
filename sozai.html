@@ -16,6 +16,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=6">
 <link rel="stylesheet" href="site.css?v=1">
+<style>.szc{display:flex;flex-wrap:wrap;gap:4px}.szc button{font:inherit;font-size:12px;padding:4px 9px;background:#2a0418;color:#ffd6ec;border:1px solid #ff7ac1;cursor:pointer;min-height:30px}.szc button.on{background:#ff3d9a;color:#fff}.scell[hidden]{display:none!important}</style>
 </head>
 <body class="sub">
 <div class="wrap">
@@ -91,6 +92,7 @@
 <p class="msg" id="smsg" role="status"></p>
 </div>
 </section>
+<section class="sec bl glow"><h3>🔍 素材をさがす</h3><input id="sq" type="search" placeholder="例：ﾊｰﾄ、星、ﾗｲﾝ" style="width:100%;box-sizing:border-box;font-size:16px;padding:6px"><div id="sc" class="szc" style="margin-top:6px"></div><p class="msg" id="shit" style="margin:4px 0 0"></p></section>
 <section class="sec pk glow"><h3>★運営の素材★</h3><p style="font-size:12px">めろﾋﾟｮﾝ☆運営が作ったｵﾘｼﾞﾅﾙ素材だょ。ﾎﾑﾍﾟでなら自由に使ってOK♪（ほかのｻｲﾄへの持ち出し・再配布ゎﾅｼでおねがい）</p><div id="off" class="sgrid"></div></section>
 <section class="sec pp glow"><h3>♡みんなの新着素材♡</h3><div id="res" class="sgrid"><p class="msg">読み込み中…</p></div></section>
 </div></div></section>
@@ -106,7 +108,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="ui.js?v=1"></script>
-<script src="db.js?v=14"></script>
+<script src="db.js?v=15"></script>
 <script src="site.js?v=4"></script>
 <script>
 var $=function(i){return document.getElementById(i)};
@@ -115,11 +117,16 @@ function isNew(s){return Date.now()-new Date(s).getTime()<3*86400000}
 function hpRow(h,extra){return '<a class="hrow" href="hp.html?id='+DB.esc(h.hp_id)+'">'+(h.icon&&h.icon.indexOf(DB.imgBase)===0?'<img src="'+DB.esc(h.icon)+'" alt="">':'<span class="noimg">♡</span>')+'<span><b>'+DB.esc(h.title||h.nickname+'のﾎﾑﾍﾟ')+'</b><br><small>by '+DB.esc(h.nickname)+(extra||'')+'</small>'+(h.tags&&h.tags.length?'<br><small class="tg">'+h.tags.map(function(t){return '#'+DB.esc(t)}).join(' ')+'</small>':'')+'</span></a>'}
 async function roulette(){try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else UI.tell('まだﾎﾑﾍﾟがないみたい')}catch(e){UI.tell(e.message)}}
 
-$('off').innerHTML=DB.OFFICIAL.map(function(m){return '<div class="scell"><div class="simg"><img src="'+DB.esc(DB.sozUrl(m[0]))+'" alt="'+DB.esc(m[1])+'"></div><b>'+DB.esc(m[1])+'</b><small>by 運営</small><button type="button" class="del" data-cp="'+DB.esc(m[0])+'">ｺｰﾄﾞをｺﾋﾟｰ</button></div>'}).join('');
+$('off').innerHTML=DB.OFFICIAL.map(function(m){return '<div class="scell" data-cat="'+DB.esc(DB.sozCat(m[0],m[1]))+'" data-t="'+DB.esc(m[1])+'"><div class="simg"><img src="'+DB.esc(DB.sozUrl(m[0]))+'" alt="'+DB.esc(m[1])+'"></div><b>'+DB.esc(m[1])+'</b><small>by 運営</small><button type="button" class="del" data-cp="'+DB.esc(m[0])+'">ｺｰﾄﾞをｺﾋﾟｰ</button></div>'}).join('');
 $('off').onclick=function(e){$('res').onclick(e)};
 var me=null;
+var SC='ぜんぶ';
+$('sc').innerHTML=['ぜんぶ'].concat(DB.SOZCATS).map(function(c){return '<button type="button" data-sc="'+DB.esc(c)+'"'+(c===SC?' class="on"':'')+'>'+DB.esc(c)+'</button>'}).join('');
+function filt(){var q=$('sq').value.trim().toLowerCase(),n=0;document.querySelectorAll('.scell[data-cat]').forEach(function(c){var ok=(SC==='ぜんぶ'||c.getAttribute('data-cat')===SC)&&(!q||(c.getAttribute('data-t')+' '+c.getAttribute('data-cat')).toLowerCase().indexOf(q)>=0);c.hidden=!ok;if(ok)n++});
+  $('shit').textContent=(q||SC!=='ぜんぶ')?n+'件みつかったょ':''}
+$('sq').oninput=filt;$('sc').onclick=function(e){var b=e.target.closest('[data-sc]');if(!b)return;SC=b.getAttribute('data-sc');$('sc').querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});filt()};
 async function load(){try{var L=await DB.materials(120);
-  $('res').innerHTML=L.length?L.map(function(m){var p=m.profiles||{};return '<div class="scell"><div class="simg"><img src="'+DB.esc(DB.sozUrl(m.path))+'" alt="'+DB.esc(m.title||'素材')+'"></div><b>'+DB.esc(m.title||'無題')+'</b><small>by '+(p.hp_id?'<a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a>':DB.esc(p.nickname||''))+'</small><button type="button" class="del" data-cp="'+DB.esc(m.path)+'">ｺｰﾄﾞをｺﾋﾟｰ</button>'+(me&&m.user_id===me.id?'<button type="button" class="del" data-rm="'+m.id+'" data-p="'+DB.esc(m.path)+'">削除</button>':'<a class="del" style="text-decoration:none" href="report.html?type=material&id='+m.id+'&hp='+encodeURIComponent(p.hp_id||'')+'">通報</a>')+'</div>'}).join(''):'<p class="msg">まだ素材がないょ。一番乗りしてね♪</p>'}
+  $('res').innerHTML=L.length?L.map(function(m){var p=m.profiles||{};return '<div class="scell" data-cat="'+DB.esc(DB.sozCat(m.path,m.title))+'" data-t="'+DB.esc(m.title||'')+'"><div class="simg"><img src="'+DB.esc(DB.sozUrl(m.path))+'" alt="'+DB.esc(m.title||'素材')+'"></div><b>'+DB.esc(m.title||'無題')+'</b><small>by '+(p.hp_id?'<a href="hp.html?id='+DB.esc(p.hp_id)+'">'+DB.esc(p.nickname)+'</a>':DB.esc(p.nickname||''))+'</small><button type="button" class="del" data-cp="'+DB.esc(m.path)+'">ｺｰﾄﾞをｺﾋﾟｰ</button>'+(me&&m.user_id===me.id?'<button type="button" class="del" data-rm="'+m.id+'" data-p="'+DB.esc(m.path)+'">削除</button>':'<a class="del" style="text-decoration:none" href="report.html?type=material&id='+m.id+'&hp='+encodeURIComponent(p.hp_id||'')+'">通報</a>')+'</div>'}).join(''):'<p class="msg">まだ素材がないょ。一番乗りしてね♪</p>';filt()}
   catch(e){$('res').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
 $('res').onclick=async function(e){var c=e.target.getAttribute('data-cp'),r=e.target.getAttribute('data-rm');
   if(c){var code='[s='+c+']';try{await navigator.clipboard.writeText(code);e.target.textContent='ｺﾋﾟｰしたょ✧'}catch(err){UI.input('このｺｰﾄﾞをｺﾋﾟｰしてね',code)}}

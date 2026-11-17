@@ -608,7 +608,10 @@ body .phone{margin-left:auto!important;margin-right:auto!important}
 @media (max-width:460px){body.tplh .phone{max-width:calc(100vw - 28px)!important;margin-top:16px!important}}
 /* PCでゎ少し広く。長い英数字やURLも枠の中で折り返す */
 @media (min-width:700px){.mbar{max-width:420px}:root:not([data-tpl="garake"]) body:not(.ed) .phone{max-width:400px}:root[data-tpl="garake"] body:not(.ed) .phone{max-width:360px}body.tplh .phone{max-width:420px!important}body.tplh .in{font-size:13px}}
-.in,.screen{overflow-wrap:anywhere}.in img,.in iframe,.in video{max-width:100%}.in pre{white-space:pre-wrap}
+.szbar{margin:0 0 6px}.szbar .ein{width:100%;box-sizing:border-box;margin:0 0 4px}.szc{display:flex;flex-wrap:wrap;gap:4px}.szc button{font:inherit;font-size:11px;padding:3px 7px;background:#2a0418;color:#ffd6ec;border:1px solid #ff7ac1;cursor:pointer}.szc button.on{background:#ff3d9a;color:#fff}
+.pvw{margin:4px 0 6px;font-size:12px}.pvw summary{cursor:pointer;color:var(--hi,#ff3d9a)}.pvbox{border:1px dashed var(--hi2,#ffb3d9);padding:6px;margin-top:4px;word-break:break-all;max-height:320px;overflow:auto}
+.ptgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:8px 0}.ptbtn{display:flex;flex-direction:column;gap:2px;padding:8px 6px;background:#2a0418;color:#ffd6ec;border:2px outset #ff7ac1;font:inherit;cursor:pointer;text-align:center}.ptbtn b{color:#ff9ad5;font-size:13px}.ptbtn small{font-size:10px;color:#c9a2ff}.ptbtn:active{border-style:inset}
+.in,.screen{overflow-wrap:anywhere}.pimg{display:block;max-width:100%;height:auto;margin:6px auto;border:2px solid var(--hi2,#ffb3d9)}a.hpl{color:var(--hi,#ff3d9a);font-weight:bold}.in img,.in iframe,.in video{max-width:100%}.in pre{white-space:pre-wrap}
 .tpl-gal .tg-hd{overflow:hidden}
 /* 管理用モーダル（入口・テンプレ選択・保存BOX）はめろﾋﾟｮﾝ☆の色で固定 */
 .mbox.mgr{background:#120008!important;color:#ffd6ec!important;border:2px solid #ff3d9a!important;box-shadow:0 0 0 4px #000,0 0 0 5px #ff9ad5,0 10px 30px rgba(0,0,0,.6);font-family:"MS PGothic","Hiragino Kaku Gothic ProN",sans-serif}
@@ -634,7 +637,7 @@ body .phone{margin-left:auto!important;margin-right:auto!important}
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="ui.js?v=1"></script>
-<script src="db.js?v=14"></script>
+<script src="db.js?v=15"></script>
 <script>
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
@@ -674,7 +677,9 @@ function deco(t){
      .replace(/\[rb\]([\s\S]*?)\[\/rb\]/g,'<span class="dk-rb">$1</span>')
      .replace(/\[mq\]([\s\S]*?)\[\/mq\]/g,'<span class="dk-mq"><span>$1</span></span>')
      .replace(/\[center\]([\s\S]*?)\[\/center\]/g,'<span class="dk-ct">$1</span>');
-    h=h.replace(/\[s=([^\]\s]+)\]/g,function(m,x){return DB.sozOk(x)?'<img class="sz" src="'+DB.sozUrl(x)+'" alt="">':''});
+    h=h.replace(/\[s=([^\]\s]+)\]/g,function(m,x){return DB.sozOk(x)?'<img class="sz" src="'+DB.sozUrl(x)+'" alt="">':''})
+     .replace(/\[p=([0-9a-f-]{36}\/\d+\.jpg)\]/g,function(m,x){return '<img class="pimg" src="'+DB.imgBase+x+'" alt="写真" loading="lazy">'})
+     .replace(/\[hp=([a-z0-9_]{3,16})\]([\s\S]*?)\[\/hp\]/g,'<a class="hpl" href="hp.html?id=$1">$2</a>');
     if(h===p)break}
   return h.replace(/\n/g,'<br>')}
 function def(nick){return {tpl:'garake',msg:DEFMSG,sub:'',title:'☆★'+nick+'のﾎﾑﾍﾟ★☆',theme:'pink',marquee:'ようこそ(*´∀`*)ﾉﾞ ゆっくりしてってね☆',mood:'(*´∀`*)',showCounter:true,intro:'',song:'',icon:'',iconPath:'',colors:{},tags:[],thanks:'拍手ありがと(*´∀`*)ﾉ\nまた遊びに来てね♪',showClaps:true,kiri:'',
@@ -686,7 +691,7 @@ function fix(d,nick){var b=def(nick);d=d&&typeof d==='object'?d:{};Object.keys(b
   /* 古いﾃﾞｰﾀの形がくずれてても表示できるように整える */
   var seen={};d.menu=d.menu.filter(function(m){if(!m||typeof m!=='object'||typeof m.k!=='string'||!m.k||seen[m.k])return false;seen[m.k]=1;return true});
   d.menu.forEach(function(m){if(typeof m.l!=='string')m.l=m.l==null?(BUILTIN[m.k]||'ﾍﾟｰｼﾞ'):String(m.l);if(m.d!=null&&typeof m.d!=='string')m.d=String(m.d);m.on=m.on!==false});
-  ['title','sub','marquee','mood','msg','intro','song','kiri','thanks','icon','iconPath'].forEach(function(k){if(typeof d[k]!=='string')d[k]=d[k]==null?'':String(d[k])});
+  ['title','sub','marquee','mood','msg','intro','song','kiri','kiriMsg','thanks','icon','iconPath'].forEach(function(k){if(typeof d[k]!=='string')d[k]=d[k]==null?'':String(d[k])});
   d.qa=d.qa.filter(Array.isArray).map(function(p){return [p[0]==null?'':String(p[0]),p[1]==null?'':String(p[1])]});
   d.real=d.real.filter(function(e){return e&&e.t!=null}).map(function(e){return {t:String(e.t),at:e.at||new Date().toISOString()}});
   Object.keys(d.pages).forEach(function(k){var p=d.pages[k];if(!p||typeof p!=='object'){delete d.pages[k];return}if(typeof p.b!=='string')p.b=p.b==null?'':String(p.b);if(p.h!=null&&typeof p.h!=='string')p.h=String(p.h)});
@@ -726,9 +731,9 @@ var BLK={
  msg:function(){return ED?'<span class="elb">TOPの文（文字の大きさや色を変えて、自由にﾃﾞｺってね）</span>'+ta('data-k="msg"',D.msg,'ようこそ♪',180):(D.msg?'<div class="msg">'+deco(D.msg)+'</div>':'')},
  mood:function(){if(ED)return '<span class="elb">今日の気分</span>'+inp('mood',D.mood)+'<div class="moods">'+MOODS.map(function(m){return '<button type="button" data-act="mood" data-v="'+esc(m)+'">'+esc(m)+'</button>'}).join('')+'</div>';return D.mood?'<p class="mood">今日の気分 <b>'+esc(D.mood)+'</b></p>':''},
  menu:function(){return menuHtml(TPL[D.tpl].menu)+(ED?'<p style="text-align:center;margin:4px 0"><button type="button" class="ebtn sub" data-act="sheet" data-v="menu">ﾒﾆｭｰを編集・ﾍﾟｰｼﾞを追加</button></p>':'')},
- counter:function(){if(ED)return '<label class="elb"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> カウンターを表示する</label><span class="elb">ｷﾘ番（カンマ区切り。空なら 777・1000 などゾロ目とキリのいい数）</span>'+inp('kiri',D.kiri,'','例：100,500,1000');
+ counter:function(){if(ED)return '<label class="elb"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> カウンターを表示する</label><span class="elb">ｷﾘ番（カンマ区切り。空なら 777・1000 などゾロ目とキリのいい数）</span>'+inp('kiri',D.kiri,'','例：100,500,1000')+'<span class="elb">ｷﾘ番を踏んだ人へのお礼ﾒｯｾｰｼﾞ</span>'+ta('data-k="kiriMsg"',D.kiriMsg||'',KIRIDEF,60);
    var h='';if(D.showCounter&&!isNew)h+=TPL[D.tpl].counter==='hit'?'<p class="cnt hit">'+esc(String(CNT))+'hit!</p>':'<p class="cnt">あなたは <b>'+esc(('000000'+CNT).slice(-6))+'</b> 人目のお客様です♪</p>';
-   if(KIRI)h+='<div class="kiri"><b class="dk-rb dk-big">ｷﾘ番ｹﾞｯﾄ!!</b><br>'+KIRI+' 番目のお客様です♪'+(me&&!owner?'<br><button type="button" class="ebtn" data-act="kirirep">BBSで報告する</button>':'')+'</div>';return h},
+   if(KIRI)h+='<div class="kiri"><b class="dk-rb dk-big">ｷﾘ番ｹﾞｯﾄ!!</b><br>'+KIRI+' 番目のお客様です♪'+(me&&!owner?'<br><button type="button" class="ebtn" data-act="kirirep">BBSで報告する</button>':'')+'</div>';return h+'<div id="kgl" class="c-kiri"></div>'},
  acts:function(){if(ED)return '<span class="elb">拍手のお礼ﾒｯｾｰｼﾞ</span>'+ta('data-k="thanks"',D.thanks,'',60)+'<label class="elb"><input type="checkbox" data-k="showClaps"'+(D.showClaps?' checked':'')+'> 拍手の数をみんなに見せる</label>';
    var h='<div class="vact"><button type="button" class="ebtn" data-act="clap">👏 拍手'+((D.showClaps||owner)&&CLAPS!==null?' ('+CLAPS+')':'')+'</button>';
    if(me&&!owner)h+=FR==='friend'?'<span class="ftag">めろ友だょ♡</span>':FR==='sent'?'<span class="ftag">めろ友申請中…</span>':FR==='in'?'<button type="button" class="ebtn" data-act="facc">めろ友申請を承認</button>':'<button type="button" class="ebtn sub" data-act="freq">めろ友申請</button>';
@@ -747,7 +752,16 @@ function cMsg(){return (D.msg?'<div class="c-msg">'+deco(D.msg)+'</div>':'')+(D.
 function cSub(){return D.sub?'<div class="c-sub">'+deco(D.sub)+'</div>':''}
 function cUpd(){return '<div id="upd" class="c-upd"></div>'}
 function cCnt(f){if(!D.showCounter||isNew)return '';var n=String(CNT);return '<div class="c-cnt">'+(f?f(n):n+'hit!')+'</div>'}
-function cKiri(){return KIRI?'<div class="c-kiri"><b class="dk-bl">★ｷﾘ番ｹﾞｯﾄ!!★</b> '+KIRI+'番'+(me&&!owner?' <button type="button" class="c-lk" data-act="kirirep">[報告する]</button>':'')+'</div>':''}
+function cKiri(){return (KIRI?'<div class="c-kiri"><b class="dk-bl">★ｷﾘ番ｹﾞｯﾄ!!★</b> '+KIRI+'番'+(me&&!owner?' <button type="button" class="c-lk" data-act="kirirep">[報告する]</button>':'')+'</div>':'')+'<div id="kgl" class="c-kiri"></div>'}
+var KIRIDEF='ｷﾘ番ｹﾞｯﾄおめでとう!!\nよかったらBBSで報告してね♪\nﾘｸｴｽﾄも受け付けるょ(*´∀`*)';
+/* ｷﾘ番を踏んだ人へのお礼（自動で出る） */
+function kiriPop(){if(!KIRI||owner)return;try{var k='kiri_'+HID+'_'+KIRI;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1')}catch(e){}kiriBox()}
+function kiriBox(){modal('<p class="ttl">★ｷﾘ番ｹﾞｯﾄ!!★</p><p style="text-align:center;font-size:22px;font-weight:bold;color:#ffe066;margin:8px 0">'+KIRI+'<small style="font-size:12px"> 番目のお客様♪</small></p><p style="text-align:center;white-space:pre-wrap">'+deco(D.kiriMsg||KIRIDEF)+'</p>'+
+  (me?'<p class="shh" style="margin:10px 0 4px">ﾎﾑﾍﾟの人にひとこと（なくてもOK）</p><input class="ein" id="kmsg" maxlength="80" placeholder="例：踏みました!! これからも見に来ます♪"><div class="mch"><button type="button" class="ebtn" data-act="kirisend">BBSで報告する♪</button><button type="button" class="ebtn sub" data-act="m_close">あとで</button></div>':
+  '<p class="note2" style="text-align:center">ﾛｸﾞｲﾝすると、BBSで報告できるょ</p><div class="mch"><a class="ebtn" href="login.html">ﾛｸﾞｲﾝ</a><button type="button" class="ebtn sub" data-act="m_close">とじる</button></div>'))}
+/* ｷﾘ番ｹﾞｯﾀｰ一覧（BBSの【ｷﾘ番報告】から） */
+async function ldKiri(){var e=document.getElementById('kgl');if(!e)return;try{var L=(await DB.hpPosts(R.id)).filter(function(p){return /^【ｷﾘ番報告】/.test(p.body)}).slice(0,5);
+  e.innerHTML=L.length?'<b>☆ｷﾘ番ｹﾞｯﾀｰ☆</b><br>'+L.map(function(p){var n=(String(p.body).match(/(\d+)\s*番/)||[])[1]||'?',pr=p.profiles||{};return n+'番 '+(pr.hp_id?'<a href="hp.html?id='+esc(pr.hp_id)+'">'+esc(pr.nickname||'')+'</a>':esc(pr.nickname||''))+'さん'}).join('<br>'):''}catch(err){e.innerHTML=''}}
 function cActs(l,r){if(l==null)l='[';if(r==null)r=']';var a=[];
   a.push('<button type="button" class="c-lk" data-act="clap">'+l+'web拍手'+((D.showClaps||owner)&&CLAPS!==null?'('+CLAPS+')':'')+r+'</button>');
   if(me&&!owner)a.push(FR==='friend'?'<span class="c-lk">'+l+'めろ友♡'+r+'</span>':FR==='sent'?'<span class="c-lk">'+l+'申請中'+r+'</span>':FR==='in'?'<button type="button" class="c-lk" data-act="facc">'+l+'めろ友承認'+r+'</button>':'<button type="button" class="c-lk" data-act="freq">'+l+'めろ友申請'+r+'</button>');
@@ -842,7 +856,7 @@ function renderT(id){var h=TPLH[id].html;
   h=h.replace(/\{\{(title|sub|marquee|mood|msg)\}\}/g,function(m,k){return eslot(k,tval(k),k==='msg'||k==='marquee')});
   h=h.replace(/\[(PHOTO|UPDATE|REAL|COUNTER|KIRI|ACTS|SONG|LINKS|TAGS|FOOT)\]/g,function(m,k){return TB[k]()});
   return '<div class="tpl tpl-'+id+'">'+h+'</div>'}
-function afterTop(){ldUpd();ldLinks()}
+function afterTop(){ldUpd();ldLinks();ldKiri()}
 /* 編集：差し込み口をタップ */
 var SLOTSHEET={photo:'photo',menu:'menu',opts:'opts',tags:'design'};
 function openSlot(k){sheet=SLOTSHEET[k]||('slot:'+k);drawUi();
@@ -851,7 +865,7 @@ function palHtml(k){
   if(k==='color')return '<p class="shh">文字の色（選んだ文字を囲むょ）</p><div class="sw">'+COLS.map(function(c){return '<button type="button" data-act="wrapc" data-v="'+c[1]+'" style="background:'+c[1]+'" aria-label="'+c[0]+'"></button>'}).join('')+'</div>';
   if(k==='kao')return '<p class="shh">顔文字</p><div class="pal">'+KAO.map(function(x){return '<button type="button" data-act="ins" data-v="'+esc(x)+'">'+esc(x)+'</button>'}).join('')+'</div>';
   if(k==='emo')return '<p class="shh">デコ絵文字</p><div class="pal emo">'+EMO.map(function(x){return '<button type="button" data-act="ins" data-v="'+esc(x)+'">'+esc(x)+'</button>'}).join('')+'</div>';
-  if(k==='sozai')return '<p class="shh">素材（タップで入るょ）</p><div class="pal" id="szl">読み込み中…</div>';
+  if(k==='sozai')return '<p class="shh">素材（タップで入るょ）</p>'+'<div class="szbar"><input class="ein" id="szq" placeholder="🔍 素材をさがす（例：ﾊｰﾄ）" autocomplete="off"><div class="szc">'+['ぜんぶ'].concat(DB.SOZCATS,['みんなの']).map(function(c){return '<button type="button" data-act="szcat" data-v="'+esc(c)+'"'+(SZC===c?' class="on"':'')+'>'+esc(c)+'</button>'}).join('')+'</div></div><div class="pal" id="szl">読み込み中…</div>';
   return ''}
 var TOOLS2='<div class="tools"><button type="button" data-act="pal" data-v="color" style="color:#ff6fb5">色</button><button type="button" data-act="wrap" data-v="b"><b>B</b></button><button type="button" data-act="wrap" data-v="big">大</button><button type="button" data-act="wrap" data-v="small" style="font-size:11px">小</button><button type="button" data-act="wrap" data-v="blink">点滅</button><button type="button" data-act="wrap" data-v="rb" class="rbt">虹</button><button type="button" data-act="wrap" data-v="mq">流</button><button type="button" data-act="wrap" data-v="center">中</button><button type="button" data-act="pal" data-v="kao">顔</button><button type="button" data-act="pal" data-v="emo">♡</button><button type="button" data-act="pal" data-v="sozai">素材</button></div><div id="palbox"></div>';
 function shTop(t){return '<div class="shtop"><b>✎ '+esc(t)+'</b><button type="button" class="ebtn" data-act="sheet" data-v="">できた</button></div>'}
@@ -870,7 +884,7 @@ function sheet2(){
     '<p class="shh">★ ﾀｸﾞ（ﾎﾑﾍﾟ検索で見つけてもらう）</p><p class="note2">いま：'+(D.tags.length?D.tags.map(esc).join('、'):'なし')+'　<button type="button" class="ebtn sub" data-act="sheet" data-v="design">ﾀｸﾞを選ぶ</button></p>'+
     '<p class="shh">★ ｶｳﾝﾀｰ・ｷﾘ番</p>'+
     '<label class="elb2"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> ｶｳﾝﾀｰを表示する</label>'+
-    '<p class="shh">ｷﾘ番（カンマ区切り。空なら777・1000などゾロ目とキリのいい数）</p><input class="ein" data-k="kiri" value="'+esc(D.kiri||'')+'" placeholder="例：100,500,1000">'+
+    '<p class="shh">ｷﾘ番（カンマ区切り。空なら777・1000などゾロ目とキリのいい数）</p><input class="ein" data-k="kiri" value="'+esc(D.kiri||'')+'" placeholder="例：100,500,1000">'+'<p class="shh" style="font-weight:normal">ｷﾘ番を踏んだ人に自動で出るお礼ﾒｯｾｰｼﾞ</p><textarea class="eta" data-k="kiriMsg" style="min-height:60px" placeholder="'+esc(KIRIDEF)+'">'+esc(D.kiriMsg||'')+'</textarea>'+
     '<p class="shh">★ web拍手</p><p class="shh" style="font-weight:normal">拍手のお礼ﾒｯｾｰｼﾞ</p><textarea class="eta" data-k="thanks" style="min-height:60px">'+esc(D.thanks||'')+'</textarea>'+
     '<label class="elb2"><input type="checkbox" data-k="showClaps"'+(D.showClaps?' checked':'')+'> 拍手の数をみんなに見せる</label>'+
     '<p class="shh">★ 今のお気に入り曲（SpotifyのURL）</p><input class="ein" data-k="song" value="'+esc(D.song||'')+'" placeholder="https://open.spotify.com/track/…"></div>';
@@ -879,8 +893,8 @@ function sheet2(){
 function drawUi2(){
   var s=sheet2();
   var inner=!!location.hash.replace(/^#/,'');
-  ui.innerHTML='<div class="edbar ed2">'+s+(s?'':inner?'<div class="sh"><p class="ed2-hint" style="margin:0 0 4px">✎ 書く欄をタップ→文字を選んでﾎﾞﾀﾝで飾れるょ　<a href="#" style="color:inherit">◀ TOPへ</a></p>'+TOOLS2+'</div>':'<p class="ed2-hint">✎ 書き換えたいところを<b>タップ</b>してね（ﾍﾟｰｼﾞの中身ゎ「ﾒﾆｭｰ」の✎から）</p>')+
-   '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾝﾌﾟﾚ・色</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">⚙ 設定</button><button type="button" class="ebtn" data-act="save">保存する</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
+  ui.innerHTML='<div class="edbar ed2">'+s+(s?'':inner?'<div class="sh"><p class="ed2-hint" style="margin:0 0 4px">✎ 書く欄をタップ→文字を選んでﾎﾞﾀﾝで飾れるょ　<a href="#" style="color:inherit">◀ TOPへ</a></p>'+TOOLS2+'</div>':'<p class="ed2-hint">✎ 書き換えたいところを<b>タップ</b>してね（ﾍﾟｰｼﾞの中身ゎ「ﾒﾆｭｰ」の✎から）　<button type="button" class="ebtn sub" data-act="padd" style="padding:2px 8px;min-height:0">＋ﾍﾟｰｼﾞ追加</button></p>')+
+   '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾝﾌﾟﾚ・色</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">⚙ 設定</button><button type="button" class="ebtn sub" data-act="qsave" title="編集画面を開いたまま保存">途中保存</button><button type="button" class="ebtn" data-act="save">保存して閉じる</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
    '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>'}
 var rpT=null;
 function livePreview(){clearTimeout(rpT);rpT=setTimeout(function(){if(!location.hash){root.innerHTML=frame(top());afterTop();readGlit()}},200)}
@@ -908,7 +922,7 @@ var INTRO_T=[
  ['今の自分ﾆｭｰｽ','◆今月のわたしﾆｭｰｽ◆\nがんばってること：\nﾊﾏってるもの：\nﾘﾋﾟしてる曲：\n行きたい場所：\n今月の目標：\n来月の自分へ：']];
 function intro(){
   var h=ttl(label('intro'));
-  if(ED)return h+'<p class="note2" style="margin:0 0 4px">何を書けばいいか迷ったら、型を入れて「：」のあとを埋めてね👇</p><div class="vact" style="flex-wrap:wrap">'+INTRO_T.map(function(t,n){return '<button type="button" class="ebtn sub" data-act="itpl" data-i="'+n+'">'+esc(t[0])+'</button>'}).join('')+'</div>'+ta('data-k="intro"',D.intro,'自由に書いてね♪',260)+'<p class="empty">※本名・学校名・住んでる場所ゎ書かないでね</p>'+back();
+  if(ED)return h+'<p class="note2" style="margin:0 0 4px">何を書けばいいか迷ったら、型を入れて「：」のあとを埋めてね👇</p><div class="vact" style="flex-wrap:wrap">'+INTRO_T.map(function(t,n){return '<button type="button" class="ebtn sub" data-act="itpl" data-i="'+n+'">'+esc(t[0])+'</button>'}).join('')+'</div>'+ta('data-k="intro"',D.intro,'自由に書いてね♪',260)+pvBox(fillOnly(D.intro))+'<p class="empty">※本名・学校名・住んでる場所ゎ書かないでね</p>'+back();
   var it=fillOnly(D.intro);return h+(it.trim()?'<p style="word-break:break-all">'+deco(it)+'</p>':'<p class="empty">まだ自己紹介がありません</p>')+back()}
 /* 型の「：」のあとが空っぽの行や、答えのない Q. ゎ公開側でかくす */
 function fillOnly(t){var L=String(t||'').split('\n'),o=[];for(var i=0;i<L.length;i++){var l=L[i];
@@ -931,10 +945,32 @@ function plain(t){return String(t||'').replace(/\[[^\]]*\]/g,'')}
 function starter(k){var p=D.pages[k],m=D.menu.filter(function(x){return x.k===k})[0];
   return '<style>\nbody{margin:0;padding:12px;background:#ffd6ea;color:#6b1f45;font-family:sans-serif;font-size:14px;text-align:center}\nh1{color:#ff3d9a;font-size:20px}\n.box{background:#fff;border:2px dotted #ff8cc6;border-radius:10px;padding:10px;margin:10px 0}\n</style>\n<h1>'+esc(plain(m?m.l:'ﾍﾟｰｼﾞ'))+'</h1>\n<div class="box">\n'+esc(plain(p.b)||'ここに好きなことを書いてね♪').replace(/\n/g,'<br>\n')+'\n</div>\n'}
 function frameH(k){return '<iframe class="uhtml" data-pg="'+esc(k)+'" sandbox="allow-scripts" title="'+esc(plain(label(k)))+'"></iframe>'}
+/* 本文に写真・めろIDﾘﾝｸを入れるﾎﾞﾀﾝ */
+function pvBox(t){return '<details class="pvw" open><summary>👀 見え方（公開側ではこう見えるょ）</summary><div class="pvbox">'+(String(t||'').trim()?deco(t):'<span class="empty">まだ何も書いてないょ</span>')+'</div></details>'}
+document.addEventListener('focusin',function(e){var t=e.target;if(t.tagName==='TEXTAREA'||t.tagName==='INPUT')t.dataset.touched='1'});
+document.addEventListener('input',function(e){var t=e.target;if(t.tagName!=='TEXTAREA')return;var n=t.nextElementSibling;if(n&&n.classList&&n.classList.contains('pvw')){var b=n.querySelector('.pvbox');clearTimeout(t._pv);t._pv=setTimeout(function(){b.innerHTML=t.value.trim()?deco(t.id==='db'?t.value:(t.getAttribute('data-k')==='intro'?fillOnly(t.value):t.value)):'<span class="empty">まだ何も書いてないょ</span>'},150)}});
+function imgBtn(sel){return '<div class="vact" style="flex-wrap:wrap"><label class="ebtn sub" style="display:inline-flex;align-items:center">📷 写真を入れる<input type="file" accept="image/*" hidden data-imgto="'+esc(sel)+'"></label><button type="button" class="ebtn sub" data-act="hplink" data-v="'+esc(sel)+'">♡ めろIDでﾘﾝｸ</button></div><p class="note2">※写真ゎ自動で小さくして、撮った場所の情報を消すょ。顔や制服、家の周りが写った写真ゎ気をつけてね</p>'}
+function insAt(el,txt){var fresh=!el.dataset.touched,a=fresh||el.selectionStart==null?el.value.length:el.selectionStart,b=fresh||el.selectionEnd==null?a:el.selectionEnd;el.dataset.touched='1';el.value=el.value.slice(0,a)+txt+el.value.slice(b);el.selectionStart=el.selectionEnd=a+txt.length;el.dispatchEvent(new Event('input',{bubbles:true}));el.focus()}
+document.addEventListener('input',function(e){if(e.target.id==='szq'){clearTimeout(ldSoz.t);ldSoz.t=setTimeout(ldSoz,200);return}});
+document.addEventListener('input',function(e){var t=e.target;if(!me||(t.id!=='dt'&&t.id!=='db'))return;try{localStorage.setItem('mp_ddraft_'+me.id,JSON.stringify({t:(document.getElementById('dt')||{}).value||'',b:(document.getElementById('db')||{}).value||'',at:Date.now()}))}catch(err){}});
+function restoreDiary(){if(!me)return;var x=null;try{x=JSON.parse(localStorage.getItem('mp_ddraft_'+me.id)||'null')}catch(e){}if(!x||!(x.t||x.b))return;var a=document.getElementById('dt'),b=document.getElementById('db');if(!a||!b||a.value||b.value)return;a.value=x.t;b.value=x.b;
+  var d=b.closest('details');if(d)d.open=true;var n=document.createElement('p');n.className='note2';n.textContent='✎ 書きかけの日記を戻したょ';b.parentNode.insertBefore(n,b);b.dispatchEvent(new Event('input',{bubbles:true}))}
+document.addEventListener('change',async function(e){var t=e.target,sel=t.getAttribute&&t.getAttribute('data-imgto');if(!sel||!t.files||!t.files[0])return;var f=t.files[0];t.value='';
+  var el=document.querySelector(sel);if(!el)return;toast('写真を準備中…');try{var blob=await shrink(f,900),r=await DB.uploadImg(me.id,blob);insAt(el,'\n[p='+r.path+']\n');toast('写真を入れたょ✧')}catch(err){UI.tell(err.message)}});
+var PTYPES=[
+ ['blank','白紙','自由に書く','♡新しいﾍﾟｰｼﾞ♡',''],
+ ['enikki','絵日記','写真＋その日のできごと','♡絵日記♡','[center][big]♡絵日記♡[/big][/center]\n\n[c=#ff3d9a]○月○日（○）[/c]　天気：\n\n（↓の「📷写真を入れる」で写真をはってね）\n\nきょうのできごと：\n\nいちばん楽しかったこと：\n\nひとこと：\n\n[s=m/line_heart.gif]'],
+ ['suki','好きなものﾘｽﾄ','好きなものをどんどん並べる','♡好きなもの♡','[center][big]♡好きなものﾘｽﾄ♡[/big][/center]\n\n[s=m/heart_pink.gif] 曲：\n[s=m/heart_pink.gif] ｱﾆﾒ・漫画：\n[s=m/heart_pink.gif] ｹﾞｰﾑ：\n[s=m/heart_pink.gif] 食べもの：\n[s=m/heart_pink.gif] 色：\n[s=m/heart_pink.gif] 場所：\n[s=m/heart_pink.gif] 言葉：\n[s=m/heart_pink.gif] 推し：\n\n[small]※どんどん追加してね♪[/small]'],
+ ['links','ﾘﾝｸ集','おすすめのﾎﾑﾍﾟを紹介','♡ﾘﾝｸ集♡','[center][big]★おすすめﾎﾑﾍﾟ★[/big][/center]\n\n（↓の「♡めろIDでﾘﾝｸ」で、めろﾋﾟｮﾝ☆のﾎﾑﾍﾟを紹介できるょ）\n\n[s=m/star_yellow.gif] \n　ひとこと：\n\n[s=m/star_yellow.gif] \n　ひとこと：\n\n[small]相互ﾘﾝｸ募集中♪ BBSで声かけてね[/small]'],
+ ['kiri','ｷﾘ番ﾍﾟｰｼﾞ','ｷﾘ番のﾙｰﾙとｹﾞｯﾀｰさん','☆ｷﾘ番☆','[center][big][blink]☆ｷﾘ番☆[/blink][/big][/center]\n\nｷﾘ番：100・777・1000…\n踏んだ人ゎBBSで報告してね♪\n\n[big]★ｷﾘ番ｹﾞｯﾀｰさん★[/big]\n\n\n※踏み逃げ禁止ﾃﾞｽ(｀・ω・´)'],
+ ['q30','30の質問','答えるだけで自己紹介','♡30の質問♡','[center][big]♡30の質問♡[/big][/center]\n\nQ1. 名前（ﾆｯｸﾈｰﾑ）ゎ？\nA. \nQ2. 呼んでほしい名前ゎ？\nA. \nQ3. 年代ゎ？（中学生・20代とか）\nA. \nQ4. 好きな色ゎ？\nA. \nQ5. 好きな食べものゎ？\nA. \nQ6. 苦手な食べものゎ？\nA. \nQ7. 好きな季節ゎ？\nA. \nQ8. 好きな動物ゎ？\nA. \nQ9. 趣味ゎ？\nA. \nQ10. 特技ゎ？\nA. \nQ11. ﾏｲﾌﾞｰﾑゎ？\nA. \nQ12. よく聴く曲ゎ？\nA. \nQ13. 好きなｱﾆﾒ・漫画ゎ？\nA. \nQ14. 好きなｹﾞｰﾑゎ？\nA. \nQ15. 推しゎいる？\nA. \nQ16. 休みの日ゎ何してる？\nA. \nQ17. 朝型？夜型？\nA. \nQ18. 犬派？猫派？\nA. \nQ19. 自分を動物にたとえると？\nA. \nQ20. 宝物ゎ？\nA. \nQ21. 最近うれしかったこと\nA. \nQ22. 最近笑ったこと\nA. \nQ23. 行ってみたい場所\nA. \nQ24. 今いちばんほしいもの\nA. \nQ25. 口ぐせゎ？\nA. \nQ26. 長所ゎ？\nA. \nQ27. 短所ゎ？\nA. \nQ28. 将来の夢ゎ？\nA. \nQ29. ﾎﾑﾍﾟのこだわりﾎﾟｲﾝﾄ\nA. \nQ30. 見てくれた人へひとこと\nA. '],
+ ['poem','ﾎﾟｴﾑ','詩や短い文章','♡ﾎﾟｴﾑ♡','[center][big]♡ﾎﾟｴﾑ♡[/big][/center]\n\n[center]ﾀｲﾄﾙ：\n\n\n\n[/center]\n[s=m/line_star.gif]'],
+ ['html','HTMLで作る','上級者むけ（はじめの設定から3日後）','♡ｵﾘｼﾞﾅﾙ♡','']];
+function pageTypes(){modal('<p class="ttl">＋ ﾍﾟｰｼﾞを追加</p><p class="note2" style="text-align:center">どんなﾍﾟｰｼﾞにする？（あとから自由に書きかえられるょ）</p><div class="ptgrid">'+PTYPES.map(function(t){return '<button type="button" class="ptbtn" data-act="padd2" data-v="'+t[0]+'"><b>'+esc(t[1])+'</b><small>'+esc(t[2])+'</small></button>'}).join('')+'</div><div class="mch"><button type="button" class="ebtn sub" data-act="m_close">やめる</button></div>')}
 function page(k){
   var p=D.pages[k];if(!p)return ttl('ﾍﾟｰｼﾞ')+'<p class="empty">このﾍﾟｰｼﾞゎ見つからないょ</p>'+back();
   if(ED){var h=ttl(label(k))+'<div class="vact"><button type="button" class="ebtn'+(p.fmt==='html'?' sub':'')+'" data-act="fmt" data-i="0" data-v="'+esc(k)+'">文章で書く</button><button type="button" class="ebtn'+(p.fmt==='html'?'':' sub')+'" data-act="fmt" data-i="1" data-v="'+esc(k)+'">HTMLで作る</button></div>';
-    if(p.fmt!=='html')return h+'<span class="elb">ﾍﾟｰｼﾞの中身</span>'+ta('data-pg="'+esc(k)+'"',p.b,'自由に書いてね♪',260)+back();
+    if(p.fmt!=='html')return h+'<span class="elb">ﾍﾟｰｼﾞの中身</span>'+ta('data-pg="'+esc(k)+'"',p.b,'自由に書いてね♪',260)+pvBox(p.b)+imgBtn('textarea[data-pg=\''+k+'\']')+back();
     if(!htmlOk())return h+'<p class="empty">HTMLで作る機能ゎ、はじめの設定から3日たつと使えるょ</p>'+back();
     return h+'<p class="note2" style="color:var(--hi)">HTMLとCSSで自由に作れるょ。外部のｻｲﾄの画像やｽｸﾘﾌﾟﾄ、ﾌｫｰﾑゎ使えないょ。素材ゎ [s=ｺｰﾄﾞ] で入る</p><div class="vact"><button type="button" class="ebtn sub" data-act="kaizo" data-v="'+esc(k)+'">文章ﾍﾟｰｼﾞを元に改造</button><button type="button" class="ebtn sub" data-act="blank" data-v="'+esc(k)+'">白紙にする</button></div>'+
       '<textarea class="eta code" data-pgh="'+esc(k)+'" spellcheck="false" style="min-height:260px">'+esc(p.h||'')+'</textarea><span class="elb">ﾌﾟﾚﾋﾞｭｰ</span>'+frameH(k)+back()}
@@ -948,12 +984,12 @@ function fail(e){ap('<p class="empty">'+esc(e.message)+'</p>')}
 function rep(t,id){return '<a class="mini2" style="text-decoration:none;display:inline-flex;align-items:center" href="report.html?type='+t+'&id='+encodeURIComponent(id)+'&hp='+encodeURIComponent(HID)+'">通報</a>'}
 function who(p){return p&&p.hp_id?'<a href="hp.html?id='+esc(p.hp_id)+'">'+esc(p.nickname)+'</a>':esc(p?p.nickname:'ななしさん')}
 async function ldDiary(){try{var L=await DB.diaries(R.id),h='',W=ED||owner;
-  if(owner&&!ED)h+='<details class="dia dnew"'+(/[?&]w=1/.test(location.search)?' open':'')+'><summary>✎ 日記を書く</summary><div class="bd"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><a href="hp.html?id='+esc(HID)+'&amp;edit=1#diary" style="font-size:11px;margin-right:8px">色や文字の飾りを使って書く</a><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div></details>';
-  if(ED)h+='<div class="box"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div>';
+  if(owner&&!ED)h+='<details class="dia dnew"'+(/[?&]w=1/.test(location.search)?' open':'')+'><summary>✎ 日記を書く</summary><div class="bd"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+pvBox('')+imgBtn('#db')+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><a href="hp.html?id='+esc(HID)+'&amp;edit=1#diary" style="font-size:11px;margin-right:8px">色や文字の飾りを使って書く</a><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div></details>';
+  if(ED)h+='<div class="box"><input class="ein" id="dt" maxlength="50" placeholder="ﾀｲﾄﾙ">'+ta('id="db"','','本文',160)+pvBox('')+imgBtn('#db')+'<label class="elb"><input type="checkbox" id="dp" checked> 公開する</label><p style="text-align:right;margin:0"><button type="button" class="ebtn" data-act="dadd">日記を書く♪</button></p></div>';
   if(!L.length)h+='<p class="empty">まだ日記ゎありません</p>';
   L.forEach(function(d,i){h+='<details class="dia"'+(i===0?' open':'')+'><summary><span class="d">'+esc(tm(d.created_at))+'</span> '+esc(d.title||'無題')+(d.is_public?'':' <span class="ptag">非公開</span>')+(i===0?'<span class="new">NEW!</span>':'')+'</summary><div class="bd">'+deco(d.body)+'</div>'+(!owner?'<p style="text-align:right;margin:2px 0">'+rep('diary',d.id)+'</p>':'')+
     (W?'<p style="text-align:right;margin:4px 0"><button type="button" class="ebtn sub" data-act="dpub" data-i="'+d.id+'" data-v="'+(d.is_public?'0':'1')+'">'+(d.is_public?'非公開にする':'公開する')+'</button> <button type="button" class="ebtn sub" data-act="ddel" data-i="'+d.id+'">消す</button></p>':'')+'</details>'});
-  ap(h)}catch(e){fail(e)}}
+  ap(h);restoreDiary()}catch(e){fail(e)}}
 async function ldPhoto(){try{var L=await DB.photos(R.id),h='';
   if(ED||owner)h+='<div class="box"><label class="ebtn" style="display:inline-flex;align-items:center">'+(ED?'':'📷 ')+'写真を'+(ED?'選ぶ':'追加する')+'<input type="file" id="pf" accept="image/*" hidden></label> <input class="ein" id="pc" maxlength="100" placeholder="ひとこと（なくてもOK）" style="margin-top:6px"><p class="note2" style="color:var(--hi)">※自動で小さくして、撮った場所の情報を消すょ</p></div>';
   if(!L.length)h+='<p class="empty">まだ写真ゎありません</p>';
@@ -999,14 +1035,14 @@ function draw(){
   if(LOAD[r]){root.innerHTML=frame(mini+apage(r));LOAD[r]()}
   else root.innerHTML=frame(mini+(f?f():(D.pages[r]?page(r):top())));
   }catch(err){if(window.console)console.error(err);root.innerHTML=frame(mini+'<p class="empty">このﾍﾟｰｼﾞをうまく表示できなかったょ…（'+esc(err.message)+'）</p>'+back())}
-  if(!r&&(!ED||isT())){ldUpd();ldLinks()}
+  if(!r&&(!ED||isT())){ldUpd();ldLinks();ldKiri()}
   fillFrames();readGlit();drawUi()}
 function cur(v){return getComputedStyle(document.documentElement).getPropertyValue('--'+v).trim()}
 function sheetHtml(){
   if(sheet==='color')return '<div class="sh"><p class="shh">文字の色（選んだ文字を囲むょ）</p><div class="sw">'+COLS.map(function(c){return '<button type="button" data-act="wrapc" data-v="'+c[1]+'" style="background:'+c[1]+'" aria-label="'+c[0]+'"></button>'}).join('')+'</div></div>';
   if(sheet==='kao')return '<div class="sh"><p class="shh">顔文字</p><div class="pal">'+KAO.map(function(k){return '<button type="button" data-act="ins" data-v="'+esc(k)+'">'+esc(k)+'</button>'}).join('')+'</div></div>';
   if(sheet==='emo')return '<div class="sh"><p class="shh">デコ絵文字</p><div class="pal emo">'+EMO.map(function(k){return '<button type="button" data-act="ins" data-v="'+esc(k)+'">'+esc(k)+'</button>'}).join('')+'</div></div>';
-  if(sheet==='sozai')return '<div class="sh"><p class="shh">素材（タップで入るょ）　<a href="sozai.html" target="_blank" style="color:#ff9ad5">素材置き場へ</a></p><div class="pal" id="szl">読み込み中…</div></div>';
+  if(sheet==='sozai')return '<div class="sh"><p class="shh">素材（タップで入るょ）　<a href="sozai.html" target="_blank" style="color:#ff9ad5">素材置き場へ</a></p>'+'<div class="szbar"><input class="ein" id="szq" placeholder="🔍 素材をさがす（例：ﾊｰﾄ）" autocomplete="off"><div class="szc">'+['ぜんぶ'].concat(DB.SOZCATS,['みんなの']).map(function(c){return '<button type="button" data-act="szcat" data-v="'+esc(c)+'"'+(SZC===c?' class="on"':'')+'>'+esc(c)+'</button>'}).join('')+'</div></div><div class="pal" id="szl">読み込み中…</div>'+'</div>';
   if(sheet==='design'){
     var h='<div class="sh"><p class="shh">テンプレ</p><select id="tp">'+Object.keys(TPL).map(function(k){return '<option value="'+k+'"'+(D.tpl===k?' selected':'')+'>'+TPL[k].n+'</option>'}).join('')+'</select>'+(D.tpl==='garake'?'<p class="shh">ガラケー王道の色</p><select id="th">'+THEMES.map(function(t){return '<option value="'+t[0]+'"'+(D.theme===t[0]?' selected':'')+'>'+t[1]+'</option>'}).join('')+'</select>':'');
     h+='<p class="shh">色をこまかく変える</p><div class="cg">'+CV.map(function(c){var v=hex(D.colors[c[0]])?D.colors[c[0]]:cur(c[0]);if(!hex(v))v='#ffffff';return '<label>'+c[1]+'<input type="color" data-cv="'+c[0]+'" value="'+esc(v)+'"></label>'}).join('')+'</div>';
@@ -1019,7 +1055,7 @@ function sheetHtml(){
   if(sheet==='menu'){
     var h2='<div class="sh"><p class="shh">ﾒﾆｭｰ（名前・表示・並び順）</p>';
     D.menu.forEach(function(m,i){h2+='<div class="mrow" style="flex-wrap:wrap"><input class="ein" data-ml="'+i+'" value="'+esc(m.l)+'" maxlength="20"><input class="ein" data-md="'+i+'" value="'+esc(m.d!=null?m.d:(MDESC[m.k]||''))+'" maxlength="20" placeholder="説明（ﾃﾝﾌﾟﾚによって表示）" style="order:9;flex-basis:100%;font-size:14px"><label class="mon"><input type="checkbox" data-mo="'+i+'"'+(m.on?' checked':'')+'>表示</label><button type="button" class="mini" data-act="mup" data-i="'+i+'" aria-label="上へ">▲</button><button type="button" class="mini" data-act="mdown" data-i="'+i+'" aria-label="下へ">▼</button>'+'<button type="button" class="mini" data-act="mgo" data-v="'+esc(m.k)+'" aria-label="中身を書く" title="中身を書く">✎</button>'+(BUILTIN[m.k]?'':'<button type="button" class="mini" data-act="mdel" data-i="'+i+'" aria-label="消す">×</button>')+'</div>'});
-    return h2+'<p><button type="button" class="ebtn" data-act="padd">＋ ﾍﾟｰｼﾞを追加</button></p><p class="note2">✎を押すと、そのﾍﾟｰｼﾞの中身を書けるょ</p></div>'}
+    return h2+'<p style="text-align:center"><button type="button" class="ebtn" data-act="padd" style="font-size:14px;padding:8px 18px">＋ ﾍﾟｰｼﾞを追加（絵日記・好きなもの・ﾘﾝｸ集…）</button></p><p class="note2">✎を押すと、そのﾍﾟｰｼﾞの中身を書けるょ</p></div>'}
   return ''}
 function drawUi(){
   if(!owner){ui.innerHTML='';return}
@@ -1027,7 +1063,7 @@ function drawUi(){
   if(isT())drawUi2();else{
   ui.innerHTML='<div class="edbar">'+sheetHtml()+
    '<div class="tools" aria-label="文字の装飾"><button type="button" data-act="sheet" data-v="color" style="color:#ff6fb5">色</button><button type="button" data-act="wrap" data-v="b"><b>B</b></button><button type="button" data-act="wrap" data-v="big">大</button><button type="button" data-act="wrap" data-v="small" style="font-size:11px">小</button><button type="button" data-act="wrap" data-v="blink">点滅</button><button type="button" data-act="wrap" data-v="rb" class="rbt">虹</button><button type="button" data-act="wrap" data-v="mq">流</button><button type="button" data-act="wrap" data-v="center">中</button><button type="button" data-act="sheet" data-v="kao">顔</button><button type="button" data-act="sheet" data-v="emo">♡</button><button type="button" data-act="sheet" data-v="sozai">素材</button></div>'+
-   '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾞｻﾞｲﾝ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn" data-act="save">保存する</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
+   '<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="design">ﾃﾞｻﾞｲﾝ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub" data-act="qsave" title="編集画面を開いたまま保存">途中保存</button><button type="button" class="ebtn" data-act="save">保存して閉じる</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
    '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>';}
   var tp=document.getElementById('tp');if(tp)tp.onchange=function(){D.tpl=this.value;D.colors={};changed();draw()};
   var th=document.getElementById('th');if(th)th.onchange=function(){D.theme=this.value;D.colors={};changed();draw()};
@@ -1040,14 +1076,26 @@ function drawUi(){
     if(el.checked){if(D.tags.length>=8){el.checked=false;st('タグゎ8つまでだょ');return}D.tags.push(t)}else D.tags=D.tags.filter(function(x){return x!==t});changed()}});
   if(sheet==='sozai')ldSoz();
   var f=document.getElementById('iconf');if(f)f.onchange=function(){if(f.files[0])upIcon(f.files[0])}}
-async function ldSoz(){var e=document.getElementById('szl');if(!e)return;var L=[];try{L=await DB.materials(60)}catch(err){}
-  try{L=DB.OFFICIAL.map(function(m){return {path:m[0],title:m[1]}}).concat(L);
-  e.innerHTML=L.length?L.map(function(m){return '<button type="button" data-act="ins" data-v="[s='+esc(m.path)+']" title="'+esc(m.title)+'"><img src="'+esc(DB.sozUrl(m.path))+'" alt="'+esc(m.title||'素材')+'" style="max-height:32px;max-width:80px"></button>'}).join(''):'まだ素材がないょ'}catch(err){e.textContent=err.message}}
+var SZ=null,SZC='ぜんぶ';
+async function ldSoz(){var e=document.getElementById('szl');if(!e)return;if(!SZ){var L=[];try{L=await DB.materials(200)}catch(err){}
+  SZ=DB.OFFICIAL.map(function(m){return {path:m[0],title:m[1],off:1}}).concat(L.map(function(m){return {path:m.path,title:m.title}})).map(function(m){m.cat=DB.sozCat(m.path,m.title);return m})}
+  var q=((document.getElementById('szq')||{}).value||'').trim().toLowerCase();
+  var L=SZ.filter(function(m){return (SZC==='ぜんぶ'||(SZC==='みんなの'?!m.off:m.cat===SZC))&&(!q||String(m.title||'').toLowerCase().indexOf(q)>=0||m.cat.toLowerCase().indexOf(q)>=0)});
+  try{
+  e.innerHTML=L.length?L.map(function(m){return '<button type="button" data-act="ins" data-v="[s='+esc(m.path)+']" title="'+esc(m.title)+'"><img src="'+esc(DB.sozUrl(m.path))+'" alt="'+esc(m.title||'素材')+'" style="max-height:32px;max-width:80px"></button>'}).join(''):(q||SZC!=='ぜんぶ'?'見つからなかったょ':'まだ素材がないょ')}catch(err){e.textContent=err.message}}
 function redrawPage(){var r=location.hash.replace(/^#/,''),fn={prof:prof,intro:intro,real:real}[r];if(LOAD[r])return;root.innerHTML=frame(fn?fn():(D.pages[r]?page(r):top()));fillFrames();if(!r&&isT())afterTop()}
 function fillFrames(){document.querySelectorAll('iframe.uhtml').forEach(function(f){var p=D.pages[f.getAttribute('data-pg')];if(p)f.srcdoc=htmlDoc(p.h)})}
 window.addEventListener('message',function(e){if(!e.data||e.data.melo!==1)return;document.querySelectorAll('iframe.uhtml').forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(Math.max(+e.data.h||0,120),6000)+'px'})});
 var pvT=null;
-function changed(){dirty=true;st('まだ保存してないょ')}
+function changed(){dirty=true;st('まだ保存してないょ');clearTimeout(changed.t);changed.t=setTimeout(saveDraft,1500)}
+/* 書きかけの自動下書き（この端末に保存） */
+function dKey(){return 'mp_draft_'+(me&&me.id)}
+function saveDraft(){if(!dirty||!owner||!ED)return;try{localStorage.setItem(dKey(),JSON.stringify({at:Date.now(),d:D,vis:VIS,isNew:isNew}));var e=document.getElementById('st');var t=new Date();st('下書きを自動で保存したょ（'+t.getHours()+':'+('0'+t.getMinutes()).slice(-2)+'）。公開するにゎ「保存」を押してね')}catch(e){}}
+function dropDraft(){try{localStorage.removeItem(dKey())}catch(e){}}
+async function checkDraft(){var x=null;try{x=JSON.parse(localStorage.getItem(dKey())||'null')}catch(e){}if(!x||!x.d)return;
+  if(JSON.stringify(x.d)===JSON.stringify(D)){dropDraft();return}
+  var t=new Date(x.at),ts=(t.getMonth()+1)+'/'+t.getDate()+' '+t.getHours()+':'+('0'+t.getMinutes()).slice(-2);
+  if(await UI.ask('保存しないまま閉じた書きかけがあるょ（'+ts+'）。\n続きから編集する？\n（「やめる」を押すと書きかけゎ消えるょ）')){D=fix(x.d,R.nickname);VIS=x.vis||VIS;isNew=!!x.isNew;dirty=true;draw();st('書きかけを戻したょ。公開するにゎ「保存」を押してね')}else dropDraft()}
 function st(t){var e=document.getElementById('st');if(e&&e.getClientRects().length)e.textContent=t;else if(t&&!/中…$/.test(t)&&t!=='まだ保存してないょ')toast(t)}
 /* 選んだ文字を囲む・挿入 */
 function target(){if(lastF&&document.body.contains(lastF))return lastF;st('先に文字を書く欄をタップしてね');return null}
@@ -1071,7 +1119,8 @@ root.addEventListener('input',function(e){var t=e.target,k=t.getAttribute('data-
 root.addEventListener('change',function(e){if(e.target.getAttribute('data-k')==='song')draw()});
 document.addEventListener('click',async function(e){var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act'),iv=b.getAttribute('data-i'),i=+iv,v=b.getAttribute('data-v'),el;
   if(a==='edit'){chooser()}
-  else if(a==='m_edit'){closeM();ED=true;draw()}
+  else if(a==='m_edit'){closeM();ED=true;draw();checkDraft()}
+  else if(a==='qsave'){if(!dirty){toast('変更ゎないょ');return}await save(b,'mid');if(dirty)return;toast('ここまで保存したょ✧（公開側にも反映されたょ）')}
   else if(a==='m_new'){await newHp()}
   else if(a==='m_new_keep'){await loadBox();if(BOX.length>=5){UI.tell('保存BOXがいっぱいだょ（5個まで）。いらないのを消すか「しまわずに作る」を選んでね');return boxView()}try{await DB.addBackup(stamp(),D)}catch(err){UI.tell(err.message);return}tplPick()}
   else if(a==='m_new_drop'){tplPick()}
@@ -1094,7 +1143,11 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='mup'&&i>0){D.menu.splice(i-1,0,D.menu.splice(i,1)[0]);changed();drawUi();redrawPage()}
   else if(a==='mdown'&&i<D.menu.length-1){D.menu.splice(i+1,0,D.menu.splice(i,1)[0]);changed();drawUi();redrawPage()}
   else if(a==='mdel'){if(await UI.ask('このﾍﾟｰｼﾞを消す？（中身も消えるょ）')){var k=D.menu[i].k;delete D.pages[k];D.menu.splice(i,1);changed();if(location.hash==='#'+k)location.hash='';drawUi();redrawPage()}}
-  else if(a==='padd'){if(D.menu.length>=12){st('ﾍﾟｰｼﾞゎ12個までだょ');return}var k2='p'+Date.now().toString(36);D.pages[k2]={b:''};D.menu.push({k:k2,l:'♡新しいﾍﾟｰｼﾞ♡',on:true});changed();drawUi();redrawPage()}
+  else if(a==='padd'){if(Object.keys(D.pages).length>=12){UI.tell('追加ﾍﾟｰｼﾞゎ12個までだょ');return}pageTypes()}
+  else if(a==='padd2'){var T2=PTYPES.filter(function(t){return t[0]===v})[0];if(!T2)return;if(v==='html'&&!htmlOk()){UI.tell('HTMLで作る機能ゎ、はじめの設定から3日たつと使えるょ。今ゎ文章のﾍﾟｰｼﾞで作ってみてね');return}
+    var k2='p'+Date.now().toString(36);D.pages[k2]=v==='html'?{b:'',fmt:'html',h:''}:{b:T2[4]};D.menu.push({k:k2,l:T2[3],on:true});closeM();changed();sheet='';ED=true;if(location.hash==='#'+k2)draw();else location.hash=k2;scrollTo(0,0);toast('ﾍﾟｰｼﾞを追加したょ✧ 中身を書いてね')}
+  else if(a==='hplink'){var el=document.querySelector(v);if(!el)return;var id=await UI.input('紹介したいﾎﾑﾍﾟのめろIDを入れてね（例：ayapyon）','');if(!id)return;id=id.trim().toLowerCase();if(!/^[a-z0-9_]{3,16}$/.test(id)){UI.tell('めろIDゎ半角英小文字・数字・_ の3〜16文字だょ');return}
+    var nm=await UI.input('ﾘﾝｸに表示する名前（ﾎﾑﾍﾟ名など）',id);if(nm==null)return;insAt(el,'[hp='+id+']'+(nm.trim()||id)+'[/hp]')}
   else if(a==='resetc'){D.colors={};applyColors();readGlit();changed();drawUi()}
   else if(a==='delicon'){if(await UI.ask('ﾌﾟﾛﾌ画像を外す？')){var old=D.iconPath;D.icon='';D.iconPath='';await save(null,true);if(old)DB.delImg(old).catch(function(){});draw()}}
   else if(a==='save'){await save(b)}
@@ -1108,8 +1161,10 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='closem'){var m=document.getElementById('modal');if(m)m.remove();draw()}
   else if(a==='freq'){if(!await UI.ask(R.nickname+' さんにめろ友申請する？'))return;try{await DB.requestFriend(R.id);FR='sent';draw()}catch(err){UI.tell(err.message)}}
   else if(a==='facc'){try{await DB.acceptFriend(FR_ID);FR='friend';draw()}catch(err){UI.tell(err.message)}}
-  else if(a==='kirirep'){try{await DB.addHpPost(R.id,'【ｷﾘ番報告】'+KIRI+' 番を踏みました♪');UI.tell('BBSに報告したょ✧');location.hash='bbs'}catch(err){UI.tell(err.message)}}
-  else if(a==='dadd'){var t1=document.getElementById('dt').value.trim(),b1=document.getElementById('db').value;if(!b1.trim()){st('本文を書いてね');return}try{await DB.addDiary(t1,b1,document.getElementById('dp').checked);toast('日記を書いたょ✧');ldDiary()}catch(err){st(err.message)}}
+  else if(a==='szcat'){SZC=v;document.querySelectorAll('[data-act=szcat]').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});ldSoz()}
+  else if(a==='kirirep'){kiriBox()}
+  else if(a==='kirisend'){var km=(document.getElementById('kmsg')||{}).value||'';try{await DB.addHpPost(R.id,'【ｷﾘ番報告】'+KIRI+' 番を踏みました♪'+(km.trim()?' '+km.trim():''));closeM();toast('BBSに報告したょ✧');location.hash='bbs'}catch(err){UI.tell(err.message)}}
+  else if(a==='dadd'){var t1=document.getElementById('dt').value.trim(),b1=document.getElementById('db').value;if(!b1.trim()){st('本文を書いてね');return}try{await DB.addDiary(t1,b1,document.getElementById('dp').checked);try{localStorage.removeItem('mp_ddraft_'+me.id)}catch(e){}toast('日記を書いたょ✧');ldDiary()}catch(err){st(err.message)}}
   else if(a==='dpub'){try{await DB.setDiaryPub(iv,v==='1');ldDiary()}catch(err){st(err.message)}}
   else if(a==='ddel'){if(await UI.ask('この日記を消す？'))try{await DB.delDiary(iv);ldDiary()}catch(err){st(err.message)}}
   else if(a==='pdel'){if(await UI.ask('この写真を消す？'))try{await DB.delPhoto(iv);DB.delImg(v).catch(function(){});ldPhoto()}catch(err){st(err.message)}}
@@ -1173,9 +1228,9 @@ function piCheck(){var all=JSON.stringify([D.title,D.marquee,D.intro,D.qa,D.real
   return hit}
 async function save(b,quiet){
   var nr=document.getElementById('newreal');if(nr&&nr.value.trim()){D.real.unshift({t:nr.value.trim(),at:new Date().toISOString()});D.real=D.real.slice(0,50);nr.value=''}
-  if(!quiet){var hit=piCheck();if(hit.length&&!await UI.ask(hit.join('・')+'っぽいものが入ってるょ。\n誰でも見れる場所に個人情報を書くのゎ危ないよ。\nこのまま保存する？'))return}
+  if(quiet!==true){var hit=piCheck();if(hit.length&&!await UI.ask(hit.join('・')+'っぽいものが入ってるょ。\n誰でも見れる場所に個人情報を書くのゎ危ないよ。\nこのまま保存する？'))return}
   if(b)b.disabled=true;st('保存中…');
-  try{await DB.saveHp(me.id,D,VIS);dirty=false;isNew=false;st('保存したょ✧');if(!quiet){ED=false;sheet='';draw();toast('保存したょ✧')}}catch(err){st(err.message)}if(b)b.disabled=false}
+  try{await DB.saveHp(me.id,D,VIS);dirty=false;isNew=false;dropDraft();st('保存したょ✧');if(!quiet){ED=false;sheet='';draw();toast('保存したょ✧')}}catch(err){st(err.message)}if(b)b.disabled=false}
 window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue=''}});
 window.addEventListener('hashchange',function(){draw();scrollTo(0,0)});
 setInterval(function(){var c=document.getElementById('clk');if(c)c.textContent=clock()},30000);
@@ -1199,7 +1254,7 @@ document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{
   if(owner&&WANT&&!isNew)setTimeout(chooser,0);
   draw();
   if(R.hp){DB.clapCount(R.id).then(function(n){CLAPS=n;if(!location.hash&&!ED)draw()}).catch(function(){})}
-  if(!owner&&R.hp){DB.visit(HID).then(function(n){if(n){CNT=n;if(isKiri(n))KIRI=n;if(!location.hash)draw()}}).catch(function(){})}
+  if(!owner&&R.hp){DB.visit(HID).then(function(n){if(n){CNT=n;if(isKiri(n))KIRI=n;if(!location.hash)draw();kiriPop()}}).catch(function(){})}
   if(me&&!owner&&R.hp){DB.footprint(R.id).catch(function(){});
     DB.friendWith(me.id,R.id).then(function(f){if(!f)FR='none';else if(f.status==='accepted')FR='friend';else if(f.from_id===me.id)FR='sent';else{FR='in';FR_ID=f.id}if(!location.hash)draw()}).catch(function(){})}
 })();

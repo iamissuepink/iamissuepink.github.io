@@ -118,6 +118,11 @@ window.DB={
     await run(sb.storage.from('sozai').upload(path,file,{contentType:file.type,upsert:false}));await run(sb.from('materials').insert({path:path,title:title}));return path},
   delMaterial:async function(id,path){await del(sb.from('materials').delete().eq('id',id));await run(sb.storage.from('sozai').remove([path]))},
   sozOk:function(p){return /^[0-9a-f-]{36}\/[0-9a-z]+\.(gif|png|webp)$/.test(p||'')||/^m\/[a-z0-9_]{1,30}\.(gif|png)$/.test(p||'')},
+  SOZCATS:['ﾊｰﾄ','星・ｷﾗｷﾗ','ﾘﾎﾞﾝ','文字','ﾗｲﾝ','その他'],
+  sozCat:function(path,title){var t=String(title||'')+' '+String(path||'');
+    if(/ﾗｲﾝ|らいん|ライン|line|線/i.test(t))return 'ﾗｲﾝ';    if(/ﾊｰﾄ|はーと|ハート|heart|♡|♥/i.test(t))return 'ﾊｰﾄ';if(/星|ｷﾗ|きら|キラ|star|kira|☆|★/i.test(t))return '星・ｷﾗｷﾗ';
+    if(/ﾘﾎﾞﾝ|りぼん|リボン|ribbon/i.test(t))return 'ﾘﾎﾞﾝ';if(/ﾗｲﾝ|らいん|ライン|line|線/i.test(t))return 'ﾗｲﾝ';
+    if(/NEW|UP!|LOVE|THANKS|文字|ﾛｺﾞ|welcome/i.test(t))return '文字';return 'その他'},
   sozUrl:function(p){p=String(p||'');return p.indexOf('m/')===0?SITE+'img/sozai/'+p.slice(2):SOZ+p},
   OFFICIAL:[['m/heart_pink.gif','ﾋﾟﾝｸのﾊｰﾄ'],['m/heart_beat.gif','ﾄﾞｷﾄﾞｷﾊｰﾄ'],['m/heart_blue.gif','水色のﾊｰﾄ'],['m/heart_purple.gif','むらさきのﾊｰﾄ'],['m/kira_twinkle.gif','ｷﾗｷﾗ'],['m/star_yellow.gif','きいろの星'],['m/star_pink.gif','ﾋﾟﾝｸの星'],['m/ribbon_pink.gif','ﾋﾟﾝｸﾘﾎﾞﾝ'],['m/ribbon_black.gif','黒ﾘﾎﾞﾝ'],['m/new_blink.gif','NEW!'],['m/up.gif','UP!'],['m/love.gif','LOVE'],['m/thanks.gif','THANKS!'],['m/arrow_pink.gif','やじるし'],['m/clover.gif','ｸﾛｰﾊﾞｰ'],['m/moon.gif','おつきさま'],['m/note_pink.gif','おんぷ'],['m/usagi.gif','うさぎ'],['m/line_heart.gif','ﾊｰﾄのﾗｲﾝ'],['m/line_dot.gif','しましまﾗｲﾝ'],['m/line_star.gif','星のﾗｲﾝ']],
   uploadImg:async function(uid,blob){var path=uid+'/'+Date.now()+'.jpg';await run(sb.storage.from('hp').upload(path,blob,{contentType:'image/jpeg',upsert:false}));return {path:path,url:IMG+path}},
