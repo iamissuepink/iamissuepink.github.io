@@ -672,7 +672,11 @@ function clock(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':'+('0'+d
 function hex(c){return /^#[0-9a-fA-F]{6}$/.test(c||'')}
 /* 文字装飾 */
 function deco(t){
-  var h=esc(t),p;
+  var raw=String(t==null?'':t),blocks=[];
+  raw=raw.replace(/\[html\]([\s\S]*?)\[\/html\]/gi,function(m,code){
+    if(blocks.length>=3)return m;
+    blocks.push(code);return '\u0001HB'+(blocks.length-1)+'\u0001'});
+  var h=esc(raw),p;
   for(var i=0;i<6;i++){p=h;
     h=h.replace(/\[c=(#[0-9a-fA-F]{6})\]([\s\S]*?)\[\/c\]/g,'<span style="color:$1">$2</span>')
      .replace(/\[b\]([\s\S]*?)\[\/b\]/g,'<b>$1</b>')
@@ -686,6 +690,7 @@ function deco(t){
      .replace(/\[p=([0-9a-f-]{36}\/\d+\.jpg)\]/g,function(m,x){return '<img class="pimg" src="'+DB.imgBase+x+'" alt="写真" loading="lazy">'})
      .replace(/\[hp=([a-z0-9_]{3,16})\]([\s\S]*?)\[\/hp\]/g,'<a class="hpl" href="hp.html?id=$1">$2</a>');
     if(h===p)break}
+  if(blocks.length)h=h.replace(/\u0001HB(\d+)\u0001/g,function(m,bi){return '<iframe class="uhtml ufree" sandbox="allow-scripts allow-top-navigation-by-user-activation" title="自由HTML" srcdoc="'+esc(htmlDoc(blocks[bi]))+'"></iframe>'});
   return h.replace(/\n/g,'<br>')}
 function def(nick){return {tpl:'garake',msg:DEFMSG,sub:'',title:'☆★'+nick+'のﾎﾑﾍﾟ★☆',theme:'pink',marquee:'ようこそ(*´∀`*)ﾉﾞ ゆっくりしてってね☆',mood:'(*´∀`*)',showCounter:true,intro:'',song:'',icon:'',iconPath:'',colors:{},tags:[],thanks:'拍手ありがと(*´∀`*)ﾉ\nまた遊びに来てね♪',showClaps:true,kiri:'',
   qa:[['名前',''],['ﾆｯｸﾈｰﾑ',''],['誕生日',''],['血液型',''],['趣味',''],['好きな食べ物',''],['ﾏｲﾌﾞｰﾑ',''],['最後に一言','']],real:[],
@@ -734,7 +739,7 @@ var BLK={
  sub:function(){return ED?'<span class="elb">ﾎﾑﾍﾟ名の下のひとこと</span>'+inp('sub',D.sub||'','deco','例：←+--+ﾏﾀｰﾘ更新中+--+→'):''},
  marq:function(){return ED?'<span class="elb">流れる文字</span>'+inp('marquee',D.marquee,'deco'):(D.marquee?'<div class="marq"><span>'+deco(D.marquee)+'</span></div>':'')},
  img:function(){if(TPL[D.tpl].menu==='table')return '';return (iconOk()?'<div class="topimg"><img class="pic" src="'+esc(D.icon)+'" alt="TOP写真"></div>':'')+(ED?'<p style="text-align:center;margin:6px 0"><button type="button" class="ebtn sub" data-act="sheet" data-v="design">TOP写真・色を変える</button></p>':'')},
- msg:function(){return ED?'<span class="elb">TOPの文（文字の大きさや色を変えて、自由にﾃﾞｺってね）</span>'+ta('data-k="msg"',D.msg,'ようこそ♪',180)+pvBox(D.msg):(D.msg?'<div class="msg">'+deco(D.msg)+'</div>':'')},
+ msg:function(){return ED?'<span class="elb">TOPの文（文字の大きさや色を変えて、自由にﾃﾞｺってね）</span>'+ta('data-k="msg"',D.msg,'ようこそ♪',180)+pvBox(D.msg)+htmlBtn('textarea[data-k="msg"]'):(D.msg?'<div class="msg">'+deco(D.msg)+'</div>':'')},
  mood:function(){if(ED)return '<span class="elb">今日の気分</span>'+inp('mood',D.mood)+'<div class="moods">'+MOODS.map(function(m){return '<button type="button" data-act="mood" data-v="'+esc(m)+'">'+esc(m)+'</button>'}).join('')+'</div>';return D.mood?'<p class="mood">今日の気分 <b>'+esc(D.mood)+'</b></p>':''},
  menu:function(){return menuHtml(TPL[D.tpl].menu)+(ED?'<p style="text-align:center;margin:4px 0"><button type="button" class="ebtn sub" data-act="sheet" data-v="menu">ﾒﾆｭｰを編集・ﾍﾟｰｼﾞを追加</button></p>':'')},
  counter:function(){if(ED)return '<label class="elb"><input type="checkbox" data-k="showCounter"'+(D.showCounter?' checked':'')+'> カウンターを表示する</label><span class="elb">ｷﾘ番（カンマ区切り。空なら 777・1000 などゾロ目とキリのいい数）</span>'+inp('kiri',D.kiri,'','例：100,500,1000')+'<span class="elb">ｷﾘ番を踏んだ人へのお礼ﾒｯｾｰｼﾞ</span>'+ta('data-k="kiriMsg"',D.kiriMsg||'',KIRIDEF,60);
@@ -930,7 +935,7 @@ var INTRO_T=[
  ['今の自分ﾆｭｰｽ','◆今月のわたしﾆｭｰｽ◆\nがんばってること：\nﾊﾏってるもの：\nﾘﾋﾟしてる曲：\n行きたい場所：\n今月の目標：\n来月の自分へ：']];
 function intro(){
   var h=ttl(label('intro'));
-  if(ED)return h+'<p class="note2" style="margin:0 0 4px">何を書けばいいか迷ったら、型を入れて「：」のあとを埋めてね👇</p><div class="vact" style="flex-wrap:wrap">'+INTRO_T.map(function(t,n){return '<button type="button" class="ebtn sub" data-act="itpl" data-i="'+n+'">'+esc(t[0])+'</button>'}).join('')+'</div>'+ta('data-k="intro"',D.intro,'自由に書いてね♪',260)+pvBox(fillOnly(D.intro))+'<p class="empty">※本名・学校名・住んでる場所ゎ書かないでね</p>'+back();
+  if(ED)return h+'<p class="note2" style="margin:0 0 4px">何を書けばいいか迷ったら、型を入れて「：」のあとを埋めてね👇</p><div class="vact" style="flex-wrap:wrap">'+INTRO_T.map(function(t,n){return '<button type="button" class="ebtn sub" data-act="itpl" data-i="'+n+'">'+esc(t[0])+'</button>'}).join('')+'</div>'+ta('data-k="intro"',D.intro,'自由に書いてね♪',260)+pvBox(fillOnly(D.intro))+htmlBtn('textarea[data-k="intro"]')+'<p class="empty">※本名・学校名・住んでる場所ゎ書かないでね</p>'+back();
   var it=fillOnly(D.intro);return h+(it.trim()?'<p style="word-break:break-all">'+deco(it)+'</p>':'<p class="empty">まだ自己紹介がありません</p>')+back()}
 /* 型の「：」のあとが空っぽの行や、答えのない Q. ゎ公開側でかくす */
 function fillOnly(t){var L=String(t||'').split('\n'),o=[];for(var i=0;i<L.length;i++){var l=L[i];
@@ -1031,7 +1036,9 @@ function frameB(k){return '<iframe class="uhtml" data-hk="'+esc(k)+'" sandbox="a
 function pvBox(t){return '<details class="pvw" open><summary>👀 見え方（公開側ではこう見えるょ）</summary><div class="pvbox">'+(String(t||'').trim()?deco(t):'<span class="empty">まだ何も書いてないょ</span>')+'</div></details>'}
 document.addEventListener('focusin',function(e){var t=e.target;if(t.tagName==='TEXTAREA'||t.tagName==='INPUT')t.dataset.touched='1'});
 document.addEventListener('input',function(e){var t=e.target;if(t.tagName!=='TEXTAREA')return;var n=t.nextElementSibling;if(n&&n.classList&&n.classList.contains('pvw')){var b=n.querySelector('.pvbox');clearTimeout(t._pv);t._pv=setTimeout(function(){b.innerHTML=t.value.trim()?deco(t.id==='db'?t.value:(t.getAttribute('data-k')==='intro'?fillOnly(t.value):t.value)):'<span class="empty">まだ何も書いてないょ</span>'},150)}});
-function imgBtn(sel){return '<div class="vact" style="flex-wrap:wrap"><label class="ebtn sub" style="display:inline-flex;align-items:center">📷 写真を入れる<input type="file" accept="image/*" hidden data-imgto="'+esc(sel)+'"></label><button type="button" class="ebtn sub" data-act="hplink" data-v="'+esc(sel)+'">♡ めろIDでﾘﾝｸ</button></div><p class="note2">※写真ゎ自動で小さくして、撮った場所の情報を消すょ。顔や制服、家の周りが写った写真ゎ気をつけてね</p>'}
+function imgBtn(sel){return '<div class="vact" style="flex-wrap:wrap"><label class="ebtn sub" style="display:inline-flex;align-items:center">📷 写真を入れる<input type="file" accept="image/*" hidden data-imgto="'+esc(sel)+'"></label><button type="button" class="ebtn sub" data-act="hplink" data-v="'+esc(sel)+'">♡ めろIDでﾘﾝｸ</button>'+htmlBtnInner(sel)+'</div><p class="note2">※写真ゎ自動で小さくして、撮った場所の情報を消すょ。顔や制服、家の周りが写った写真ゎ気をつけてね</p>'}
+function htmlBtnInner(sel){return '<button type="button" class="ebtn sub" data-act="inshtml" data-v="'+esc(sel)+'">🖥 自由HTMLを入れる</button>'}
+function htmlBtn(sel){return '<p style="text-align:center;margin:4px 0">'+htmlBtnInner(sel)+'</p><p class="note2">※HTMLとCSSだけ使えるょ（JavaScriptゎ使えない・自動で消毒されるょ）。3個まで入れられるょ</p>'}
 function insAt(el,txt){var fresh=!el.dataset.touched,a=fresh||el.selectionStart==null?el.value.length:el.selectionStart,b=fresh||el.selectionEnd==null?a:el.selectionEnd;el.dataset.touched='1';el.value=el.value.slice(0,a)+txt+el.value.slice(b);el.selectionStart=el.selectionEnd=a+txt.length;el.dispatchEvent(new Event('input',{bubbles:true}));el.focus()}
 document.addEventListener('input',function(e){if(e.target.id==='szq'){clearTimeout(ldSoz.t);ldSoz.t=setTimeout(ldSoz,200);return}});
 document.addEventListener('input',function(e){var t=e.target;if(!me||(t.id!=='dt'&&t.id!=='db'))return;try{localStorage.setItem('mp_ddraft_'+me.id,JSON.stringify({t:(document.getElementById('dt')||{}).value||'',b:(document.getElementById('db')||{}).value||'',at:Date.now()}))}catch(err){}});
@@ -1269,6 +1276,7 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
     var k2='p'+Date.now().toString(36);D.pages[k2]=v==='html'?{b:'',fmt:'html',h:''}:{b:T2[4]};D.menu.push({k:k2,l:T2[3],on:true});closeM();changed();sheet='';ED=true;if(location.hash==='#'+k2)draw();else location.hash=k2;scrollTo(0,0);toast('ﾍﾟｰｼﾞを追加したょ✧ 中身を書いてね')}
   else if(a==='hplink'){var el=document.querySelector(v);if(!el)return;var id=await UI.input('紹介したいﾎﾑﾍﾟのめろIDを入れてね（例：ayapyon）','');if(!id)return;id=id.trim().toLowerCase();if(!/^[a-z0-9_]{3,16}$/.test(id)){UI.tell('めろIDゎ半角英小文字・数字・_ の3〜16文字だょ');return}
     var nm=await UI.input('ﾘﾝｸに表示する名前（ﾎﾑﾍﾟ名など）',id);if(nm==null)return;insAt(el,'[hp='+id+']'+(nm.trim()||id)+'[/hp]')}
+  else if(a==='inshtml'){var elh=document.querySelector(v);if(!elh)return;insAt(elh,'\n[html]\n<!-- ここに自由にHTML・CSSを書けるょ。JavaScriptゎ使えないよ -->\n\n[/html]\n')}
   else if(a==='resetc'){D.colors={};applyColors();readGlit();changed();drawUi()}
   else if(a==='delicon'){if(await UI.ask('ﾌﾟﾛﾌ画像を外す？')){var old=D.iconPath;D.icon='';D.iconPath='';await save(null,true);if(old)DB.delImg(old).catch(function(){});draw()}}
   else if(a==='save'){await save(b)}

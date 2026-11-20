@@ -7,7 +7,7 @@
 
 do $$
 declare
-  hid text := 'meropyon_unei';   -- ←ここを運営アカウントのめろIDに
+  hid text := 'melopyon_info';   -- ←ここを運営アカウントのめろIDに
   uid uuid;
 begin
   select id into uid from public.profiles where hp_id = hid;
@@ -56,4 +56,4 @@ end $$;
 
 -- 確認
 select p.hp_id, p.nickname, h.visibility, (select count(*) from public.diaries d where d.user_id = p.id) as diaries
-from public.profiles p join public.homepages h on h.user_id = p.id where p.hp_id = 'meropyon_unei';
+from public.profiles p join public.homepages h on h.user_id = p.id where p.hp_id = 'melopyon_info';
