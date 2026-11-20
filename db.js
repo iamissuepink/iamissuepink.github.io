@@ -38,7 +38,11 @@ function err(e){
   if(/hp_backups/.test(m)&&/row-level/.test(m))return '保存BOXがいっぱいだょ。いらないのを消してね';
   if(/exceeded the maximum|too large/i.test(m))return '画像が大きすぎるょ';
   if(/row-level security|permission denied|Unauthorized/i.test(m))return 'この操作ゎできなかったょ。ﾏｲﾍﾟｰｼﾞで「はじめの設定」が終わってるか確認してね'+tag;
-  return 'ｴﾗｰ: '+m+tag;
+  /* ここから先ゎ想定してないｴﾗｰ。DBの生のﾒｯｾｰｼﾞ（ﾃｰﾌﾞﾙ名・制約名など）を利用者に見せないで、必ず日本語の案内文にする */
+  if(c==='23514'||/violates check constraint/i.test(m))return '入力した内容が条件に合ってないみたい。少し短くするか内容を変えてもう一回ためしてね'+tag;
+  if(c==='23505'||/duplicate key|already exists/i.test(m))return 'もう同じものがあるみたいだょ'+tag;
+  if(/^\d{5}$/.test(c)||/violates|constraint|relation ".*" does not exist|column ".*" does not exist/i.test(m))return '予期しないｴﾗｰが起きたょ。時間をおいてもう一回ためしてね。直らなければ運営まで連絡してね'+tag;
+  return '予期しないｴﾗｰが起きたょ。時間をおいてもう一回ためしてね'+tag;
 }
 async function run(p){var r=await p;if(r.error)throw new Error(err(r.error));return r.data}
 /* 消したはずなのに消えてない（権限で0件になった）ときにちゃんとｴﾗｰにする */
