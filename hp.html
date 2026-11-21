@@ -781,7 +781,7 @@ function cActs(l,r){if(l==null)l='[';if(r==null)r=']';var a=[];
   a.push('<button type="button" class="c-lk" data-act="clap">'+l+'web拍手'+((D.showClaps||owner)&&CLAPS!==null?'('+CLAPS+')':'')+r+'</button>');
   if(me&&!owner)a.push(FR==='friend'?'<span class="c-lk">'+l+'めろ友♡'+r+'</span>':FR==='sent'?'<span class="c-lk">'+l+'申請中'+r+'</span>':FR==='in'?'<button type="button" class="c-lk" data-act="facc">'+l+'めろ友承認'+r+'</button>':'<button type="button" class="c-lk" data-act="freq">'+l+'めろ友申請'+r+'</button>');
   if(owner)a.push('<a class="c-lk" href="#foot">'+l+'足あと'+r+'</a>');
-  return (owner?'':'<div class="c-hint">☆気に入ったら押してね☆</div>')+'<div class="c-acts'+(owner?'':' c-acts-v')+'">'+a.join(' ')+'</div>'}
+  return (owner?'':'<div class="c-hint">'+(me?'☆気に入ったら押してね☆':'☆拍手・めろ友ゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してから押せるょ☆')+'</div>')+'<div class="c-acts'+(owner?'':' c-acts-v')+'">'+a.join(' ')+'</div>'}
 function cSong(){var s=sp(D.song);return s?'<div class="c-song"><iframe src="'+esc(s)+'" height="80" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>':''}
 function cTags(){return D.tags.length?'<div class="c-tags">'+D.tags.map(function(t){return '<a href="search.html?tag='+encodeURIComponent(t)+'">#'+esc(t)+'</a>'}).join(' ')+'</div>':''}
 function cLinks(){return '<div id="flinks" class="c-fl"></div>'}
