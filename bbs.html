@@ -115,9 +115,12 @@
 var $=function(i){return document.getElementById(i)},msg=$('msg'),C=['#9be3ff','#ff9ad5','#5ff08f','#ffe066','#c9a2ff'];
 function say(t,ng){msg.textContent=t;msg.className='msg'+(ng?' ng':'')}
 var u=await DB.me();
+function bbsHtml(t){var s=String(t==null?'':t),out='',re=/\[s=([^\]\s]+)\]/g,last=0,m;
+  while((m=re.exec(s))){out+=DB.esc(s.slice(last,m.index));last=re.lastIndex;if(DB.sozOk(m[1]))out+='<img src="'+DB.esc(DB.sozUrl(m[1]))+'" alt="" style="vertical-align:middle;max-width:100%">'}
+  return out+DB.esc(s.slice(last))}
 async function load(){try{var ps=await DB.posts(50);
   $('list').innerHTML=ps.length?ps.map(function(p,i){var n=p.profiles?p.profiles.nickname:'ななしさん';
-    return '<div class="post"><span class="nm" style="color:'+C[i%C.length]+'">'+DB.esc(n)+'</span> <span class="dt">'+DB.time(p.created_at)+'</span>'+(u&&p.user_id===u.id?'<button class="del" type="button" data-id="'+p.id+'">削除</button>':'')+(u&&p.user_id===u.id?'':'<a class="del" style="text-decoration:none" href="report.html?type=bbs&id='+p.id+'">通報</a>')+'\n'+DB.esc(p.body)+'</div>'}).join(''):'<p class="msg">まだ書き込みがないょ。一番乗りしてね♪</p>';
+    return '<div class="post"><span class="nm" style="color:'+C[i%C.length]+'">'+DB.esc(n)+'</span> <span class="dt">'+DB.time(p.created_at)+'</span>'+(u&&p.user_id===u.id?'<button class="del" type="button" data-id="'+p.id+'">削除</button>':'')+(u&&p.user_id===u.id?'':'<a class="del" style="text-decoration:none" href="report.html?type=bbs&id='+p.id+'">通報</a>')+'\n'+bbsHtml(p.body)+'</div>'}).join(''):'<p class="msg">まだ書き込みがないょ。一番乗りしてね♪</p>';
 }catch(e){$('list').innerHTML='<p class="msg ng">'+DB.esc(e.message)+'</p>'}}
 if(u){$('can').hidden=false;try{var p=await DB.getProfile(u.id);$('who').textContent=DB.san(p&&p.nickname)}catch(e){}}else{$('need').hidden=false}
 $('send').onclick=async function(){var b=this,t=$('body').value.trim();
