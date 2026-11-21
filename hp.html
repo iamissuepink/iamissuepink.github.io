@@ -1073,7 +1073,7 @@ var PTYPES=[
  ['q30','30の質問','答えるだけで自己紹介','♡30の質問♡','Q1. 名前（ﾆｯｸﾈｰﾑ）ゎ？\nA. \nQ2. 呼んでほしい名前ゎ？\nA. \nQ3. 年代ゎ？（中学生・20代とか）\nA. \nQ4. 好きな色ゎ？\nA. \nQ5. 好きな食べものゎ？\nA. \nQ6. 苦手な食べものゎ？\nA. \nQ7. 好きな季節ゎ？\nA. \nQ8. 好きな動物ゎ？\nA. \nQ9. 趣味ゎ？\nA. \nQ10. 特技ゎ？\nA. \nQ11. ﾏｲﾌﾞｰﾑゎ？\nA. \nQ12. よく聴く曲ゎ？\nA. \nQ13. 好きなｱﾆﾒ・漫画ゎ？\nA. \nQ14. 好きなｹﾞｰﾑゎ？\nA. \nQ15. 推しゎいる？\nA. \nQ16. 休みの日ゎ何してる？\nA. \nQ17. 朝型？夜型？\nA. \nQ18. 犬派？猫派？\nA. \nQ19. 自分を動物にたとえると？\nA. \nQ20. 宝物ゎ？\nA. \nQ21. 最近うれしかったこと\nA. \nQ22. 最近笑ったこと\nA. \nQ23. 行ってみたい場所\nA. \nQ24. 今いちばんほしいもの\nA. \nQ25. 口ぐせゎ？\nA. \nQ26. 長所ゎ？\nA. \nQ27. 短所ゎ？\nA. \nQ28. 将来の夢ゎ？\nA. \nQ29. ﾎﾑﾍﾟのこだわりﾎﾟｲﾝﾄ\nA. \nQ30. 見てくれた人へひとこと\nA. '],
  ['poem','ﾎﾟｴﾑ','詩や短い文章','♡ﾎﾟｴﾑ♡','[center]ﾀｲﾄﾙ：\n\n\n\n[/center]\n[s=m/line_star.gif]'],
  ['html','HTMLで作る','上級者むけ（HTML・CSSで自由に作る）','♡ｵﾘｼﾞﾅﾙ♡','']];
-function pageTypes(){modal('<p class="ttl">＋ ﾍﾟｰｼﾞを追加</p><p class="note2" style="text-align:center">どんなﾍﾟｰｼﾞにする？（あとから自由に書きかえられるょ）<br>追加ﾍﾟｰｼﾞ：<b>'+Object.keys(D.pages).length+'</b> / 12</p><div class="ptgrid">'+PTYPES.map(function(t){return '<button type="button" class="ptbtn" data-act="padd2" data-v="'+t[0]+'"><b>'+esc(t[1])+(t[0]==='html'&&!htmlOk()?' 🔒':'')+'</b><small>'+esc(t[0]==='html'&&!htmlOk()?'はじめの設定から3日たつと使えるょ（あと'+htmlLeft()+'）':t[2])+'</small></button>'}).join('')+'</div><div class="mch"><button type="button" class="ebtn sub" data-act="m_close">やめる</button></div>')}
+function pageTypes(){modal('<p class="ttl">＋ ﾍﾟｰｼﾞを追加</p><p class="note2" style="text-align:center">どんなﾍﾟｰｼﾞにする？（あとから自由に書きかえられるょ）<br>追加ﾍﾟｰｼﾞ：<b>'+Object.keys(D.pages).length+'</b> / 12</p><div class="ptgrid">'+PTYPES.map(function(t){return '<button type="button" class="ptbtn" data-act="padd2" data-v="'+t[0]+'"><b>'+esc(t[1])+(t[0]==='html'&&!htmlOk()?' 🔒':'')+'</b><small>'+esc(t[0]==='html'&&!htmlOk()?'はじめの設定から3日たつと使えるょ（あと'+htmlLeft()+'）':(t[0]==='html'?'✓ いま使えるょ（HTML・CSSで自由に作る）':t[2]))+'</small></button>'}).join('')+'</div><div class="mch"><button type="button" class="ebtn sub" data-act="m_close">やめる</button></div>')}
 function page(k){
   var p=D.pages[k];if(!p)return ttl('ﾍﾟｰｼﾞ')+'<p class="empty">このﾍﾟｰｼﾞゎ見つからないょ</p>'+back();
   if(ED){var h=ttl(label(k))+'<div class="vact"><button type="button" class="ebtn'+(p.fmt==='html'?' sub':'')+'" data-act="fmt" data-i="0" data-v="'+esc(k)+'">文章で書く</button><button type="button" class="ebtn'+(p.fmt==='html'?'':' sub')+'" data-act="fmt" data-i="1" data-v="'+esc(k)+'">HTMLで作る</button></div>';
@@ -1360,7 +1360,7 @@ async function chooser(){await loadBox();
    '<button type="button" class="ebtn sub" data-act="m_close">とじる</button></div>'+
    '<p class="note2" style="color:var(--hi)">※日記・写真・BBS・質問箱などゎ、新しく作っても消えずにそのまま残るょ</p>')}
 async function newHp(){if(isNew)return tplPick();await loadBox();
-  modal('<p class="ttl">新しく作る</p><p class="mq2">新しく作ると、今のﾎﾑﾍﾟの見た目と文章ゎ置きかわるょ。<br>「保存BOX」にしまっておくと、あとで元に戻せるょ</p><div class="mch">'+
+  modal('<p class="ttl">新しく作る</p><p class="mq2">新しく作ると、今のﾎﾑﾍﾟの見た目と文章ゎ置きかわるょ。<br>「保存BOX」にしまっておくと、あとで元に戻せるょ<br><b>日記・写真・BBS・質問箱ゎ消えずにそのまま残るょ</b></p><div class="mch">'+
    '<button type="button" class="ebtn" data-act="m_new_keep">📦 しまってから作る（おすすめ）<br><small>今のﾎﾑﾍﾟを保存BOXにしまうょ。あとで復活できるょ（'+BOX.length+'/'+BOXMAX+'）</small></button>'+
    '<button type="button" class="ebtn sub" data-act="m_new_drop">しまわずに作る<br><small>新しいのを保存した時点で今のﾎﾑﾍﾟゎ消えて、戻せないょ</small></button>'+
    '<button type="button" class="ebtn sub" data-act="edit">← もどる</button></div>')}
