@@ -952,11 +952,20 @@ function htmlOk(){return INFO&&INFO.created_at&&Date.now()-new Date(INFO.created
 function htmlLeft(){if(!INFO||!INFO.created_at)return 3;var ms=3*86400000-(Date.now()-new Date(INFO.created_at).getTime());if(ms<=0)return 0;var d=Math.floor(ms/86400000),h=Math.ceil((ms%86400000)/3600000);if(h===24){d++;h=0}return d?(d+'日'+(h?'と'+h+'時間':'')):(h+'時間')}
 function htmlLockMsg(){return 'HTMLで作る機能ゎ、はじめの設定から3日たつと使えるょ（あと'+htmlLeft()+'）'}
 /* ===== HTML（第3層）：JavaScript ゎ使えない。ﾀｸﾞ・属性・ﾘﾝｸを消毒してから表示する ===== */
-var HBAD={SCRIPT:1,IFRAME:1,FRAME:1,FRAMESET:1,OBJECT:1,EMBED:1,APPLET:1,FORM:1,INPUT:1,BUTTON:1,TEXTAREA:1,SELECT:1,OPTION:1,BASE:1,META:1,LINK:1,PORTAL:1,NOSCRIPT:1,TEMPLATE:1,SET:1,ANIMATE:1,HANDLER:1,LISTENER:1,FOREIGNOBJECT:1};
+var HBAD={SCRIPT:1,FRAME:1,FRAMESET:1,OBJECT:1,EMBED:1,APPLET:1,FORM:1,INPUT:1,BUTTON:1,TEXTAREA:1,SELECT:1,OPTION:1,BASE:1,META:1,LINK:1,PORTAL:1,NOSCRIPT:1,TEMPLATE:1,SET:1,ANIMATE:1,HANDLER:1,LISTENER:1,FOREIGNOBJECT:1};
 function hpAbs(hash){return location.origin+location.pathname+'?id='+encodeURIComponent(HID)+(hash?'#'+hash:'')}
-function sanitizeHtml(code){var doc;try{doc=new DOMParser().parseFromString('<!DOCTYPE html><html><head></head><body>'+String(code||'')+'</body></html>','text/html')}catch(e){return ''}
+/* ｲﾝﾗｲﾝHTMLﾊﾞﾝﾗｳｺの中に[html]ﾏｲ[/html]のﾈｽﾄｲframeゎ残していいけど、src付きや余計な属性は消して、中身(srcdoc)もまるごと再消毒する（何重にﾈｽﾄしても安全なように深さ制限つき） */
+function sanitizeHtml(code,depth){depth=depth||0;var doc;try{doc=new DOMParser().parseFromString('<!DOCTYPE html><html><head></head><body>'+String(code||'')+'</body></html>','text/html')}catch(e){return ''}
   var all=doc.body.querySelectorAll('*'),i,el;
-  for(i=all.length-1;i>=0;i--){el=all[i];var tn=el.tagName.toUpperCase();if(HBAD[tn]){el.remove();continue}
+  for(i=all.length-1;i>=0;i--){el=all[i];var tn=el.tagName.toUpperCase();
+    if(tn==='IFRAME'){var sd=el.getAttribute('srcdoc');
+      if(sd==null||depth>=3){el.remove();continue}
+      Array.prototype.slice.call(el.attributes).forEach(function(a){var n=a.name.toLowerCase();if(n!=='class'&&n!=='title')el.removeAttribute(a.name)});
+      el.setAttribute('sandbox','allow-scripts allow-top-navigation-by-user-activation');
+      var bm=sd.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+      el.setAttribute('srcdoc',htmlDoc(bm?bm[1]:sd,depth+1));
+      continue}
+    if(HBAD[tn]){el.remove();continue}
     Array.prototype.slice.call(el.attributes).forEach(function(a){var n=a.name.toLowerCase(),v=a.value.replace(/[\s\u0000-\u001f]/g,'').toLowerCase();
       if(n.indexOf('on')===0||n==='srcdoc'||n==='formaction'||n==='action'||n==='ping'||n==='target')el.removeAttribute(a.name);
       else if(/(^|:)(href|src|srcset|poster|background|xlink:href|data|lowsrc|dynsrc)$/.test(n)&&/^(javascript|vbscript|data:(?!image\/(png|gif|jpe?g|webp)))/.test(v))el.removeAttribute(a.name)});
@@ -965,10 +974,10 @@ function sanitizeHtml(code){var doc;try{doc=new DOMParser().parseFromString('<!D
       else if((m=hr.match(/^(?:(?:https?:)?\/\/[^\/]*\/)?(?:hp\.html)?\?id=([a-z0-9_]{3,16})(#[a-z0-9_-]*)?$/i))&&(hr.indexOf('//')<0||hr.indexOf(location.host)>=0)){el.setAttribute('href',location.origin+location.pathname+'?id='+m[1]+(m[2]||''));el.setAttribute('target','_top')}
       else{el.removeAttribute('href');el.setAttribute('title','外のｻｲﾄへのﾘﾝｸゎ使えないょ')}}}
   return doc.body.innerHTML}
-function htmlDoc(code){var base=DB.imgBase.replace(/\/hp\/$/,'/'),nonce='m'+Math.random().toString(36).slice(2,12);
-  var csp="default-src 'none'; img-src "+base+" "+location.origin+"/img/ data:; style-src 'unsafe-inline'; script-src 'nonce-"+nonce+"'; font-src data:";
+function htmlDoc(code,depth){var base=DB.imgBase.replace(/\/hp\/$/,'/'),nonce='m'+Math.random().toString(36).slice(2,12);
+  var csp="default-src 'none'; frame-src 'self'; img-src "+base+" "+location.origin+"/img/ data:; style-src 'unsafe-inline'; script-src 'nonce-"+nonce+"'; font-src data:";
   code=String(code||'').replace(/\[s=([^\]\s]+)\]/g,function(m,x){return DB.sozOk(x)?'<img src="'+DB.sozUrl(x)+'" alt="">':''}).replace(/\{\{counter\}\}/g,('000000'+(CNT||0)).slice(-6));
-  code=sanitizeHtml(code);
+  code=sanitizeHtml(code,depth);
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="'+csp+'"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>'+code+
     '<script nonce="'+nonce+'">(function(){function s(){parent.postMessage({melo:1,h:document.documentElement.scrollHeight},"*")}try{new ResizeObserver(s).observe(document.documentElement)}catch(e){}addEventListener("load",s);setTimeout(s,300);s()})()<\/script></body></html>'}
 function plain(t){return String(t||'').replace(/\[[^\]]*\]/g,'')}
@@ -1026,9 +1035,12 @@ function htmlEditor(r){var c=convOf(r),k=c.k;
 async function convertPage(r){if(!htmlOk()){UI.tell(htmlLockMsg());return}if(!canConv(r))return;
   if(!await UI.ask('「'+convName(r)+'」をHTMLに変換する？\n\n・変換したﾍﾟｰｼﾞゎ、部品の組み合わせの画面にゎ戻れないょ（一方通行）\n・変換する前の状態ゎ保存BOXに自動でしまうから、いつでも「復活」で戻せるょ'))return;
   await loadBox();if(BOX.length>=BOXMAX){UI.tell('保存BOXがいっぱいで、変換前の状態をしまえないょ。いらないのを消してからもう一回ためしてね');return boxView()}
+  var h,now=new Date().toISOString();
+  try{h=toHtml(r)}catch(e){if(window.console)console.error(e);UI.tell('変換中にｴﾗｰが起きたょ。時間をおいてもう一回ためしてね');return}
   var snap=JSON.parse(JSON.stringify(D));snap.__auto='html';
-  try{await DB.addBackup('HTML変換前（'+convName(r)+'）'+stamp().replace('保存',''),snap)}catch(err){UI.tell(err.message);return}
-  var h=toHtml(r),now=new Date().toISOString();
+  var cn=convName(r);if(cn.length>10)cn=cn.slice(0,10)+'…';
+  var nm=('変換前 '+cn+' '+stamp().replace('保存','').trim()).slice(0,30);
+  try{await DB.addBackup(nm,snap)}catch(err){UI.tell(err.message);return}
   if(!r||r==='prof'||r==='intro'||r==='real')D.html[r||'top']={h:h,h0:h,conv:now};else{var p=D.pages[r];p.fmt='html';p.h=h;p.h0=h;p.full=true;p.conv=now}
   sheet='';changed();draw();toast('HTMLに変換したょ✧ 保存すると公開側にも反映されるょ')}
 function frameB(k){return '<iframe class="uhtml" data-hk="'+esc(k)+'" sandbox="allow-scripts allow-top-navigation-by-user-activation" title="'+esc(k==='top'?plain(D.title):plain(label(k)))+'"></iframe>'}
