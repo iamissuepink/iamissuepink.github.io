@@ -390,6 +390,10 @@ body:not(.ed) .in{padding:8px 8px 12px;font-size:12px;line-height:1.55}
 .c-lk{font:inherit;font-size:11px;color:var(--hi);background:none;border:0;padding:2px 1px;cursor:pointer;text-decoration:underline;min-height:24px}
 span.c-lk{text-decoration:none}
 .c-acts{margin:8px 0;line-height:1.9}
+.c-hint{font-size:11px;margin:10px 0 0;color:var(--hi)}
+.c-acts-v{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;line-height:1.4}
+.c-acts-v .c-lk,.c-acts-v span.c-lk{font-size:12px;font-weight:bold;padding:5px 12px;min-height:30px;text-decoration:none;color:var(--hi);background:var(--card);border:2px outset var(--hi2)}
+.c-acts-v button.c-lk:active{border-style:inset}
 .c-ph{display:block;margin:6px auto;width:100%;height:auto}
 .c-mq{overflow:hidden;white-space:nowrap;font-size:11px;margin:6px 0}
 .c-mq span{display:inline-block;padding-left:100%;animation:mq 10s linear infinite}
@@ -634,7 +638,7 @@ body .phone{margin-left:auto!important;margin-right:auto!important}
 <link rel="stylesheet" href="parts.css?v=1">
 </head>
 <body>
-<div class="mbar"><a class="lg" href="index.html">めろﾋﾟｮﾝ☆</a><span id="mid"></span><span style="display:flex;gap:10px;align-items:center"><a class="ic" href="search.html" aria-label="ﾎﾑﾍﾟ検索">🔍</a><a class="ic" href="#" id="rlt" aria-label="ﾎﾑﾍﾟﾙｰﾚｯﾄ">🎲</a><a id="rpt" href="report.html">通報</a></span></div>
+<div class="mbar"><a class="lg" href="index.html">めろﾋﾟｮﾝ☆</a><span id="mid"></span><span style="display:flex;gap:10px;align-items:center"><a class="ic" href="mypage.html" aria-label="ﾏｲﾍﾟｰｼﾞ">👤</a><a class="ic" href="search.html" aria-label="ﾎﾑﾍﾟ検索">🔍</a><a class="ic" href="#" id="rlt" aria-label="ﾎﾑﾍﾟﾙｰﾚｯﾄ">🎲</a><a id="rpt" href="report.html">通報</a></span></div>
 <div id="root"><p class="note">読み込み中…</p></div>
 <div id="ui"></div>
 <canvas id="kira" aria-hidden="true"></canvas>
@@ -777,7 +781,7 @@ function cActs(l,r){if(l==null)l='[';if(r==null)r=']';var a=[];
   a.push('<button type="button" class="c-lk" data-act="clap">'+l+'web拍手'+((D.showClaps||owner)&&CLAPS!==null?'('+CLAPS+')':'')+r+'</button>');
   if(me&&!owner)a.push(FR==='friend'?'<span class="c-lk">'+l+'めろ友♡'+r+'</span>':FR==='sent'?'<span class="c-lk">'+l+'申請中'+r+'</span>':FR==='in'?'<button type="button" class="c-lk" data-act="facc">'+l+'めろ友承認'+r+'</button>':'<button type="button" class="c-lk" data-act="freq">'+l+'めろ友申請'+r+'</button>');
   if(owner)a.push('<a class="c-lk" href="#foot">'+l+'足あと'+r+'</a>');
-  return '<div class="c-acts">'+a.join(' ')+'</div>'}
+  return (owner?'':'<div class="c-hint">☆気に入ったら押してね☆</div>')+'<div class="c-acts'+(owner?'':' c-acts-v')+'">'+a.join(' ')+'</div>'}
 function cSong(){var s=sp(D.song);return s?'<div class="c-song"><iframe src="'+esc(s)+'" height="80" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>':''}
 function cTags(){return D.tags.length?'<div class="c-tags">'+D.tags.map(function(t){return '<a href="search.html?tag='+encodeURIComponent(t)+'">#'+esc(t)+'</a>'}).join(' ')+'</div>':''}
 function cLinks(){return '<div id="flinks" class="c-fl"></div>'}
@@ -908,7 +912,7 @@ function drawUi2(){
   var s=sheet2();
   var inner=!!location.hash.replace(/^#/,'');
   ui.innerHTML='<div class="edbar ed2">'+s+(s?'':convOf(location.hash.replace(/^#/,''))?'<p class="ed2-hint">🔧 このﾍﾟｰｼﾞゎHTMLで編集中だょ（下の入力欄で書きかえてね）</p>':inner?'<div class="sh"><p class="ed2-hint" style="margin:0 0 4px">✎ 書く欄をタップ→文字を選んでﾎﾞﾀﾝで飾れるょ　<a href="#" style="color:inherit">◀ TOPへ</a></p>'+TOOLS2+'</div>':'<p class="ed2-hint">✎ 書き換えたいところを<b>タップ</b>してね（ﾍﾟｰｼﾞの中身ゎ「ﾒﾆｭｰ」の✎から）　<button type="button" class="ebtn sub" data-act="padd" style="padding:2px 8px;min-height:0">＋ﾍﾟｰｼﾞ追加</button></p>')+
-   (sheet?'':(canConv(location.hash.replace(/^#/,''))?'<p class="pgtools">このﾍﾟｰｼﾞ：<button type="button" class="ebtn sub" data-act="toHtml">🔧 HTMLに変換'+(htmlOk()?'':'（あと'+htmlLeft()+'）')+'</button></p>':''))+'<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="parts">🎨 ﾃﾞｻﾞｲﾝ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">⚙ 設定</button><button type="button" class="ebtn sub" data-act="qsave" title="編集画面を開いたまま保存">途中保存</button><button type="button" class="ebtn" data-act="save">保存して閉じる</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
+   (sheet?'':(canConv(location.hash.replace(/^#/,''))?'<p class="pgtools">このﾍﾟｰｼﾞ：<button type="button" class="ebtn sub" data-act="toHtml">🔧 HTMLに変換'+(htmlOk()?'':'（あと'+htmlLeft()+'）')+'</button></p>':''))+'<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="parts">🎨 ﾃﾞｻﾞｲﾝ（全体）</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">⚙ 設定</button><button type="button" class="ebtn sub" data-act="qsave" title="編集画面を開いたまま保存">途中保存</button><button type="button" class="ebtn" data-act="save">保存して閉じる</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
    '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>'}
 var rpT=null;
 function livePreview(){clearTimeout(rpT);rpT=setTimeout(function(){if(!location.hash&&!convOf('')){root.innerHTML=frame(top());afterTop();readGlit()}},200)}
@@ -1062,14 +1066,14 @@ document.addEventListener('change',async function(e){var t=e.target,sel=t.getAtt
   var el=document.querySelector(sel);if(!el)return;toast('写真を準備中…');try{var blob=await shrink(f,900),r=await DB.uploadImg(me.id,blob);insAt(el,'\n[p='+r.path+']\n');toast('写真を入れたょ✧')}catch(err){UI.tell(err.message)}});
 var PTYPES=[
  ['blank','白紙','自由に書く','♡新しいﾍﾟｰｼﾞ♡',''],
- ['enikki','絵日記','写真＋その日のできごと','♡絵日記♡','[center][big]♡絵日記♡[/big][/center]\n\n[c=#ff3d9a]○月○日（○）[/c]　天気：\n\n（↓の「📷写真を入れる」で写真をはってね）\n\nきょうのできごと：\n\nいちばん楽しかったこと：\n\nひとこと：\n\n[s=m/line_heart.gif]'],
- ['suki','好きなものﾘｽﾄ','好きなものをどんどん並べる','♡好きなもの♡','[center][big]♡好きなものﾘｽﾄ♡[/big][/center]\n\n[s=m/heart_pink.gif] 曲：\n[s=m/heart_pink.gif] ｱﾆﾒ・漫画：\n[s=m/heart_pink.gif] ｹﾞｰﾑ：\n[s=m/heart_pink.gif] 食べもの：\n[s=m/heart_pink.gif] 色：\n[s=m/heart_pink.gif] 場所：\n[s=m/heart_pink.gif] 言葉：\n[s=m/heart_pink.gif] 推し：\n\n[small]※どんどん追加してね♪[/small]'],
- ['links','ﾘﾝｸ集','おすすめのﾎﾑﾍﾟを紹介','♡ﾘﾝｸ集♡','[center][big]★おすすめﾎﾑﾍﾟ★[/big][/center]\n\n（↓の「♡めろIDでﾘﾝｸ」で、めろﾋﾟｮﾝ☆のﾎﾑﾍﾟを紹介できるょ）\n\n[s=m/star_yellow.gif] \n　ひとこと：\n\n[s=m/star_yellow.gif] \n　ひとこと：\n\n[small]相互ﾘﾝｸ募集中♪ BBSで声かけてね[/small]'],
- ['kiri','ｷﾘ番ﾍﾟｰｼﾞ','ｷﾘ番のﾙｰﾙとｹﾞｯﾀｰさん','☆ｷﾘ番☆','[center][big][blink]☆ｷﾘ番☆[/blink][/big][/center]\n\nｷﾘ番：100・777・1000…\n踏んだ人ゎBBSで報告してね♪\n\n[big]★ｷﾘ番ｹﾞｯﾀｰさん★[/big]\n\n\n※踏み逃げ禁止ﾃﾞｽ(｀・ω・´)'],
- ['q30','30の質問','答えるだけで自己紹介','♡30の質問♡','[center][big]♡30の質問♡[/big][/center]\n\nQ1. 名前（ﾆｯｸﾈｰﾑ）ゎ？\nA. \nQ2. 呼んでほしい名前ゎ？\nA. \nQ3. 年代ゎ？（中学生・20代とか）\nA. \nQ4. 好きな色ゎ？\nA. \nQ5. 好きな食べものゎ？\nA. \nQ6. 苦手な食べものゎ？\nA. \nQ7. 好きな季節ゎ？\nA. \nQ8. 好きな動物ゎ？\nA. \nQ9. 趣味ゎ？\nA. \nQ10. 特技ゎ？\nA. \nQ11. ﾏｲﾌﾞｰﾑゎ？\nA. \nQ12. よく聴く曲ゎ？\nA. \nQ13. 好きなｱﾆﾒ・漫画ゎ？\nA. \nQ14. 好きなｹﾞｰﾑゎ？\nA. \nQ15. 推しゎいる？\nA. \nQ16. 休みの日ゎ何してる？\nA. \nQ17. 朝型？夜型？\nA. \nQ18. 犬派？猫派？\nA. \nQ19. 自分を動物にたとえると？\nA. \nQ20. 宝物ゎ？\nA. \nQ21. 最近うれしかったこと\nA. \nQ22. 最近笑ったこと\nA. \nQ23. 行ってみたい場所\nA. \nQ24. 今いちばんほしいもの\nA. \nQ25. 口ぐせゎ？\nA. \nQ26. 長所ゎ？\nA. \nQ27. 短所ゎ？\nA. \nQ28. 将来の夢ゎ？\nA. \nQ29. ﾎﾑﾍﾟのこだわりﾎﾟｲﾝﾄ\nA. \nQ30. 見てくれた人へひとこと\nA. '],
- ['poem','ﾎﾟｴﾑ','詩や短い文章','♡ﾎﾟｴﾑ♡','[center][big]♡ﾎﾟｴﾑ♡[/big][/center]\n\n[center]ﾀｲﾄﾙ：\n\n\n\n[/center]\n[s=m/line_star.gif]'],
- ['html','HTMLで作る','上級者むけ（はじめの設定から3日後）','♡ｵﾘｼﾞﾅﾙ♡','']];
-function pageTypes(){modal('<p class="ttl">＋ ﾍﾟｰｼﾞを追加</p><p class="note2" style="text-align:center">どんなﾍﾟｰｼﾞにする？（あとから自由に書きかえられるょ）<br>追加ﾍﾟｰｼﾞ：<b>'+Object.keys(D.pages).length+'</b> / 12</p><div class="ptgrid">'+PTYPES.map(function(t){return '<button type="button" class="ptbtn" data-act="padd2" data-v="'+t[0]+'"><b>'+esc(t[1])+(t[0]==='html'&&!htmlOk()?' 🔒':'')+'</b><small>'+esc(t[0]==='html'&&!htmlOk()?'あと'+htmlLeft()+'で使えるょ':t[2])+'</small></button>'}).join('')+'</div><div class="mch"><button type="button" class="ebtn sub" data-act="m_close">やめる</button></div>')}
+ ['enikki','絵日記','写真＋その日のできごと','♡絵日記♡','[c=#ff3d9a]○月○日（○）[/c]　天気：\n\n（↓の「📷写真を入れる」で写真をはってね）\n\nきょうのできごと：\n\nいちばん楽しかったこと：\n\nひとこと：\n\n[s=m/line_heart.gif]'],
+ ['suki','好きなものﾘｽﾄ','好きなものをどんどん並べる','♡好きなもの♡','[s=m/heart_pink.gif] 曲：\n[s=m/heart_pink.gif] ｱﾆﾒ・漫画：\n[s=m/heart_pink.gif] ｹﾞｰﾑ：\n[s=m/heart_pink.gif] 食べもの：\n[s=m/heart_pink.gif] 色：\n[s=m/heart_pink.gif] 場所：\n[s=m/heart_pink.gif] 言葉：\n[s=m/heart_pink.gif] 推し：\n\n[small]※どんどん追加してね♪[/small]'],
+ ['links','ﾘﾝｸ集','おすすめのﾎﾑﾍﾟを紹介','♡ﾘﾝｸ集♡','（↓の「♡めろIDでﾘﾝｸ」で、めろﾋﾟｮﾝ☆のﾎﾑﾍﾟを紹介できるょ）\n\n[s=m/star_yellow.gif] \n　ひとこと：\n\n[s=m/star_yellow.gif] \n　ひとこと：\n\n[small]相互ﾘﾝｸ募集中♪ BBSで声かけてね[/small]'],
+ ['kiri','ｷﾘ番ﾍﾟｰｼﾞ','ｷﾘ番のﾙｰﾙとｹﾞｯﾀｰさん','☆ｷﾘ番☆','ｷﾘ番：100・777・1000…\n踏んだ人ゎBBSで報告してね♪\n\n[big]★ｷﾘ番ｹﾞｯﾀｰさん★[/big]\n\n\n※踏み逃げ禁止ﾃﾞｽ(｀・ω・´)'],
+ ['q30','30の質問','答えるだけで自己紹介','♡30の質問♡','Q1. 名前（ﾆｯｸﾈｰﾑ）ゎ？\nA. \nQ2. 呼んでほしい名前ゎ？\nA. \nQ3. 年代ゎ？（中学生・20代とか）\nA. \nQ4. 好きな色ゎ？\nA. \nQ5. 好きな食べものゎ？\nA. \nQ6. 苦手な食べものゎ？\nA. \nQ7. 好きな季節ゎ？\nA. \nQ8. 好きな動物ゎ？\nA. \nQ9. 趣味ゎ？\nA. \nQ10. 特技ゎ？\nA. \nQ11. ﾏｲﾌﾞｰﾑゎ？\nA. \nQ12. よく聴く曲ゎ？\nA. \nQ13. 好きなｱﾆﾒ・漫画ゎ？\nA. \nQ14. 好きなｹﾞｰﾑゎ？\nA. \nQ15. 推しゎいる？\nA. \nQ16. 休みの日ゎ何してる？\nA. \nQ17. 朝型？夜型？\nA. \nQ18. 犬派？猫派？\nA. \nQ19. 自分を動物にたとえると？\nA. \nQ20. 宝物ゎ？\nA. \nQ21. 最近うれしかったこと\nA. \nQ22. 最近笑ったこと\nA. \nQ23. 行ってみたい場所\nA. \nQ24. 今いちばんほしいもの\nA. \nQ25. 口ぐせゎ？\nA. \nQ26. 長所ゎ？\nA. \nQ27. 短所ゎ？\nA. \nQ28. 将来の夢ゎ？\nA. \nQ29. ﾎﾑﾍﾟのこだわりﾎﾟｲﾝﾄ\nA. \nQ30. 見てくれた人へひとこと\nA. '],
+ ['poem','ﾎﾟｴﾑ','詩や短い文章','♡ﾎﾟｴﾑ♡','[center]ﾀｲﾄﾙ：\n\n\n\n[/center]\n[s=m/line_star.gif]'],
+ ['html','HTMLで作る','上級者むけ（HTML・CSSで自由に作る）','♡ｵﾘｼﾞﾅﾙ♡','']];
+function pageTypes(){modal('<p class="ttl">＋ ﾍﾟｰｼﾞを追加</p><p class="note2" style="text-align:center">どんなﾍﾟｰｼﾞにする？（あとから自由に書きかえられるょ）<br>追加ﾍﾟｰｼﾞ：<b>'+Object.keys(D.pages).length+'</b> / 12</p><div class="ptgrid">'+PTYPES.map(function(t){return '<button type="button" class="ptbtn" data-act="padd2" data-v="'+t[0]+'"><b>'+esc(t[1])+(t[0]==='html'&&!htmlOk()?' 🔒':'')+'</b><small>'+esc(t[0]==='html'&&!htmlOk()?'はじめの設定から3日たつと使えるょ（あと'+htmlLeft()+'）':t[2])+'</small></button>'}).join('')+'</div><div class="mch"><button type="button" class="ebtn sub" data-act="m_close">やめる</button></div>')}
 function page(k){
   var p=D.pages[k];if(!p)return ttl('ﾍﾟｰｼﾞ')+'<p class="empty">このﾍﾟｰｼﾞゎ見つからないょ</p>'+back();
   if(ED){var h=ttl(label(k))+'<div class="vact"><button type="button" class="ebtn'+(p.fmt==='html'?' sub':'')+'" data-act="fmt" data-i="0" data-v="'+esc(k)+'">文章で書く</button><button type="button" class="ebtn'+(p.fmt==='html'?'':' sub')+'" data-act="fmt" data-i="1" data-v="'+esc(k)+'">HTMLで作る</button></div>';
@@ -1160,7 +1164,7 @@ function skThumb(shape,img){var n={grid:6,bars:3,pair:4,tabs:3,table:6,list:4,ic
 var AUTOIN='<span class="pprev" style="display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink);background:var(--card)">ﾃﾝﾌﾟﾚ<br>のまま</span>';
 function pname(L,id){var x=PARTS.find(L,id);return x?x[1]:'ﾃﾝﾌﾟﾚのまま'}
 function partsSheet(){var g=D.design,h='<div class="sh pts">'+shTop('ﾃﾞｻﾞｲﾝ（部品の組み合わせ）');
-  h+='<p class="note2" style="margin:0 0 6px">いま：骨格「'+esc(TPL[D.tpl].n)+'」／背景「'+esc(pname(PARTS.BG,g.bg))+'」／枠「'+esc(pname(PARTS.FRAME,g.frame))+'」／見出し「'+esc(pname(PARTS.HEAD,g.head))+'」／配色「'+esc(pname(PARTS.PAL,g.pal))+'」<br>選ぶとすぐ上のﾎﾑﾍﾟに反映されるょ。気に入ったら「保存」してね</p>';
+  h+='<p class="note2" style="margin:0 0 6px">いま：骨格「'+esc(TPL[D.tpl].n)+'」／背景「'+esc(pname(PARTS.BG,g.bg))+'」／枠「'+esc(pname(PARTS.FRAME,g.frame))+'」／見出し「'+esc(pname(PARTS.HEAD,g.head))+'」／配色「'+esc(pname(PARTS.PAL,g.pal))+'」<br>選ぶとすぐ上のﾎﾑﾍﾟに反映されるょ。気に入ったら「保存」してね<br><b style="color:#ffe066">※ﾃﾞｻﾞｲﾝゎﾎﾑﾍﾟ全体（TOPも、ほかのﾍﾟｰｼﾞも）に反映されるょ。ﾍﾟｰｼﾞごとに変えることゎできないょ。HTMLに変換したﾍﾟｰｼﾞゎﾃﾞｻﾞｲﾝと別になるょ</b></p>';
   h+='<div class="ptabs">'+PARTS.CATS.map(function(c){return '<button type="button" data-act="ptab" data-v="'+c[0]+'"'+(PT===c[0]?' class="on"':'')+'>'+c[1]+'</button>'}).join('')+'</div>';
   if(PT==='kei'){h+='<p class="note2">系統を選ぶと、骨格・背景・枠・見出し・配色にまとめて初期ｾｯﾄが入るょ。そのあと好きな部品だけ差しかえてね</p><div class="pgrid2">'+PARTS.KEI.map(function(k){var K=k[3];return pcard('pkei',k[0],g.kei===k[0],'<span class="pprev" style="'+palStyle(K.pal)+'"><span class="pt-bg" data-bgp="'+K.bg+'" style="position:absolute;inset:0;height:auto"></span><span class="pt-hd" data-hd="'+K.head+'" style="margin:16px 6px">MENU</span></span>',k[1],k[2])}).join('')+'</div>'}
   else if(PT==='skel'){h+='<p class="note2">骨格＝ﾒﾆｭｰの形や中身の並び順。変えても背景・枠・見出し・配色ゎそのまま残るょ</p><div class="pgrid2">'+PARTS.SKEL.map(function(k){return pcard('pskel',k[0],D.tpl===k[0],skThumb(k[3],k[4]),k[1],k[2])}).join('')+'</div>'}
@@ -1198,7 +1202,7 @@ function drawUi(){
   if(isT())drawUi2();else{
   ui.innerHTML='<div class="edbar">'+sheetHtml()+
    (sheet==='parts'||sheet==='opts'?'':'<div class="tools" aria-label="文字の装飾"><button type="button" data-act="sheet" data-v="color" style="color:#ff6fb5">色</button><button type="button" data-act="wrap" data-v="b"><b>B</b></button><button type="button" data-act="wrap" data-v="big">大</button><button type="button" data-act="wrap" data-v="small" style="font-size:11px">小</button><button type="button" data-act="wrap" data-v="blink">点滅</button><button type="button" data-act="wrap" data-v="rb" class="rbt">虹</button><button type="button" data-act="wrap" data-v="mq">流</button><button type="button" data-act="wrap" data-v="center">中</button><button type="button" data-act="sheet" data-v="kao">顔</button><button type="button" data-act="sheet" data-v="emo">♡</button><button type="button" data-act="sheet" data-v="sozai">素材</button></div>')+
-   (sheet?'':(canConv(location.hash.replace(/^#/,''))?'<p class="pgtools">このﾍﾟｰｼﾞ：<button type="button" class="ebtn sub" data-act="toHtml">🔧 HTMLに変換'+(htmlOk()?'':'（あと'+htmlLeft()+'）')+'</button></p>':''))+'<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="parts">🎨 ﾃﾞｻﾞｲﾝ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">⚙ 設定</button><button type="button" class="ebtn sub" data-act="qsave" title="編集画面を開いたまま保存">途中保存</button><button type="button" class="ebtn" data-act="save">保存して閉じる</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
+   (sheet?'':(canConv(location.hash.replace(/^#/,''))?'<p class="pgtools">このﾍﾟｰｼﾞ：<button type="button" class="ebtn sub" data-act="toHtml">🔧 HTMLに変換'+(htmlOk()?'':'（あと'+htmlLeft()+'）')+'</button></p>':''))+'<div class="acts"><button type="button" class="ebtn sub lt" data-act="sheet" data-v="parts">🎨 ﾃﾞｻﾞｲﾝ（全体）</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="menu">ﾒﾆｭｰ</button><button type="button" class="ebtn sub lt" data-act="sheet" data-v="opts">⚙ 設定</button><button type="button" class="ebtn sub" data-act="qsave" title="編集画面を開いたまま保存">途中保存</button><button type="button" class="ebtn" data-act="save">保存して閉じる</button><button type="button" class="ebtn sub lt" data-act="view">見た目確認</button></div>'+
    '<div class="st" id="st" role="status">'+(dirty?'まだ保存してないょ':'')+'</div></div>';}
   var tp=document.getElementById('tp');if(tp)tp.onchange=function(){D.tpl=this.value;D.colors={};changed();draw()};
   var th=document.getElementById('th');if(th)th.onchange=function(){D.theme=this.value;D.colors={};changed();draw()};
@@ -1351,14 +1355,14 @@ function stamp(){var d=new Date();return '保存 '+(d.getMonth()+1)+'/'+d.getDat
 async function chooser(){await loadBox();
   modal('<p class="ttl">ﾎﾑﾍﾟ編集</p><div class="mch">'+
    '<button type="button" class="ebtn" data-act="m_edit">✎ 今のﾎﾑﾍﾟを編集する</button>'+
-   '<button type="button" class="ebtn" data-act="m_new">♡ 新しく作る<br><small>テンプレを選んで作り直すょ</small></button>'+
+   '<button type="button" class="ebtn" data-act="m_new">♡ 新しく作る<br><small>見た目と文章を作り直すょ（日記・写真・BBSゎ消えないょ）</small></button>'+
    '<button type="button" class="ebtn sub" data-act="m_box">📦 保存BOXを見る（'+BOX.length+'/'+BOXMAX+'）</button>'+
    '<button type="button" class="ebtn sub" data-act="m_close">とじる</button></div>'+
    '<p class="note2" style="color:var(--hi)">※日記・写真・BBS・質問箱などゎ、新しく作っても消えずにそのまま残るょ</p>')}
 async function newHp(){if(isNew)return tplPick();await loadBox();
-  modal('<p class="ttl">新しく作る</p><p class="mq2">今のﾎﾑﾍﾟゎどうする？</p><div class="mch">'+
-   '<button type="button" class="ebtn" data-act="m_new_keep">📦 保存BOXにしまってから作る<br><small>あとで復活できるょ（'+BOX.length+'/'+BOXMAX+'）</small></button>'+
-   '<button type="button" class="ebtn sub" data-act="m_new_drop">しまわずに作る<br><small>新しいのを保存した時点で今のﾎﾑﾍﾟゎ消えるょ</small></button>'+
+  modal('<p class="ttl">新しく作る</p><p class="mq2">新しく作ると、今のﾎﾑﾍﾟの見た目と文章ゎ置きかわるょ。<br>「保存BOX」にしまっておくと、あとで元に戻せるょ</p><div class="mch">'+
+   '<button type="button" class="ebtn" data-act="m_new_keep">📦 しまってから作る（おすすめ）<br><small>今のﾎﾑﾍﾟを保存BOXにしまうょ。あとで復活できるょ（'+BOX.length+'/'+BOXMAX+'）</small></button>'+
+   '<button type="button" class="ebtn sub" data-act="m_new_drop">しまわずに作る<br><small>新しいのを保存した時点で今のﾎﾑﾍﾟゎ消えて、戻せないょ</small></button>'+
    '<button type="button" class="ebtn sub" data-act="edit">← もどる</button></div>')}
 function tplPick(){var keep={icon:D.icon,iconPath:D.iconPath};D=fix(def(R.nickname),R.nickname);D.icon=keep.icon;D.iconPath=keep.iconPath;
   modal('<p class="ttl">テンプレをえらんでね</p><div class="tplg">'+Object.keys(TPL).map(function(k){return '<button type="button" class="tplc" data-act="m_tpl" data-v="'+k+'"><span class="sw" data-t="'+k+'"></span>'+esc(TPL[k].n)+'</button>'}).join('')+'</div><p class="note2">あとから「ﾃﾝﾌﾟﾚ・色」でいつでも変えられるょ</p>')}
@@ -1387,6 +1391,8 @@ async function upIcon(file){st('画像を準備中…');
     await save(null,true);if(old)DB.delImg(old).catch(function(){});draw();st('画像を変えたょ✧')}
   catch(err){st(err.message)}}
 function txtOf(h){return String(h||'').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<!--[\s\S]*?-->/g,' ').replace(/<[^>]+>/g,' ')}
+function sampleCheck(){var hit=[];Object.keys(D.pages).forEach(function(k){var p=D.pages[k];if(!p||p.fmt==='html')return;var b=String(p.b||'');
+    if(b.indexOf('○月○日')>=0||b.indexOf('（↓の「')>=0||/^\s*A[.．]\s*$/m.test(b))hit.push(plain(label(k)))});return hit}
 function piCheck(){var pg=Object.keys(D.pages).map(function(k){var p=D.pages[k];return [p.b,txtOf(p.h)]}),hh=Object.keys(D.html||{}).map(function(k){return txtOf(D.html[k].h)});
   var all=JSON.stringify([D.title,D.sub,D.marquee,D.msg,D.intro,D.qa,D.real,pg,hh,D.menu.map(function(m){return m.l})]),hit=[];
   if(/0\d{1,4}[-ー－]?\d{1,4}[-ー－]?\d{3,4}/.test(all))hit.push('電話番号');
@@ -1397,6 +1403,7 @@ function piCheck(){var pg=Object.keys(D.pages).map(function(k){var p=D.pages[k];
 async function save(b,quiet){
   var nr=document.getElementById('newreal');if(nr&&nr.value.trim()){D.real.unshift({t:nr.value.trim(),at:new Date().toISOString()});D.real=D.real.slice(0,50);nr.value=''}
   if(quiet!==true){var hit=piCheck();if(hit.length&&!await UI.ask(hit.join('・')+'っぽいものが入ってるょ。\n誰でも見れる場所に個人情報を書くのゎ危ないよ。\nこのまま保存する？'))return}
+  if(quiet===undefined){var sm=sampleCheck();if(sm.length&&!await UI.ask('見本の文字（「○月○日」「（↓の…）」や、答えのない「A.」）が残ってるﾍﾟｰｼﾞがあるょ：'+sm.join('、')+'\n見本の文字ゎそのまま公開されるょ。\nこのまま保存する？（「やめる」で戻って書きかえられるょ）'))return}
   if(b)b.disabled=true;st('保存中…');
   try{await DB.saveHp(me.id,D,VIS);dirty=false;isNew=false;dropDraft();st('保存したょ✧');if(!quiet){ED=false;sheet='';PREV=false;draw();toast('保存したょ✧')}}catch(err){st(err.message)}if(b)b.disabled=false}
 window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue=''}});

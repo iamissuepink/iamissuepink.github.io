@@ -90,23 +90,24 @@
 <p style="text-align:center;margin:4px 0 0;font-size:12px"><a href="#" id="forgot">ﾊﾟｽﾜｰﾄﾞを忘れた？</a></p>
 </div>
 <div id="f-up" class="fm" style="gap:8px" hidden>
-<label for="up-nick">ﾆｯｸﾈｰﾑ（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
-<label for="up-id">めろID（ﾎﾑﾍﾟのURLになるょ。半角英小文字・数字・_ の3〜16文字。<b>あとから変えられない</b>）</label>
+<label for="up-nick">ﾆｯｸﾈｰﾑ【必須】（あとで変えられるょ）</label><input id="up-nick" type="text" maxlength="20">
+<label for="up-id">めろID【必須】（ﾎﾑﾍﾟのURLになるょ。半角英小文字・数字・_ の3〜16文字。<b>あとから変えられない</b>）</label>
 <input id="up-id" type="text" maxlength="16" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="例：ayapyon">
 <p class="msg" id="idmsg" style="text-align:left;margin:0"></p>
-<label for="up-by">生まれた年と月（ほかの人にゎ見えないょ）</label>
+<label for="up-by">生まれた年と月【必須】（ほかの人にゎ見えないょ）</label>
 <div style="display:flex;gap:6px"><select id="up-by" style="flex:1"></select><select id="up-bm" style="flex:1"></select></div>
 <p style="font-size:11px;color:#c9a2ff;margin:0">※年齢にあわせて安全のための設定をするのに使うょ。日にちゎ聞かないょ</p>
 <div id="up-gbox" hidden class="fm" style="gap:4px">
-<label for="up-gmail">保護者のﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-gmail" type="email" autocomplete="off">
+<label for="up-gmail">保護者のﾒｰﾙｱﾄﾞﾚｽ【必須】</label><input id="up-gmail" type="email" autocomplete="off">
 <p style="font-size:11px;color:#c9a2ff;margin:0">12歳以下の人ゎ、保護者の人の承認が必要だょ。保護者の人と一緒に登録してね（<a href="guardian.html" target="_blank">保護者の方へ</a>）</p>
 </div>
-<label for="up-ref">めろﾋﾟｮﾝ☆をどこで知った？</label>
+<label for="up-ref">めろﾋﾟｮﾝ☆をどこで知った？【必須】</label>
 <select id="up-ref"><option value="">えらんでね</option><option value="friend">友だちに聞いた・誘われた</option><option value="sns">SNS（X・Instagram・TikTokなど）</option><option value="hp">だれかのﾎﾑﾍﾟで見た</option><option value="event">ｲﾍﾞﾝﾄ・作り会</option><option value="search">検索して見つけた</option><option value="other">そのほか</option></select>
-<label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ</label><input id="up-mail" type="email" autocomplete="email">
-<label for="up-pass">ﾊﾟｽﾜｰﾄﾞ（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
-<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree" style="width:18px;height:18px;margin-top:2px;flex:none"><span><a href="terms.html" target="_blank">利用規約</a>と<a href="privacy.html" target="_blank">ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰ</a>を読んで同意します（18歳未満の人ゎ保護者の人と一緒に読んでね）</span></label>
-<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree2" style="width:18px;height:18px;margin-top:2px;flex:none"><span>使い方のﾃﾞｰﾀ（どのﾍﾟｰｼﾞをいつ使ったか等）を、個人がわからない形にして<a href="privacy.html#research" target="_blank">運営の研究</a>に使うことに同意します（同意しなくても登録できるょ）</span></label>
+<label for="up-mail">ﾒｰﾙｱﾄﾞﾚｽ【必須】</label><input id="up-mail" type="email" autocomplete="email">
+<label for="up-mail2">ﾒｰﾙｱﾄﾞﾚｽ（確認のためもう一回）【必須】</label><input id="up-mail2" type="email" autocomplete="off">
+<label for="up-pass">ﾊﾟｽﾜｰﾄﾞ【必須】（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
+<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree" style="width:18px;height:18px;margin-top:2px;flex:none"><span>【必須】<a href="terms.html" target="_blank">利用規約</a>と<a href="privacy.html" target="_blank">ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰ</a>を読んで同意します（18歳未満の人ゎ保護者の人と一緒に読んでね）</span></label>
+<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree2" style="width:18px;height:18px;margin-top:2px;flex:none"><span>【任意】使い方のﾃﾞｰﾀ（どのﾍﾟｰｼﾞをいつ使ったか等）を、個人がわからない形にして<a href="privacy.html#research" target="_blank">運営の研究</a>に使うことに同意します（同意しなくても登録できるょ）</span></label>
 <button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
 <p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!（迷惑ﾒｰﾙﾌｫﾙﾀﾞも見てね）<br>※ﾆｯｸﾈｰﾑ・めろIDに本名ゎ使わないでね</p>
 </div>
@@ -157,6 +158,7 @@ $('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim(),id=$('
   var age=DB.age(bym);if(age<6){say('生まれた年と月を確認してね',true);return}
   if(age<=12&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g)){say('保護者のﾒｰﾙｱﾄﾞﾚｽを入れてね',true);return}
   if(age<=12&&g.toLowerCase()===mail.toLowerCase()){say('保護者のﾒｰﾙｱﾄﾞﾚｽゎ、自分のとちがうのを入れてね',true);return}
+  if(mail.toLowerCase()!==$('up-mail2').value.trim().toLowerCase()){say('ﾒｰﾙｱﾄﾞﾚｽが2回で合ってないょ。もう一回確認してね',true);return}
   if(!$('up-ref').value){say('どこで知ったか選んでね',true);return}
   if(!$('agree').checked){say('利用規約とﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰに同意してね',true);return}
   b.disabled=true;say('登録中…');
