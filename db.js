@@ -77,15 +77,20 @@ window.DB={
     return n},
   markSeen:function(claps){return run(sb.auth.updateUser({data:{seen:{at:new Date().toISOString(),claps:claps||0}}}))},
   setMeta:function(o){return run(sb.auth.updateUser({data:o}))},
-  exportAll:async function(uid){
-    var p=await run(sb.from('profiles').select('nickname,bio,hp_id,created_at').eq('id',uid).limit(1));p=p[0]||{};
-    var h=await run(sb.from('homepages').select('data,visibility,counter,updated_at').eq('user_id',uid).limit(1));
+  /* 6本の取得を並行で行い、終わるたびに onStep(終わった数,全部の数,名前) を呼ぶ。段階ごとの所要時間ゎ console に出す */
+  exportAll:async function(uid,onStep){var N=6,done=0;
+    function tm(name,f){var t=Date.now();function fin(){done++;if(window.console)console.info('[めろﾋﾟｮﾝ☆] 書き出し '+name+' '+(Date.now()-t)+'ms');if(onStep){try{onStep(done,N,name)}catch(e){}}}
+      return f().then(function(r){fin();return r},function(e){fin();throw e})}
     var safe=async function(f){try{return await f()}catch(e){return {error:e.message}}};
-    return {app:'meropyon',version:1,exported_at:new Date().toISOString(),hp_id:p.hp_id||'',profile:p,homepage:h[0]||null,
-      diaries:await safe(function(){return run(sb.from('diaries').select('title,body,is_public,created_at').eq('user_id',uid).order('created_at',{ascending:true}))}),
-      photos:await safe(async function(){var L=await run(sb.from('photos').select('path,caption,created_at').eq('user_id',uid).order('created_at',{ascending:true}));return L.map(function(x){return {url:IMG+x.path,caption:x.caption,created_at:x.created_at}})}),
-      backups:await safe(function(){return run(sb.from('hp_backups').select('name,data,created_at').eq('user_id',uid).order('created_at',{ascending:true}))}),
-      questions:await safe(function(){return run(sb.from('questions').select('body,answer,answered_at,created_at').eq('owner',uid).not('answer','is',null))})}},
+    var R=await Promise.all([
+      tm('ﾌﾟﾛﾌ',function(){return run(sb.from('profiles').select('nickname,bio,hp_id,created_at').eq('id',uid).limit(1))}),
+      tm('ﾎﾑﾍﾟ',function(){return run(sb.from('homepages').select('data,visibility,counter,updated_at').eq('user_id',uid).limit(1))}),
+      tm('日記',function(){return safe(function(){return run(sb.from('diaries').select('title,body,is_public,created_at').eq('user_id',uid).order('created_at',{ascending:true}))})}),
+      tm('写真',function(){return safe(async function(){var L=await run(sb.from('photos').select('path,caption,created_at').eq('user_id',uid).order('created_at',{ascending:true}));return L.map(function(x){return {url:IMG+x.path,caption:x.caption,created_at:x.created_at}})})}),
+      tm('保存BOX',function(){return safe(function(){return run(sb.from('hp_backups').select('name,data,created_at').eq('user_id',uid).order('created_at',{ascending:true}))})}),
+      tm('質問箱',function(){return safe(function(){return run(sb.from('questions').select('body,answer,answered_at,created_at').eq('owner',uid).not('answer','is',null))})})]);
+    var p=R[0][0]||{},h=R[1];
+    return {app:'meropyon',version:1,exported_at:new Date().toISOString(),hp_id:p.hp_id||'',profile:p,homepage:h[0]||null,diaries:R[2],photos:R[3],backups:R[4],questions:R[5]}},
   importHp:async function(uid,hp){var cur=await run(sb.from('homepages').select('data,visibility').eq('user_id',uid).limit(1));
     if(cur[0]&&cur[0].data){var d=new Date();await run(sb.from('hp_backups').insert({name:'戻す前 '+(d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2),data:cur[0].data}))}
     var vis=cur[0]?cur[0].visibility:(hp.visibility||'members');

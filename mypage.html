@@ -188,7 +188,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="ui.js?v=1"></script>
-<script src="db.js?v=16"></script>
+<script src="db.js?v=17"></script>
 <script src="site.js?v=4"></script>
 <script>
 (async function(){
@@ -197,10 +197,14 @@ function say(t,ng){msg.textContent=t;msg.className='msg'+(ng?' ng':'')}
 var u=await DB.me();$('loading').hidden=true;
 if(!u){$('guest').hidden=false;return}
 $('member').hidden=false;
-try{var p=await DB.getProfile(u.id);
-  $('hello').textContent=DB.san(p&&p.nickname);$('nick').value=p?p.nickname:'';$('bio').value=p?p.bio:'';
+var PROF_OK=false;
+async function loadProf(){var p=null,err=null,rb=$('profretry');if(rb)rb.remove();$('save').disabled=true;say('ﾌﾟﾛﾌを読み込み中…');
+  for(var i=0;i<3;i++){try{p=await DB.getProfile(u.id);err=null;if(p)break}catch(e){err=e;p=null}if(i<2)await new Promise(function(r){setTimeout(r,600*(i+1))})}
   var d=new Date(p?p.created_at:u.created_at);$('since').textContent=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
-}catch(e){say(e.message,true)}
+  if(p){$('hello').textContent=DB.san(p.nickname);$('nick').value=p.nickname||'';$('bio').value=p.bio||'';PROF_OK=true;$('save').disabled=false;say('')}
+  else{PROF_OK=false;say((err?err.message+'　':'')+'ﾌﾟﾛﾌを読み込めなかったょ。このままだと保存できないから、もう一回読み込んでね',true);
+    var b=document.createElement('button');b.type='button';b.id='profretry';b.className='pill';b.textContent='もう一回読み込む';b.style.marginTop='6px';b.onclick=loadProf;msg.parentNode.insertBefore(b,msg.nextSibling)}}
+await loadProf();
 DB.isAdmin(u.id).then(function(a){if(a)$('adminl').hidden=false}).catch(function(){});
 try{var info=await DB.myInfo(u.id);
   if(!info){var md={};try{md=await DB.meta()}catch(e){}
@@ -251,18 +255,18 @@ function initSetup(md){md=md||{};
     try{await DB.setup($('hpid').value,$('by').value+'-'+('0'+$('bm').value).slice(-2),$('gbox').hidden?'':$('gmail').value.trim());location.reload()}
     catch(e){sm.textContent=e.message;sm.className='msg ng'}b.disabled=false};
 }
-$('save').onclick=async function(){var b=this,n=$('nick').value.trim();
+$('save').onclick=async function(){var b=this,n=$('nick').value.trim();if(!PROF_OK){say('ﾌﾟﾛﾌを読み込めてないから保存できないょ。「もう一回読み込む」を押してね',true);return}
   if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
   b.disabled=true;say('保存中…');
   try{await DB.saveProfile(u.id,n,$('bio').value);$('hello').textContent=DB.san(n);say('保存したょ✧')}catch(e){say(e.message,true)}b.disabled=false};
 DB.meta().then(function(md){$('rsch').checked=md.research===true}).catch(function(){});
 $('rsch').onchange=async function(){var c=this.checked,m=$('rmsg');try{await DB.setMeta({research:c,research_at:new Date().toISOString()});m.textContent=c?'ありがとう♡ 協力してくれるの、すごくうれしい':'外したょ。これからのﾃﾞｰﾀゎ研究に使わないょ';m.className='msg'}catch(e){m.textContent=e.message;m.className='msg ng';this.checked=!c}};
 function dmsg(t,ng){var m=$('dmsg');m.textContent=t;m.className='msg'+(ng?' ng':'')}
-$('exp').onclick=async function(){var b=this;b.disabled=true;dmsg('まとめてるょ…');
-  try{var x=await DB.exportAll(u.id);var blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'}),a=document.createElement('a');
+$('exp').onclick=async function(){var b=this;b.disabled=true;dmsg('まとめてるょ…（0/6）');var slow=setTimeout(function(){dmsg('まだまとめてるょ…時間がかかってるけど、そのまま待っててね',false)},12000);
+  try{var x=await DB.exportAll(u.id,function(n,N,nm){clearTimeout(slow);dmsg('まとめてるょ…（'+n+'/'+N+'：'+nm+'まで終わったょ）')});var blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'}),a=document.createElement('a');
     var d=new Date(),ds=d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2);
     a.href=URL.createObjectURL(blob);a.download='meropyon_'+(x.hp_id||'data')+'_'+ds+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
-    dmsg('書き出したょ✧ ﾀﾞｳﾝﾛｰﾄﾞﾌｫﾙﾀﾞを見てね（写真ゎURLのﾘｽﾄだけ入ってるょ）')}catch(e){dmsg(e.message,true)}b.disabled=false};
+    dmsg('書き出したょ✧ ﾀﾞｳﾝﾛｰﾄﾞﾌｫﾙﾀﾞを見てね（写真ゎURLのﾘｽﾄだけ入ってるょ）')}catch(e){dmsg(e.message,true)}clearTimeout(slow);b.disabled=false};
 $('imp').onchange=async function(){var f=this.files[0];this.value='';if(!f)return;
   try{var x=JSON.parse(await f.text());if(!x||x.app!=='meropyon'||!x.homepage||!x.homepage.data)throw new Error('めろﾋﾟｮﾝ☆で書き出したﾌｧｲﾙじゃないみたい');
     if(!(await UI.ask('「'+(x.homepage.data.title||'ﾎﾑﾍﾟ')+'」（'+String(x.exported_at||'').slice(0,10)+' に書き出し）に戻す？\n今のﾎﾑﾍﾟゎ保存BOXにしまうょ')))return;
