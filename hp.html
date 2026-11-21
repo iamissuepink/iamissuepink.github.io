@@ -647,7 +647,7 @@ body .phone{margin-left:auto!important;margin-right:auto!important}
 (function(){
 var root=document.getElementById('root'),ui=document.getElementById('ui');
 var Q=new URLSearchParams(location.search),HID=(Q.get('id')||'').toLowerCase(),WANT=Q.get('edit')==='1';
-var me=null,R=null,D=null,VIS='members',CNT=0,owner=false,ED=false,dirty=false,isNew=false,sheet='',lastF=null;
+var PREV=false,me=null,R=null,D=null,VIS='members',CNT=0,owner=false,ED=false,dirty=false,isNew=false,sheet='',lastF=null;
 var MOODS=['(*´∀`*)','(ﾉ´∀｀*)','(〃▽〃)','☆(ゝω・)v','(｀・ω・´)','(´；ω；｀)','(｡>﹏<｡)','(*´﹃｀*)','(-_-)zzz','ヽ(`Д´)ﾉ','┐(´д｀)┌','(=゜ω゜)ﾉ'];
 var KAO=['(*´∀`*)','(ﾉ´∀｀*)','o(^-^)o','(〃▽〃)','☆(ゝω・)v','(｀・ω・´)ゞ','(´；ω；｀)','(｡>﹏<｡)','(*´﹃｀*)','(-_-)zzz','ヽ(`Д´)ﾉ','┐(´д｀)┌','(=゜ω゜)ﾉ','(*ﾟ▽ﾟ*)','(ﾟдﾟ)','(・∀・)','( ´∀｀)ﾉｼ','(*^^*)','(>_<)','(^_-)-☆','( ´ ▽ ` )ﾉ','((o(^∇^)o))','(*_ _)人','ｷﾀ━━(ﾟ∀ﾟ)━━!!','✧+.(´▽`人).+✧','(ᵔᴥᵔ)','(o´∀`o)','ε-(´∀｀*)ﾎｯ','ヾ(*´∀｀*)ﾉ','(*´ω｀*)'];
 var EMO=['♡','♥','❤','💕','💖','💗','💘','☆','★','✧','✦','✩','♪','♫','✿','❀','🌸','🌷','🎀','👑','💎','🍓','🍰','🍭','🧸','🐰','🐻','🌈','☁','☀','🌙','⭐','✨','💫','🔥','💋','💄','📱','✉','♨','👍','✌','🙏','💦','💤','💢','⚡','🎵','🎶','❣'];
@@ -789,32 +789,32 @@ garake:function(){var it=cItems();return '<div class="c-tbox">'+esc(D.title)+cSu
   '<div class="c-h">☆MENU☆</div><div class="c-ln">☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆</div><table class="c-m2"><tr>'+it.map(function(m,i){return (i&&i%2===0?'</tr><tr>':'')+'<td><a href="#'+esc(m.k)+'">'+mlab(m)+'</a></td>'}).join('')+'</tr></table><div class="c-ln">☆.｡.:*・°☆.｡.:*・°☆.｡.:*・°☆</div>'+
   '<div class="c-h">☆UPDATE☆</div>'+cUpd()+cActs()+cSong()+cLinks()+cTags()+cFoot()},
 gal:function(){var C=['#ffd700','#ff2e97','#ffd700','#ff2e97','#ffd700','#ff2e97','#ffd700','#ff2e97','#ffd700','#ff2e97','#ffd700','#ff2e97'];
-  return '<div class="c-tbox">♛'+esc(D.title)+'♛'+cSub()+'</div>'+cImg(120)+cMq()+cMsg()+'<div class="c-h">♛MENU♛</div><div class="c-ln">♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛</div>'+
+  return '<div class="c-tbox">♛'+esc(D.title)+'♛'+cSub()+'</div>'+cImg(120)+cMq()+cMsg()+cMood()+'<div class="c-h">♛MENU♛</div><div class="c-ln">♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛</div>'+
   '<div class="c-bars">'+cItems().map(function(m,i){return '<a href="#'+esc(m.k)+'"><span style="border-left-color:'+C[i]+'">'+cE(m)+'</span>&lt;&lt;'+mlab(m)+'</a>'}).join('')+'</div><div class="c-ln">♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛✦♛</div>'+
   cUpd()+cCnt()+cKiri()+cActs('♛','')+cSong()+'<div class="c-box"><div class="c-h">♛LINK♛</div>'+cLinks()+'</div>'+cTags()+cFoot()},
 yume:function(){var it=cItems(),a=it.slice(0,8),b=it.slice(8);
-  return '<div class="c-t">'+esc(D.title)+'</div><div class="c-icons">♡☆♡☆♡</div>'+cSub()+cImg(100)+'<div class="c-small">since '+esc(SINCE)+'</div>'+cCnt(function(n){return '→ <span class="c-dg">'+('000000'+n).slice(-6)+'</span> d(*ﾟーﾟ*)'})+cKiri()+
+  return '<div class="c-t">'+esc(D.title)+'</div><div class="c-icons">♡☆♡☆♡</div>'+cSub()+cImg(100)+'<div class="c-small">since '+esc(SINCE)+'</div>'+cCnt(function(n){return '<span class="c-dg">'+('000000'+n).slice(-6)+'</span> hit!'})+cKiri()+
   '<div class="c-icons">☁︎ ☆ ☁︎ ☆ ☁︎</div><div class="c-g2">'+a.map(function(m){return '<a href="#'+esc(m.k)+'"><i></i>'+cE(m).toUpperCase()+'</a>'}).join('')+'</div>'+
   '<div class="c-lt">LETS TALK</div>'+cActs('','')+(b.length?'<div class="c-g2">'+b.map(function(m){return '<a href="#'+esc(m.k)+'"><i></i>'+mlab(m)+'</a>'}).join('')+'</div>':'')+
-  '<div class="c-date">'+esc(TODAY)+'</div>'+cMsg()+'<div class="c-icons">☁︎ ☆ ☁︎ ☆ ☁︎</div>'+cUpd()+cSong()+cLinks()+cTags()+cFoot()},
+  '<div class="c-date">'+esc(TODAY)+'</div>'+cMsg()+cMood()+'<div class="c-icons">☁︎ ☆ ☁︎ ☆ ☁︎</div>'+cUpd()+cSong()+cLinks()+cTags()+cFoot()},
 jirai:function(){return '<div class="c-lace"></div><div class="c-t">♡ '+esc(D.title)+' ♡</div>'+cSub()+cImg(120,0,'c-polar')+'<div class="c-ln">♡⸝⸝ ✝︎ ⸝⸝♡ ✝︎ ♡⸝⸝ ✝︎ ⸝⸝♡</div>'+
   '<div class="c-jl">'+cItems().map(function(m){return '<a href="#'+esc(m.k)+'"><span>✝︎ '+cE(m).toUpperCase()+'</span><i>┈┈ </i>'+mlab(m)+'</a>'}).join('')+'</div><div class="c-ln">♡⸝⸝ ✝︎ ⸝⸝♡ ✝︎ ♡⸝⸝ ✝︎ ⸝⸝♡</div>'+
   cMsg()+cMood()+'<div class="c-h">♡ new ♡</div>'+cUpd()+cCnt()+cKiri()+cActs('♡','')+cSong()+cLinks()+cTags()+'<div class="c-lace b"></div>'+cFoot()},
 pop:function(){var C=['#ff4f9a','#ffff4d','#f5a447','#7cff4d','#9b2fd6','#2f6bd6','#00c2b8','#ff7a00','#c86bff','#ff4f9a','#ffff4d','#f5a447'];
   return '<div class="c-rl"></div><div class="c-t">'+esc(D.title)+'</div><div class="c-rl"></div><div class="c-hb"><i>★</i><span>'+(D.sub?deco(D.sub):'ﾖｳｺｿ!!')+'</span></div><div class="c-st">★★★★★★★★★★★★★</div>'+
   '<table class="c-tm"><tr><td class="c-tml">'+cItems().map(function(m,i){return '<a href="#'+esc(m.k)+'" style="background:'+C[i]+'"><b>Φ</b>'+cE(m).toUpperCase()+'</a>'}).join('')+'</td><td><div class="c-tph">'+(iconOk()?'<img src="'+esc(D.icon)+'" alt="TOP写真">':'')+'</div></td></tr></table>'+
-  '<div class="c-st">★★★★★★★★★★★★★</div>'+cMq()+cMsg()+'<div class="c-hb"><span>::New entry::</span><i>★</i></div>'+cStars()+cUpd()+cStars()+'<div class="c-rl"></div>'+cCnt(function(n){return ('000000'+n).slice(-6)+'hit'})+cKiri()+'<div class="c-rl"></div>'+cActs()+cSong()+cLinks()+cTags()+'<div class="c-rl"></div>'+cFoot()},
+  '<div class="c-st">★★★★★★★★★★★★★</div>'+cMq()+cMsg()+cMood()+'<div class="c-hb"><span>::New entry::</span><i>★</i></div>'+cStars()+cUpd()+cStars()+'<div class="c-rl"></div>'+cCnt(function(n){return ('000000'+n).slice(-6)+'hit'})+cKiri()+'<div class="c-rl"></div>'+cActs()+cSong()+cLinks()+cTags()+'<div class="c-rl"></div>'+cFoot()},
 street:function(){return '<div class="c-tape">CAUTION ✦ '+esc(D.title)+' ✦ CAUTION</div><div class="c-stk">'+esc(D.title)+'</div>'+cSub()+cImg(150)+cMq()+
   '<div class="c-sl">'+cItems().map(function(m,i){return '<a href="#'+esc(m.k)+'"><span>'+('0'+(i+1)).slice(-2)+' → '+cE(m).toUpperCase()+'</span><i>'+mlab(m)+'</i></a>'}).join('')+'</div><div class="c-ln">/// ─── /// ─── ///</div>'+
-  cMsg()+'<div class="c-h">// NEW ENTRY</div>'+cUpd()+cCnt(function(n){return 'HIT : '+('000000'+n).slice(-6)})+cKiri()+cActs()+cSong()+cLinks()+cTags()+'<div class="c-tape">✦ STAY REAL ✦ STAY REAL ✦</div>'+cFoot()},
+  cMsg()+cMood()+'<div class="c-h">// NEW ENTRY</div>'+cUpd()+cCnt(function(n){return 'HIT : '+('000000'+n).slice(-6)})+cKiri()+cActs()+cSong()+cLinks()+cTags()+'<div class="c-tape">✦ STAY REAL ✦ STAY REAL ✦</div>'+cFoot()},
 kr:function(){return cImg(130,0,'c-polar')+'<div class="c-t">'+esc(D.title)+'</div>'+cSub()+'<div class="c-ln">— ♡ —</div>'+cMsg()+
   '<div class="c-kn">'+cItems().map(function(m){return '<a href="#'+esc(m.k)+'">'+cE(m).toLowerCase()+'</a>'}).join('<i>|</i>')+'</div>'+cMood()+'<div class="c-ln">— ♡ —</div><div class="c-h">new</div>'+cUpd()+cCnt(function(n){return n+' visitors'})+cKiri()+cActs('','')+cSong()+cLinks()+cTags()+cFoot()},
 voc:function(){var s=sp(D.song);return '<div class="c-t">'+esc(D.title)+'</div>'+cSub()+cMq()+'<div class="c-ln">▁▂▃▅▆▇▆▅▃▂▁▂▃▅▆▇▆▅▃▂▁</div>'+
   (s?'<div class="c-np">♪ NOW PLAYING</div>'+cSong():'')+'<div class="c-pl">'+cItems().map(function(m,i){return '<a href="#'+esc(m.k)+'"><span>♪'+('0'+(i+1)).slice(-2)+'</span><b>'+cE(m)+'</b><i>'+mlab(m)+'</i></a>'}).join('')+'</div><div class="c-ln">▁▂▃▅▆▇▆▅▃▂▁▂▃▅▆▇▆▅▃▂▁</div>'+
-  cImg(140)+cMsg()+'<div class="c-h">▶ NEW ENTRY</div>'+cUpd()+cCnt(function(n){return '<span class="c-dg">'+('000000'+n).slice(-6)+'</span> PLAYS'})+cKiri()+cActs()+cLinks()+cTags()+cFoot()},
+  cImg(140)+cMsg()+cMood()+'<div class="c-h">▶ NEW ENTRY</div>'+cUpd()+cCnt(function(n){return '<span class="c-dg">'+('000000'+n).slice(-6)+'</span> PLAYS'})+cKiri()+cActs()+cLinks()+cTags()+cFoot()},
 y2k:function(){return '<div class="c-win"><div class="c-wt">'+esc(D.title)+'.exe<i>_ □ ×</i></div><div class="c-wb"><div class="c-t">'+esc(D.title)+'</div>'+cSub()+cImg(130)+'</div></div>'+cMq()+
   '<div class="c-dk">'+cItems().map(function(m){return '<a href="#'+esc(m.k)+'"><i></i>'+mlab(m)+'</a>'}).join('')+'</div><div class="c-ln">◇◆◇◆◇◆◇◆◇◆◇◆◇</div>'+
-  cMsg()+'<div class="c-win"><div class="c-wt">New entry<i>_ □ ×</i></div><div class="c-wb">'+cUpd()+'</div></div>'+cCnt(function(n){return 'visitor: '+('000000'+n).slice(-6)})+cKiri()+cActs()+cSong()+cLinks()+cTags()+cFoot()}};
+  cMsg()+cMood()+'<div class="c-win"><div class="c-wt">New entry<i>_ □ ×</i></div><div class="c-wb">'+cUpd()+'</div></div>'+cCnt(function(n){return 'visitor: '+('000000'+n).slice(-6)})+cKiri()+cActs()+cSong()+cLinks()+cTags()+cFoot()}};
 var SINCE='',TODAY=(function(){var d=new Date(),w='SunMonTueWedThuFriSat'.substr(d.getDay()*3,3);return (d.getMonth()+1)+'/'+d.getDate()+'('+w+')'})();
 async function ldLinks(){var e=document.getElementById('flinks');if(!e)return;try{var L=await DB.hpFriends(R.id);e.innerHTML=L.length?L.map(function(f){return '<a href="hp.html?id='+esc(f.hp_id)+'">♡'+esc(f.nickname)+'</a>'}).join('<br>'):'<span class="c-small">ﾘﾝｸ募集中ﾃﾞｽ</span>'}catch(err){e.innerHTML=''}}
 
@@ -861,6 +861,7 @@ var TB={
  TAGS:function(){var t=cTags();return ED?eslot('tags',t||'<i class="eph">＋タグ</i>',1):t},
  FOOT:function(){return cFoot()}};
 function renderT(id){var h=TPLH[id].html;
+  if(!ED&&!D.mood)h=h.replace(/<div class="tg-mood">[^\n]*?<\/div>/,'');
   h=h.replace(/\[MENU\]([\s\S]*?)\[\/MENU\]/,function(m,it){var s=menuItems().map(function(x,i){
       return it.replace(/\{\{href\}\}/g,'#'+esc(x.k)).replace(/\{\{en\}\}/g,cE(x)).replace(/\{\{label\}\}/g,mlab(x)).replace(/\{\{desc\}\}/g,mdesc(x)).replace(/\{\{n\}\}/g,('0'+(i+1)).slice(-2)).replace(/\{\{color\}\}/g,BARC[i%BARC.length]).replace(/\{\{off\}\}/g,x.on?'':' t-off')}).join('');
     return eslot('menu','<div class="t-menu">'+s+'</div>',1)});
@@ -918,6 +919,7 @@ function top(){
   if(isT())return h+renderT(D.tpl);
   if(!ED&&CR[D.tpl])return h+'<div class="cl">'+CR[D.tpl]()+'</div>';
   T.order.forEach(function(b){if(b.indexOf('ln:')===0)h+=ln(b.slice(3));else if(BLK[b])h+=BLK[b]()});
+  if(ED&&T.order.indexOf('mood')<0)h+=BLK.mood();
   return h}
 
 function label(k){var m=D.menu.filter(function(x){return x.k===k})[0];return deco(m?m.l:BUILTIN[k]||'ﾍﾟｰｼﾞ')}
@@ -943,7 +945,7 @@ function fillOnly(t){var L=String(t||'').split('\n'),o=[];for(var i=0;i<L.length
   if(/^\s*A[.．]\s*$/.test(l))continue;if(/[：:]\s*$/.test(l)&&l.replace(/[：:]\s*$/,'').length<24)continue;o.push(l)}
   return o.join('\n').replace(/\n{3,}/g,'\n\n')}
 function real(){
-  var h=ttl(label('real'));
+  var h=ttl(label('real'))+BLK.mood();
   if(ED)h+=ta('id="newreal" maxlength="200"','','いまなにしてる？',60)+'<p style="text-align:right;margin:4px 0"><button type="button" class="ebtn" data-act="addreal">ﾘｱﾙる♪</button></p>';
   if(!D.real.length)h+='<p class="empty">まだﾘｱﾙはありません</p>';
   D.real.forEach(function(e,i){h+='<div class="ent"><div class="d">'+esc(tm(e.at))+(i===0?'<span class="new">NEW!</span>':'')+(ED?' <button type="button" class="ebtn sub" data-act="delreal" data-i="'+i+'" style="min-height:24px;padding:0 8px">消す</button>':'')+'</div>'+deco(e.t)+'</div>'});
@@ -1023,7 +1025,7 @@ function toHtml(r){var k=r||'top',g=D.design,sk=PARTS.find(PARTS.SKEL,D.tpl)||PA
   else{var body;
     if(k==='prof')body='<dl class="qa">\n'+D.qa.filter(function(p){return String(p[1]||'').trim()}).map(function(p){return '  <dt>'+esc(p[0])+'</dt><dd>'+deco(p[1])+'</dd>'}).join('\n')+'\n</dl>';
     else if(k==='intro')body='<div>'+deco(fillOnly(D.intro))+'</div>';
-    else if(k==='real')body='<ul class="real">\n'+D.real.map(function(x){return '  <li><small>'+esc(tm(x.at))+'</small> '+deco(x.t)+'</li>'}).join('\n')+'\n</ul>';
+    else if(k==='real')body=(D.mood?'<p class="mood">今日の気分 <b>'+esc(D.mood)+'</b></p>\n':'')+'<ul class="real">\n'+D.real.map(function(x){return '  <li><small>'+esc(tm(x.at))+'</small> '+deco(x.t)+'</li>'}).join('\n')+'\n</ul>';
     else body='<div>'+deco(D.pages[k].b||'')+'</div>';
     b='<p class="crumb"><a href="#">▲ TOPへ</a></p>\n<!-- ===== ﾍﾟｰｼﾞの名前 ===== -->\n<h2 class="h">'+label(k)+'</h2>\n<!-- ===== 中身 ===== -->\n'+body+'\n'}
   var d=new Date();
@@ -1192,7 +1194,7 @@ function sheetHtml(){
   return ''}
 function drawUi(){
   if(!owner){ui.innerHTML='';return}
-  if(!ED){ui.innerHTML='<div class="fab"><button type="button" class="ebtn" data-act="edit" style="min-height:44px;padding:0 18px">✎ 編集する</button></div>';return}
+  if(!ED){ui.innerHTML='<div class="fab"><button type="button" class="ebtn" data-act="'+(PREV?'back_edit':'edit')+'" style="min-height:44px;padding:0 18px">✎ 編集する</button></div>';return}
   if(isT())drawUi2();else{
   ui.innerHTML='<div class="edbar">'+sheetHtml()+
    (sheet==='parts'||sheet==='opts'?'':'<div class="tools" aria-label="文字の装飾"><button type="button" data-act="sheet" data-v="color" style="color:#ff6fb5">色</button><button type="button" data-act="wrap" data-v="b"><b>B</b></button><button type="button" data-act="wrap" data-v="big">大</button><button type="button" data-act="wrap" data-v="small" style="font-size:11px">小</button><button type="button" data-act="wrap" data-v="blink">点滅</button><button type="button" data-act="wrap" data-v="rb" class="rbt">虹</button><button type="button" data-act="wrap" data-v="mq">流</button><button type="button" data-act="wrap" data-v="center">中</button><button type="button" data-act="sheet" data-v="kao">顔</button><button type="button" data-act="sheet" data-v="emo">♡</button><button type="button" data-act="sheet" data-v="sozai">素材</button></div>')+
@@ -1256,7 +1258,7 @@ root.addEventListener('input',function(e){var t=e.target,k=t.getAttribute('data-
 root.addEventListener('change',function(e){if(e.target.getAttribute('data-k')==='song')draw()});
 document.addEventListener('click',async function(e){var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act'),iv=b.getAttribute('data-i'),i=+iv,v=b.getAttribute('data-v'),el;
   if(a==='edit'){chooser()}
-  else if(a==='m_edit'){closeM();ED=true;draw();checkDraft()}
+  else if(a==='m_edit'){closeM();PREV=false;ED=true;draw();checkDraft()}
   else if(a==='qsave'){if(!dirty){toast('変更ゎないょ');return}await save(b,'mid');if(dirty)return;toast('ここまで保存したょ✧（公開側にも反映されたょ）')}
   else if(a==='m_new'){await newHp()}
   else if(a==='m_new_keep'){await loadBox();if(BOX.length>=BOXMAX){UI.tell('保存BOXがいっぱいだょ（'+BOXMAX+'個まで）。いらないのを消すか「しまわずに作る」を選んでね');return boxView()}var nm=await UI.input('しまう名前をつけてね',stamp());if(nm==null)return;try{await DB.addBackup(nm.trim()||stamp(),D)}catch(err){UI.tell(err.message);return}tplPick()}
@@ -1270,7 +1272,8 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='m_del'){if(await UI.ask('この保存を消す？（元に戻せないょ）')){try{await DB.delBackup(iv);await boxView()}catch(err){UI.tell(err.message)}}}
   else if(a==='m_skin'){D.theme=v;closeM();ED=true;changed();draw()}
   else if(a==='m_tpl'){D.tpl=v;D.colors={};closeM();ED=true;changed();draw()}
-  else if(a==='view'){ED=false;sheet='';draw()}
+  else if(a==='view'){ED=false;sheet='';PREV=true;draw()}
+  else if(a==='back_edit'){PREV=false;ED=true;draw()}
   else if(a==='sheet'){var was=sheet;sheet=sheet===v?'':v;if(!isT()&&(was==='parts'||sheet==='parts'))draw();else drawUi()}
   else if(a==='wrap'){if(el=target())edit(el,'['+v+']','[/'+v+']')}
   else if(a==='wrapc'){if(el=target())edit(el,'[c='+v+']','[/c]')}
@@ -1395,7 +1398,7 @@ async function save(b,quiet){
   var nr=document.getElementById('newreal');if(nr&&nr.value.trim()){D.real.unshift({t:nr.value.trim(),at:new Date().toISOString()});D.real=D.real.slice(0,50);nr.value=''}
   if(quiet!==true){var hit=piCheck();if(hit.length&&!await UI.ask(hit.join('・')+'っぽいものが入ってるょ。\n誰でも見れる場所に個人情報を書くのゎ危ないよ。\nこのまま保存する？'))return}
   if(b)b.disabled=true;st('保存中…');
-  try{await DB.saveHp(me.id,D,VIS);dirty=false;isNew=false;dropDraft();st('保存したょ✧');if(!quiet){ED=false;sheet='';draw();toast('保存したょ✧')}}catch(err){st(err.message)}if(b)b.disabled=false}
+  try{await DB.saveHp(me.id,D,VIS);dirty=false;isNew=false;dropDraft();st('保存したょ✧');if(!quiet){ED=false;sheet='';PREV=false;draw();toast('保存したょ✧')}}catch(err){st(err.message)}if(b)b.disabled=false}
 window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue=''}});
 window.addEventListener('hashchange',function(){draw();scrollTo(0,0)});
 setInterval(function(){var c=document.getElementById('clk');if(c)c.textContent=clock()},30000);
