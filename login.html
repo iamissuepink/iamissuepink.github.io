@@ -107,7 +107,6 @@
 <label for="up-mail2">ﾒｰﾙｱﾄﾞﾚｽ（確認のためもう一回）【必須】</label><input id="up-mail2" type="email" autocomplete="off">
 <label for="up-pass">ﾊﾟｽﾜｰﾄﾞ【必須】（6文字以上）</label><input id="up-pass" type="password" autocomplete="new-password">
 <label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree" style="width:18px;height:18px;margin-top:2px;flex:none"><span>【必須】<a href="terms.html" target="_blank">利用規約</a>と<a href="privacy.html" target="_blank">ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰ</a>を読んで同意します（18歳未満の人ゎ保護者の人と一緒に読んでね）</span></label>
-<label style="display:flex;gap:6px;align-items:flex-start;color:#ffd6ec;font-size:12px"><input type="checkbox" id="agree2" style="width:18px;height:18px;margin-top:2px;flex:none"><span>【任意】使い方のﾃﾞｰﾀ（どのﾍﾟｰｼﾞをいつ使ったか等）を、個人がわからない形にして<a href="privacy.html#research" target="_blank">運営の研究</a>に使うことに同意します（同意しなくても登録できるょ）</span></label>
 <button class="pill" id="b-up" type="button" style="margin-top:8px">登録する♡</button>
 <p style="font-size:11px;color:#c9a2ff;margin:4px 0 0">※登録すると確認ﾒｰﾙが届くょ。ﾘﾝｸを押したら登録完了!!（迷惑ﾒｰﾙﾌｫﾙﾀﾞも見てね）<br>※ﾆｯｸﾈｰﾑ・めろIDに本名ゎ使わないでね</p>
 </div>
@@ -163,7 +162,7 @@ $('b-up').onclick=async function(){var b=this,n=$('up-nick').value.trim(),id=$('
   if(!$('agree').checked){say('利用規約とﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰに同意してね',true);return}
   b.disabled=true;say('登録中…');
   try{var ok=null;try{ok=await DB.idOk(id)}catch(e){}if(ok===false)throw new Error('そのめろIDゎ使えないか、もう使われてるょ。別のにしてね');
-    await DB.signUp(mail,$('up-pass').value,n,{hp_id:id,birth:bym,guardian:age<=12?g:'',ref:$('up-ref').value,research:$('agree2').checked,agreed_at:new Date().toISOString()});
+    await DB.signUp(mail,$('up-pass').value,n,{hp_id:id,birth:bym,guardian:age<=12?g:'',ref:$('up-ref').value,agreed_at:new Date().toISOString()});
     say('確認ﾒｰﾙを送ったょ!! ﾒｰﾙのﾘﾝｸを押してね✉ ﾘﾝｸを押すとﾏｲﾍﾟｰｼﾞで設定が自動で終わるょ')}catch(e){say(e.message,true)}b.disabled=false};
 })();</script>
 </body>
