@@ -1,6 +1,7 @@
+@font-face{font-family:"Jiskan16";src:url("/fonts/Jiskan16x2004-Regular.woff2") format("woff2");font-display:swap}
 *{box-sizing:border-box}
 html{background:#0a0006}
-body{margin:0;color:#ffd6ec;font-family:"MS PGothic","ＭＳ Ｐゴシック","Osaka","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-size:13px;line-height:1.6;
+body{margin:0;color:#ffd6ec;font-family:"Jiskan16","MS PGothic","ＭＳ Ｐゴシック","Osaka","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-size:13px;line-height:1.6;
 background-color:#0a0006;background-image:radial-gradient(#ffffff 1px,transparent 1.6px),radial-gradient(#ff7fc4 1.2px,transparent 2px);background-size:26px 26px,40px 40px;background-position:0 0,13px 20px;
 padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 a{color:#ff9ad5}a:hover{color:#fff}
@@ -86,3 +87,5 @@ img{max-width:100%;height:auto;display:block;border:0}
 [hidden]{display:none!important}
 .catmore{display:none;margin-top:6px}
 @media (max-width:780px){.cats.fold>div:nth-child(n+4){display:none}.catmore{display:flex}}
+
+input,textarea,select,button{font-family:inherit}

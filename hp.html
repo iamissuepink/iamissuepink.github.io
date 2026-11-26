@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ﾎﾑﾍﾟ｜めろﾋﾟｮﾝ☆</title>
 <style>
+@font-face{font-family:"Jiskan16";src:url("/fonts/Jiskan16x2004-Regular.woff2") format("woff2");font-display:swap}
+
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 --bg:#ffd6ea;--pat:#ffb8d9;--card:#fff;--ink:#6b1f45;--hi:#ff3d9a;--hi2:#ff8cc6;--sub:#ffc1df;--line:#ffb3d6;--title2:#fff;--frame:#fff0f7;--glit:#ffffff,#ff7ac1,#ffe066}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -17,7 +19,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;overflow-x:hidden;color:var(--ink);background-color:var(--bg);
 background-image:radial-gradient(circle at 25% 25%,var(--pat) 3px,transparent 3.5px),radial-gradient(circle at 75% 75%,var(--pat) 3px,transparent 3.5px);background-size:22px 22px;
-font-family:"MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-size:13px;line-height:1.6}
+font-family:"Jiskan16","MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-size:13px;line-height:1.6}
 #kira{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
 .phone{max-width:380px;margin:14px auto 80px;background:var(--frame);border-radius:30px;padding:10px 10px 20px;box-shadow:0 0 0 3px var(--hi2),0 7px 0 var(--hi)}
 .screen{border:3px solid transparent;border-radius:8px;overflow:hidden;
@@ -157,7 +159,7 @@ body.ed{padding-bottom:210px}
 .sh{border-radius:0}.mbox{border-radius:0}.kiri{border-radius:0}.box{border-radius:0}
 .pgrid img{border-radius:0}.pic{border-radius:0}
 .song iframe{border-radius:0}
-.mbar .lg{font-family:"MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif}
+.mbar .lg{font-family:"Jiskan16","MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif}
 
 .edbar .ebtn.sub,.edbar .ebtn.lt{background:#2a0a20;color:#fff;border:2px outset #ff9ad5}
 .edbar .ebtn{color:#fff}
@@ -470,7 +472,7 @@ span.c-lk{text-decoration:none}
 :root[data-tpl="street"] .c-mq{background:#111;color:#c6ff1a;border:1px solid #333}
 .c-sl{display:flex;flex-direction:column;margin:8px 0;text-align:left;font-family:"Courier New",monospace}
 .c-sl a{display:flex;justify-content:space-between;gap:6px;padding:3px 2px;border-bottom:1px solid #333;color:#f2f2f2;text-decoration:none;font-size:11px;font-weight:bold}
-.c-sl i{font-style:normal;color:#ff3dc5;font-size:10px;font-weight:normal;font-family:"MS PGothic",sans-serif}
+.c-sl i{font-style:normal;color:#ff3dc5;font-size:10px;font-weight:normal;font-family:"Jiskan16","MS PGothic",sans-serif}
 :root[data-tpl="street"] .c-msg{text-align:left;border-left:3px solid #ff3dc5;padding-left:6px}
 :root[data-tpl="street"] .c-h{color:#c6ff1a;text-align:left;font-family:"Courier New",monospace}
 /* kr */
@@ -620,7 +622,7 @@ body .phone{margin-left:auto!important;margin-right:auto!important}
 .in,.screen{overflow-wrap:anywhere}.pimg{display:block;max-width:100%;height:auto;margin:6px auto;border:2px solid var(--hi2,#ffb3d9)}a.hpl{color:var(--hi,#ff3d9a);font-weight:bold}.in img,.in iframe,.in video{max-width:100%}.in pre{white-space:pre-wrap}
 .tpl-gal .tg-hd{overflow:hidden}
 /* 管理用モーダル（入口・テンプレ選択・保存BOX）はめろﾋﾟｮﾝ☆の色で固定 */
-.mbox.mgr{background:#120008!important;color:#ffd6ec!important;border:2px solid #ff3d9a!important;box-shadow:0 0 0 4px #000,0 0 0 5px #ff9ad5,0 10px 30px rgba(0,0,0,.6);font-family:"MS PGothic","Hiragino Kaku Gothic ProN",sans-serif}
+.mbox.mgr{background:#120008!important;color:#ffd6ec!important;border:2px solid #ff3d9a!important;box-shadow:0 0 0 4px #000,0 0 0 5px #ff9ad5,0 10px 30px rgba(0,0,0,.6);font-family:"Jiskan16","MS PGothic","Hiragino Kaku Gothic ProN",sans-serif}
 .mbox.mgr .ttl{background:linear-gradient(180deg,#ff6fb5,#c8005f)!important;color:#fff!important;border:0!important;border-bottom:2px solid #fff!important;animation:none!important;text-shadow:none!important;font-size:13px;padding:4px 8px}
 .mbox.mgr .ttl::before,.mbox.mgr .ttl::after{content:""!important}
 .mbox.mgr .mq2{text-align:center;margin:8px 0 2px;font-size:12px}
@@ -981,10 +983,10 @@ function sanitizeHtml(code,depth){depth=depth||0;var doc;try{doc=new DOMParser()
       else{el.removeAttribute('href');el.setAttribute('title','外のｻｲﾄへのﾘﾝｸゎ使えないょ')}}}
   return doc.body.innerHTML}
 function htmlDoc(code,depth){var base=DB.imgBase.replace(/\/hp\/$/,'/'),nonce='m'+Math.random().toString(36).slice(2,12);
-  var csp="default-src 'none'; frame-src 'self'; img-src "+base+" "+location.origin+"/img/ data:; style-src 'unsafe-inline'; script-src 'nonce-"+nonce+"'; font-src data:";
+  var csp="default-src 'none'; frame-src 'self'; img-src "+base+" "+location.origin+"/img/ data:; style-src 'unsafe-inline'; script-src 'nonce-"+nonce+"'; font-src data: "+location.origin;
   code=String(code||'').replace(/\[s=([^\]\s]+)\]/g,function(m,x){return DB.sozOk(x)?'<img src="'+DB.sozUrl(x)+'" alt="">':''}).replace(/\{\{counter\}\}/g,('000000'+(CNT||0)).slice(-6));
   code=sanitizeHtml(code,depth);
-  return '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="'+csp+'"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>'+code+
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="'+csp+'"><meta name="viewport" content="width=device-width,initial-scale=1"><style>@font-face{font-family:"Jiskan16";src:url("'+location.origin+'/fonts/Jiskan16x2004-Regular.woff2") format("woff2");font-display:swap}</style></head><body>'+code+
     '<script nonce="'+nonce+'">(function(){function s(){parent.postMessage({melo:1,h:document.documentElement.scrollHeight},"*")}try{new ResizeObserver(s).observe(document.documentElement)}catch(e){}addEventListener("load",s);setTimeout(s,300);s()})()<\/script></body></html>'}
 function plain(t){return String(t||'').replace(/\[[^\]]*\]/g,'')}
 function starter(k){var p=D.pages[k],m=D.menu.filter(function(x){return x.k===k})[0];
@@ -1009,7 +1011,7 @@ function toHtml(r){var k=r||'top',g=D.design,sk=PARTS.find(PARTS.SKEL,D.tpl)||PA
   var cs=getComputedStyle(document.documentElement),vars=PARTS.VARS.filter(function(v){return v!=='glit'}).map(function(v){return '  --'+v+':'+(cs.getPropertyValue('--'+v).trim()||'#ffffff')+';'}).join('\n');
   function nm(L,id,auto){return (PARTS.find(L,id)||['',id])[1]+(auto?'（ﾃﾝﾌﾟﾚのまま→近い部品で再現）':'')}
   var css='/* ===== 配色（'+(g.pal==='auto'?'ﾃﾝﾌﾟﾚの色':nm(PARTS.PAL,g.pal))+'）：ここの6色＋補助色を変えると全体の色が変わるょ ===== */\n:root{\n'+vars+'\n}\n'+
-    '/* ===== 基本 ===== */\n*{box-sizing:border-box}\nbody{margin:0;padding:14px 10px 24px;color:var(--ink);font:14px/1.7 "MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif;text-align:center;word-break:break-all}\na{color:var(--hi)}\nimg{max-width:100%}\n'+
+    '/* ===== 基本 ===== */\n*{box-sizing:border-box}\nbody{margin:0;padding:14px 10px 24px;color:var(--ink);font:14px/1.7 "Jiskan16","MS PGothic","ＭＳ Ｐゴシック","Hiragino Kaku Gothic ProN",sans-serif;text-align:center;word-break:break-all}\na{color:var(--hi)}\nimg{max-width:100%}\n'+
     '/* ===== 背景：'+nm(PARTS.BG,bg,g.bg==='auto')+' ===== */\n'+String(PC.bg[bg]||'body{background-color:var(--bg)}').replace('https://iamissuepink.github.io/',location.origin+'/')+'\n'+
     '/* ===== 枠：'+nm(PARTS.FRAME,fr,g.frame==='auto')+' ===== */\n.screen{max-width:400px;margin:0 auto;padding:12px 10px}\n'+(PC.frame[fr]||'')+'\n'+
     '/* ===== 見出し：'+nm(PARTS.HEAD,hd,g.head==='auto')+' ===== */\n'+(PC.headBase||'')+'\n'+(PC.head[hd]||'')+'\n'+

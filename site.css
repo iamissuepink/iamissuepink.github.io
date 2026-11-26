@@ -1,6 +1,7 @@
+@font-face{font-family:"Jiskan16";src:url("/fonts/Jiskan16x2004-Regular.woff2") format("woff2");font-display:swap}
 *{box-sizing:border-box}
 html{background:#0a0006}
-body{margin:0;color:#ffd6ec;font-family:"MS PGothic","ＭＳ Ｐゴシック","Osaka","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-size:13px;line-height:1.6;
+body{margin:0;color:#ffd6ec;font-family:"Jiskan16","MS PGothic","ＭＳ Ｐゴシック","Osaka","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-size:13px;line-height:1.6;
 background:radial-gradient(ellipse at 20% 0%,#3a0820 0%,#14000a 45%,#0a0006 100%) fixed #0a0006;
 padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 a{color:#ff9ad5}a:hover{color:#fff}
@@ -108,3 +109,5 @@ text-shadow:2px 2px 0 #fff,-2px 2px 0 #fff,2px -2px 0 #fff,-2px -2px 0 #fff,4px 
 .tgc2 summary::before{content:"▼ "!important;color:#ff9ad5}
 .tgc2[open] summary::before{content:"▲ "!important}
 .tgc2 summary{list-style:none}.tgc2 summary::-webkit-details-marker{display:none}
+
+input,textarea,select,button{font-family:inherit}
