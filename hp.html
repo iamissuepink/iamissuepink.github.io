@@ -645,7 +645,7 @@ body .phone{margin-left:auto!important;margin-right:auto!important}
 <div id="ui"></div>
 <canvas id="kira" aria-hidden="true"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="ui.js?v=1"></script>
+<script src="ui.js?v=2"></script>
 <script src="db.js?v=17"></script>
 <script src="parts.js?v=2"></script>
 <script src="parts-css.js?v=1"></script>
@@ -753,7 +753,7 @@ var BLK={
    if(KIRI)h+='<div class="kiri"><b class="dk-rb dk-big">ｷﾘ番ｹﾞｯﾄ!!</b><br>'+KIRI+' 番目のお客様です♪'+(me&&!owner?'<br><button type="button" class="ebtn" data-act="kirirep">BBSで報告する</button>':'')+'</div>';return h+'<div id="kgl" class="c-kiri"></div>'},
  acts:function(){if(ED)return '<span class="elb">拍手のお礼ﾒｯｾｰｼﾞ</span>'+ta('data-k="thanks"',D.thanks,'',60)+'<label class="elb"><input type="checkbox" data-k="showClaps"'+(D.showClaps?' checked':'')+'> 拍手の数をみんなに見せる</label>';
    var h='<div class="vact"><button type="button" class="ebtn" data-act="clap">👏 拍手'+((D.showClaps||owner)&&CLAPS!==null?' ('+CLAPS+')':'')+'</button>';
-   if(me&&!owner)h+=FR==='friend'?'<span class="ftag">めろ友だょ♡</span> <button type="button" class="ebtn sub" data-act="fdel">めろ友をやめる</button>':FR==='sent'?'<span class="ftag">めろ友申請中…</span>':FR==='in'?'<button type="button" class="ebtn" data-act="facc">めろ友申請を承認</button>':'<button type="button" class="ebtn sub" data-act="freq">めろ友申請</button>';
+   if(me&&!owner)h+=FR==='friend'?'<span class="ftag">めろ友だょ♡</span> <button type="button" class="ebtn sub" data-act="fdel">めろ友を解除</button>':FR==='sent'?'<span class="ftag">めろ友申請中…</span>':FR==='in'?'<button type="button" class="ebtn" data-act="facc">めろ友申請を承認</button>':'<button type="button" class="ebtn sub" data-act="freq">めろ友申請</button>';
    if(owner)h+='<a class="ebtn sub" href="#foot" style="text-decoration:none;display:inline-flex;align-items:center">足あと</a>';return h+'</div>'},
  song:function(){var s=sp(D.song);return (ED?'<span class="elb">今のお気に入り曲（SpotifyのURL）</span>'+inp('song',D.song,'','https://open.spotify.com/track/…')+(D.song&&!s?'<p class="empty">SpotifyのURLの形じゃないかも</p>':''):'')+(s?'<div class="song"><iframe src="'+esc(s)+'" height="152" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>':'')},
  update:function(){var h='';if(!ED)h+=ttl('New entry')+'<div id="upd"><p class="empty">読み込み中…</p></div>';
@@ -781,7 +781,7 @@ async function ldKiri(){var e=document.getElementById('kgl');if(!e)return;try{va
   e.innerHTML=L.length?'<b>☆ｷﾘ番ｹﾞｯﾀｰ☆</b><br>'+L.map(function(p){var n=(String(p.body).match(/(\d+)\s*番/)||[])[1]||'?',pr=p.profiles||{};return n+'番 '+(pr.hp_id?'<a href="hp.html?id='+esc(pr.hp_id)+'">'+esc(pr.nickname||'')+'</a>':esc(pr.nickname||''))+'さん'}).join('<br>'):''}catch(err){e.innerHTML=''}}
 function cActs(l,r){if(l==null)l='[';if(r==null)r=']';var a=[];
   a.push('<button type="button" class="c-lk" data-act="clap">'+l+'web拍手'+((D.showClaps||owner)&&CLAPS!==null?'('+CLAPS+')':'')+r+'</button>');
-  if(me&&!owner)a.push(FR==='friend'?'<button type="button" class="c-lk" data-act="fdel" title="押すとめろ友をやめられるょ">'+l+'めろ友♡'+r+'</button>':FR==='sent'?'<span class="c-lk">'+l+'申請中'+r+'</span>':FR==='in'?'<button type="button" class="c-lk" data-act="facc">'+l+'めろ友承認'+r+'</button>':'<button type="button" class="c-lk" data-act="freq">'+l+'めろ友申請'+r+'</button>');
+  if(me&&!owner)a.push(FR==='friend'?'<button type="button" class="c-lk" data-act="fdel" title="押すとめろ友を解除できるょ">'+l+'めろ友♡'+r+'</button>':FR==='sent'?'<span class="c-lk">'+l+'申請中'+r+'</span>':FR==='in'?'<button type="button" class="c-lk" data-act="facc">'+l+'めろ友承認'+r+'</button>':'<button type="button" class="c-lk" data-act="freq">'+l+'めろ友申請'+r+'</button>');
   if(owner)a.push('<a class="c-lk" href="#foot">'+l+'足あと'+r+'</a>');
   return (owner?'':'<div class="c-hint">'+(me?'☆気に入ったら押してね☆':'☆拍手・めろ友ゎ<a href="login.html">ﾛｸﾞｲﾝ</a>してから押せるょ☆')+'</div>')+'<div class="c-acts'+(owner?'':' c-acts-v')+'">'+a.join(' ')+'</div>'}
 function cSong(){var s=sp(D.song);return s?'<div class="c-song"><iframe src="'+esc(s)+'" height="80" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="お気に入り曲"></iframe></div>':''}
@@ -1310,7 +1310,7 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='clap'){if(!me){UI.tell('拍手するにゎﾛｸﾞｲﾝしてね');return}try{CLAPS=await DB.clap(R.id);thanks()}catch(err){UI.tell(err.message)}}
   else if(a==='closem'){var m=document.getElementById('modal');if(m)m.remove();draw()}
   else if(a==='freq'){if(!await UI.ask(R.nickname+' さんにめろ友申請する？'))return;try{await DB.requestFriend(R.id);FR='sent';draw()}catch(err){UI.tell(err.message)}}
-  else if(a==='fdel'){if(!FR_ID||!await UI.ask(R.nickname+' さんとのめろ友をやめる？\n（相手にゎ知らせないょ。もう一回なるにゎ申請しなおしてね）'))return;try{await DB.delFriend(FR_ID);FR='none';FR_ID=null;draw();toast('めろ友をやめたょ')}catch(err){UI.tell(err.message)}}
+  else if(a==='fdel'){if(!FR_ID||!await UI.ask(R.nickname+' さんとのめろ友を解除する？\n（相手にゎ知らせないょ。もう一回なるにゎ申請しなおしてね）',{ok:'解除する',no:'解除しない'}))return;try{await DB.delFriend(FR_ID);FR='none';FR_ID=null;draw();toast('めろ友をやめたょ')}catch(err){UI.tell(err.message)}}
   else if(a==='facc'){try{await DB.acceptFriend(FR_ID);FR='friend';draw()}catch(err){UI.tell(err.message)}}
   else if(a==='ptab'||a==='pkei'||a==='pskel'||a==='pbg'||a==='pfrm'||a==='phd'||a==='ppal'){var sc=document.querySelector('.pts'),y=sc?sc.scrollTop:0,g=D.design;
     if(a==='ptab'){PT=v;y=0;drawUi()}

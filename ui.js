@@ -13,11 +13,11 @@ var css='.uim{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.7
 var st=document.createElement('style');st.textContent=css;(document.head||document.documentElement).appendChild(st);
 function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 var q=Promise.resolve();
-function open(kind,text,def){
+function open(kind,text,def,lb){lb=lb||{};
   var run=function(){return new Promise(function(res){
     var prev=document.activeElement,w=document.createElement('div');w.className='uim';w.setAttribute('role','dialog');w.setAttribute('aria-modal','true');
     w.innerHTML='<div class="uib"><p>'+esc(text)+'</p>'+(kind==='input'?'<input type="text" value="'+esc(def||'')+'">':'')+
-      '<div class="uirow">'+(kind==='tell'?'':'<button type="button" class="no">やめる</button>')+'<button type="button" class="ok">'+(kind==='tell'?'OK':'OK♪')+'</button></div></div>';
+      '<div class="uirow">'+(kind==='tell'?'':'<button type="button" class="no">'+(lb.no||'やめる')+'</button>')+'<button type="button" class="ok">'+(lb.ok||(kind==='tell'?'OK':'OK♪'))+'</button></div></div>';
     document.body.appendChild(w);
     var inp=w.querySelector('input'),ok=w.querySelector('.ok'),no=w.querySelector('.no');
     function done(v){document.removeEventListener('keydown',key,true);w.remove();try{prev&&prev.focus&&prev.focus()}catch(e){}res(v)}
@@ -31,7 +31,7 @@ function open(kind,text,def){
   })};
   var p=q.then(run);q=p.catch(function(){});return p}
 window.UI={
-  ask:function(t){return open('ask',t)},       // → true / false
+  ask:function(t,lb){return open('ask',t,undefined,lb)},  // → true / false（lb={ok:'…',no:'…'}でﾎﾞﾀﾝの文字を変えられる）
   tell:function(t){return open('tell',t)},     // → (OKで閉じる)
   input:function(t,d){return open('input',t,d)} // → 文字 / null
 };
