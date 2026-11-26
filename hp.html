@@ -1309,9 +1309,10 @@ document.addEventListener('click',async function(e){var b=e.target.closest('[dat
   else if(a==='blank'){if(D.pages[v].h&&!await UI.ask('HTMLを全部消す？'))return;D.pages[v].h='';changed();draw()}
   else if(a==='clap'){if(!me){UI.tell('拍手するにゎﾛｸﾞｲﾝしてね');return}try{CLAPS=await DB.clap(R.id);thanks()}catch(err){UI.tell(err.message)}}
   else if(a==='closem'){var m=document.getElementById('modal');if(m)m.remove();draw()}
-  else if(a==='freq'){if(!await UI.ask(R.nickname+' さんにめろ友申請する？'))return;try{await DB.requestFriend(R.id);FR='sent';draw()}catch(err){UI.tell(err.message)}}
+  else if(a==='freq'){if(!await UI.ask(R.nickname+' さんにめろ友申請する？',{ok:'申請する',no:'申請しない'}))return;try{await DB.requestFriend(R.id);FR='sent';draw()}catch(err){UI.tell(err.message)}}
   else if(a==='fdel'){if(!FR_ID||!await UI.ask(R.nickname+' さんとのめろ友を解除する？\n（相手にゎ知らせないょ。もう一回なるにゎ申請しなおしてね）',{ok:'解除する',no:'解除しない'}))return;try{await DB.delFriend(FR_ID);FR='none';FR_ID=null;draw();toast('めろ友をやめたょ')}catch(err){UI.tell(err.message)}}
-  else if(a==='freqL'){if(!await UI.ask(R.nickname+' さんにめろ友申請する？',{ok:'申請する',no:'しない'}))return;try{await DB.requestFriend(R.id);FR='sent';note(lockNote())}catch(err){UI.tell(err.message)}}
+  else if(a==='fdelL'){if(!FR_ID||!await UI.ask(R.nickname+' さんとのめろ友を解除する？\n（相手にゎ知らせないょ。もう一回なるにゎ申請しなおしてね）',{ok:'解除する',no:'解除しない'}))return;try{await DB.delFriend(FR_ID);FR='none';FR_ID=null;note(lockNote());toast('めろ友を解除したょ')}catch(err){UI.tell(err.message)}}
+  else if(a==='freqL'){if(!await UI.ask(R.nickname+' さんにめろ友申請する？',{ok:'申請する',no:'申請しない'}))return;try{await DB.requestFriend(R.id);FR='sent';note(lockNote())}catch(err){UI.tell(err.message)}}
   else if(a==='faccL'){try{await DB.acceptFriend(FR_ID);FR='friend';location.reload()}catch(err){UI.tell(err.message)}}
   else if(a==='facc'){try{await DB.acceptFriend(FR_ID);FR='friend';draw()}catch(err){UI.tell(err.message)}}
   else if(a==='ptab'||a==='pkei'||a==='pskel'||a==='pbg'||a==='pfrm'||a==='phd'||a==='ppal'){var sc=document.querySelector('.pts'),y=sc?sc.scrollTop:0,g=D.design;
@@ -1418,7 +1419,7 @@ function lockNote(){var b='';
   if(FR==='none')b='<button type="button" class="ebtn sub" data-act="freqL">'+esc(R.nickname)+' さんにめろ友申請する</button><br><small>めろ友になると見れるかも</small>';
   else if(FR==='sent')b='<span class="ftag">めろ友申請中…</span>';
   else if(FR==='in')b='<button type="button" class="ebtn" data-act="faccL">めろ友申請を承認</button>';
-  else if(FR==='friend')b='<span class="ftag">めろ友だょ♡</span>';
+  else if(FR==='friend')b='<span class="ftag">めろ友だょ♡</span> <button type="button" class="ebtn sub" data-act="fdelL">めろ友を解除</button>';
   return 'このﾎﾑﾍﾟゎ見れないか、まだ作られてないょ'+(b?'<br><br>'+b:'')}
 function note(t){document.documentElement.dataset.skin='gal';root.innerHTML=frame('<div class="note">'+t+'</div>')}
 document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{var id=await DB.randomHp();if(id)location.href='hp.html?id='+id;else UI.tell('まだﾎﾑﾍﾟがないみたい')}catch(err){UI.tell(err.message)}};
