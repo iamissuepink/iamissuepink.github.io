@@ -163,7 +163,7 @@
 </section>
 <section class="sec pp glow">
 <h3>★研究への協力★</h3>
-<label style="display:flex;gap:8px;align-items:flex-start;min-height:36px;font-size:12px"><input type="checkbox" id="rsch" style="width:20px;height:20px;flex:none"> 利用状況の集計（個人がわからない形）に、わたしのﾃﾞｰﾀを使わないでほしい</label>
+<label style="display:flex;gap:8px;align-items:flex-start;min-height:36px;font-size:12px"><input type="checkbox" id="rsch" disabled style="width:20px;height:20px;flex:none"> 利用状況の集計（個人がわからない形）に、わたしのﾃﾞｰﾀを使わないでほしい</label>
 <p style="font-size:11px;color:#c9a2ff">※くわしくゎ<a href="privacy.html#research">ﾌﾟﾗｲﾊﾞｼｰﾎﾟﾘｼｰの「研究への利用」</a>を見てね。いつでも変えられるょ。チェックしなくても、本文やﾆｯｸﾈｰﾑなど個人がわかるものゎ使わないょ</p>
 <p class="msg" id="rmsg" role="status"></p>
 </section>
@@ -259,7 +259,8 @@ $('save').onclick=async function(){var b=this,n=$('nick').value.trim();if(!PROF_
   if(!n){say('ﾆｯｸﾈｰﾑを入れてね',true);return}
   b.disabled=true;say('保存中…');
   try{await DB.saveProfile(u.id,n,$('bio').value);$('hello').textContent=DB.san(n);say('保存したょ✧')}catch(e){say(e.message,true)}b.disabled=false};
-DB.meta().then(function(md){$('rsch').checked=md.research_optout===true}).catch(function(){});
+$('rmsg').textContent='読み込み中…';$('rmsg').className='msg';
+DB.meta().then(function(md){$('rsch').checked=md.research_optout===true;$('rsch').disabled=false;$('rmsg').textContent=''}).catch(function(){$('rmsg').textContent='いまの設定を読み込めなかったょ。ﾍﾟｰｼﾞを開きなおしてね';$('rmsg').className='msg ng'});
 $('rsch').onchange=async function(){var c=this.checked,m=$('rmsg');try{await DB.setMeta({research_optout:c,research_optout_at:new Date().toISOString()});m.textContent=c?'わかったょ。これからの集計にゎ使わないょ':'ありがとう♡ 集計に入れさせてもらうね';m.className='msg'}catch(e){m.textContent=e.message;m.className='msg ng';this.checked=!c}};
 function dmsg(t,ng){var m=$('dmsg');m.textContent=t;m.className='msg'+(ng?' ng':'')}
 $('exp').onclick=async function(){var b=this;b.disabled=true;dmsg('まとめてるょ…（0/6）');var slow=setTimeout(function(){dmsg('まだまとめてるょ…時間がかかってるけど、そのまま待っててね',false)},12000);
