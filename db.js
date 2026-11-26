@@ -161,6 +161,7 @@ window.DB={
   requestFriend:function(o){return run(sb.rpc('request_friend',{p_to:o}))},
   acceptFriend:function(id){return run(sb.rpc('accept_friend',{p_id:id}))},
   delFriend:function(id){return del(sb.from('friend_requests').delete().eq('id',id))},
+  myFriends:function(me){return run(sb.from('friend_requests').select('id,from_id,to_id,status,created_at,f:profiles!friend_requests_from_id_fkey(nickname,hp_id),t:profiles!friend_requests_to_id_fkey(nickname,hp_id)').or('and(from_id.eq.'+me+',status.eq.accepted),and(to_id.eq.'+me+',status.eq.accepted),and(from_id.eq.'+me+',status.eq.pending)').order('created_at',{ascending:false}).limit(500))},
   incoming:function(me){return run(sb.from('friend_requests').select('id,created_at,profiles!friend_requests_from_id_fkey(nickname,hp_id)').eq('to_id',me).eq('status','pending').order('created_at',{ascending:false}))},
   hpFriends:function(o){return run(sb.rpc('hp_friends',{p_owner:o}))},
   report:function(t,id,hp,reason,detail){return run(sb.from('reports').insert({target_type:t,target_id:String(id),hp_id:hp||null,reason:reason,detail:detail||''}))},
