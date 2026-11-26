@@ -1425,7 +1425,7 @@ document.getElementById('rlt').onclick=async function(e){e.preventDefault();try{
   if(R.hp){var _hadMsg=R.hp.data&&R.hp.data.msg!==undefined;D=fix(R.hp.data,R.nickname);if(!_hadMsg)D.msg='';VIS=R.hp.visibility;CNT=R.hp.counter;SUSP=!!R.hp.suspended}
   else if(owner){var info=INFO;
     if(!info||(info.needs_guardian&&!info.guardian_approved)){note('ﾏｲﾍﾟｰｼﾞで設定を済ませてね<br><br><a href="mypage.html">ﾏｲﾍﾟｰｼﾞへ</a>');return}
-    D=def(R.nickname);isNew=true;VIS=DB.age(info.birth_ym.slice(0,7))<18?'members':'public';dirty=true}
+    D=fix(def(R.nickname),R.nickname);isNew=true;VIS=DB.age(info.birth_ym.slice(0,7))<18?'members':'public';dirty=true}
   else{note(me?'このﾎﾑﾍﾟゎ見れないか、まだ作られてないょ':'このﾎﾑﾍﾟを見るにゎﾛｸﾞｲﾝが必要かも<br><br><a href="login.html">ﾛｸﾞｲﾝ</a>');return}
   ED=owner&&isNew;
   if(owner&&WANT&&!isNew)setTimeout(chooser,0);
